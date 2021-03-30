@@ -7,15 +7,12 @@ using Unity.MLAgents.Sensors;
 
 public class Agent0 : Agent, IAgent
 {
-    // Start is called before the first frame update
-    void Start()
-    {
+    private IEnvironment _Environment;
+    public IEnvironment Environment { get => _Environment; set => _Environment = value; }
 
-    }
-
-    // Update is called once per frame
-    void Update()
+    public override void Initialize()
     {
+        base.Initialize();
 
     }
 }

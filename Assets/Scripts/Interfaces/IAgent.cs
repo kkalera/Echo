@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IAgent
 {
-
+    IEnvironment Environment { get; set; }
 }
