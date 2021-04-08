@@ -16,16 +16,16 @@ public class RewardManager : MonoBehaviour
     {
         return level switch
         {
-            0 => Reward0(collision),
-            1 => Reward0(collision),
-            2 => Reward0(collision),
-            3 => Reward1(collision),
+            0 => GetSwingReward(collision),
+            1 => GetSwingReward(collision),
+            2 => GetSwingReward(collision),
+            3 => GetSwingReward(collision),
             4 => Reward2(collision),
-            _ => Reward0(collision),
+            _ => GetHitReward(collision),
         };
     }
 
-    private RewardData Reward0(Collision collision)
+    private RewardData GetHitReward(Collision collision)
     {
         RewardData rewardData = new RewardData(0, false);
 
@@ -45,29 +45,34 @@ public class RewardManager : MonoBehaviour
         }
         return rewardData;
     }
-    private RewardData Reward1(Collision collision)
+    private RewardData GetSwingReward(Collision collision)
     {
-        RewardData rewardData = Reward0(collision);
-
+        RewardData rewardData = GetHitReward(collision);
         Crane crane = GetComponentInChildren<Crane>();
         // Add zwier reward
-        float zwier = Vector2.Distance(
+        if (crane.Spreader != null && crane.Kat != null)
+        {
+            float zwier = Vector2.Distance(
             new Vector2(crane.Spreader.transform.localPosition.x, crane.Spreader.transform.localPosition.z),
             new Vector2(crane.Kat.transform.localPosition.x, crane.Kat.transform.localPosition.z + 1.75f)
             );
-
-        CraneAgent agent = GetComponent<CraneAgent>();
-        agent.ReportZwier(zwier);
-        if (zwier > 2)
-        {
-            rewardData.reward -= 10 / agent.MaxStep;
+            CraneAgent agent = GetComponent<CraneAgent>();
+            agent.ReportZwier(zwier);
+            if (zwier > 2)
+            {
+                rewardData.reward -= 10 / agent.MaxStep;
+            }
+            else
+            {
+                rewardData.reward = +1 / agent.MaxStep;
+            }
+            if (zwier > 5) { rewardData.endEpisode = true; }
         }
-
         return rewardData;
     }
     private RewardData Reward2(Collision collision)
     {
-        RewardData rewardData = Reward1(collision);
+        RewardData rewardData = GetSwingReward(collision);
 
         if (collision != null && collision.collider.CompareTag("goal"))
         {

@@ -76,6 +76,13 @@ public class CraneAgent : Agent
             AddReward(-1f);
             EndEpisode();
         }
+        if (crane != null && crane.Spreader != null && crane.Kat != null &&
+            crane.Spreader.transform.localPosition.y > crane.Kat.transform.localPosition.y - 1)
+        {
+            Debug.Log("Spreader Y: " + crane.Spreader.transform.localPosition.y + " || kat Y: " + crane.Kat.transform.localPosition.y);
+            AddReward(-1f); EndEpisode();
+        }
+
     }
 
     private void Update()
@@ -97,7 +104,7 @@ public class CraneAgent : Agent
         if (!testMode) level = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level_parameter", 0);
         rewardManager.level = level;
 
-        if (level == 5) EditorApplication.isPlaying = false; //EditorApplication.ExecuteMenuItem("Edit/Play");
+        if (level == 4) EditorApplication.isPlaying = false; //EditorApplication.ExecuteMenuItem("Edit/Play");
 
         // Destroy the current crane and container
         if (crane != null) Destroy(crane.gameObject);
@@ -105,7 +112,7 @@ public class CraneAgent : Agent
 
         craneGameObject = Instantiate(cranePrefab, transform, false);
         GameObject containerGameObject = Instantiate(containerPrefab, transform, false);
-        container = containerGameObject.GetComponent<Container>();
+        //container = containerGameObject.GetComponent<Container>();
 
         crane = craneGameObject.GetComponent<Crane>();
         crane.Init();

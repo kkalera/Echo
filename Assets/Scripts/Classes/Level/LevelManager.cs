@@ -19,13 +19,13 @@ public class LevelManager : MonoBehaviour
         switch (level)
         {
             case 0:
-                SetLevel0();
+                SetLvlSwingManagementOnly();
                 break;
             case 1:
-                SetLevel1();
+                SetLvlSwingManagementOnly1();
                 break;
             case 2:
-                SetLevel2();
+                SetLvlSwingManagementOnly2();
                 break;
             case 3:
                 SetLevel3();
@@ -34,7 +34,7 @@ public class LevelManager : MonoBehaviour
                 SetLevel3();
                 break;
             default:
-                SetLevel0();
+                SetLvlSwingManagementOnly();
                 break;
 
         }
@@ -42,40 +42,40 @@ public class LevelManager : MonoBehaviour
     /// <summary>
     /// Very basic level requiring only kat and crane movement to hit the target
     /// </summary>
-    private void SetLevel0()
+    private void SetLvlSwingManagementOnly()
     {
         agent.plane.localScale = new Vector3(1f, 1, 1f);
-        agent.cableSwingDisabled = true;
+        agent.cableSwingDisabled = false;
         agent.winchDisabled = true;
-        agent.container.transform.localPosition = new Vector3(Random.Range(-PlaneHalfSize + 7, PlaneHalfSize - 7), 0.01f, Random.Range(-PlaneHalfSize + 2, PlaneHalfSize - 2));
-        Vector3 katPosition = new Vector3(Random.Range(-PlaneHalfSize + 7, PlaneHalfSize - 7), 10, Random.Range(-PlaneHalfSize + 2, PlaneHalfSize - 2));
+        Destroy(agent.container);
+        Vector3 katPosition = new Vector3(Random.Range(-PlaneHalfSize + 7, PlaneHalfSize - 7), 7.5f, Random.Range(-PlaneHalfSize + 2, PlaneHalfSize - 2));
         agent.crane.ResetToPosition(katPosition, 3f);
     }
 
     /// <summary>
     /// A basic level requiring only kat and crane movement, twice the size of the first level
     /// </summary>
-    private void SetLevel1()
+    private void SetLvlSwingManagementOnly1()
     {
         agent.plane.localScale = new Vector3(2f, 1, 2f);
-        agent.cableSwingDisabled = true;
+        agent.cableSwingDisabled = false;
         agent.winchDisabled = true;
-        agent.container.transform.localPosition = new Vector3(Random.Range(-PlaneHalfSize + 7, PlaneHalfSize - 7), 0.01f, Random.Range(-PlaneHalfSize + 2, PlaneHalfSize - 2));
-        Vector3 katPosition = new Vector3(Random.Range(-PlaneHalfSize + 7, PlaneHalfSize - 7), 10, Random.Range(-PlaneHalfSize + 2, PlaneHalfSize - 2));
+        Destroy(agent.container);
+        Vector3 katPosition = new Vector3(Random.Range(-PlaneHalfSize + 7, PlaneHalfSize - 7), 7.5f, Random.Range(-PlaneHalfSize + 2, PlaneHalfSize - 2));
         agent.crane.ResetToPosition(katPosition, 3f);
     }
 
     /// <summary>
     /// A basic level requiring only kat and crane movement, but adding winch actions
     /// </summary>
-    private void SetLevel2()
+    private void SetLvlSwingManagementOnly2()
     {
-        agent.plane.localScale = new Vector3(2, 1, 2);
-        agent.cableSwingDisabled = true;
-        agent.winchDisabled = false;
-        agent.container.transform.localPosition = new Vector3(Random.Range(-PlaneHalfSize + 7, PlaneHalfSize - 7), 0.01f, Random.Range(-PlaneHalfSize + 2, PlaneHalfSize - 2));
-        Vector3 katPosition = new Vector3(Random.Range(-PlaneHalfSize + 7, PlaneHalfSize - 7), 15, Random.Range(-PlaneHalfSize + 2, PlaneHalfSize - 2));
-        agent.crane.ResetToPosition(katPosition, 8);
+        agent.plane.localScale = new Vector3(2f, 1, 2f);
+        agent.cableSwingDisabled = false;
+        agent.winchDisabled = true;
+        Destroy(agent.container);
+        Vector3 katPosition = new Vector3(Random.Range(-PlaneHalfSize + 7, PlaneHalfSize - 7), Random.Range(7.5f, 15), Random.Range(-PlaneHalfSize + 2, PlaneHalfSize - 2));
+        agent.crane.ResetToPosition(katPosition, 3f);
     }
 
     /// <summary>
