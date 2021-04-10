@@ -87,14 +87,3 @@ public class RewardManager : MonoBehaviour
         return rewardData;
     }
 }
-
-public class RewardData
-{
-    public float reward;
-    public bool endEpisode;
-    public RewardData(float reward, bool endEpisode)
-    {
-        this.reward = reward;
-        this.endEpisode = endEpisode;
-    }
-}
