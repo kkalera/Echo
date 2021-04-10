@@ -47,7 +47,6 @@ public class LevelManager : MonoBehaviour
         agent.plane.localScale = new Vector3(1f, 1, 1f);
         agent.cableSwingDisabled = false;
         agent.winchDisabled = true;
-        Destroy(agent.container);
         Vector3 katPosition = new Vector3(Random.Range(-PlaneHalfSize + 7, PlaneHalfSize - 7), 7.5f, Random.Range(-PlaneHalfSize + 2, PlaneHalfSize - 2));
         agent.crane.ResetToPosition(katPosition, 3f);
     }
@@ -60,7 +59,6 @@ public class LevelManager : MonoBehaviour
         agent.plane.localScale = new Vector3(2f, 1, 2f);
         agent.cableSwingDisabled = false;
         agent.winchDisabled = true;
-        Destroy(agent.container);
         Vector3 katPosition = new Vector3(Random.Range(-PlaneHalfSize + 7, PlaneHalfSize - 7), 7.5f, Random.Range(-PlaneHalfSize + 2, PlaneHalfSize - 2));
         agent.crane.ResetToPosition(katPosition, 3f);
     }
@@ -73,7 +71,6 @@ public class LevelManager : MonoBehaviour
         agent.plane.localScale = new Vector3(2f, 1, 2f);
         agent.cableSwingDisabled = false;
         agent.winchDisabled = true;
-        Destroy(agent.container);
         Vector3 katPosition = new Vector3(Random.Range(-PlaneHalfSize + 7, PlaneHalfSize - 7), Random.Range(7.5f, 15), Random.Range(-PlaneHalfSize + 2, PlaneHalfSize - 2));
         agent.crane.ResetToPosition(katPosition, 3f);
     }

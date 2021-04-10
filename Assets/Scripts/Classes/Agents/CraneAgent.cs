@@ -111,7 +111,7 @@ public class CraneAgent : Agent
         if (container != null) Destroy(container.gameObject);
 
         craneGameObject = Instantiate(cranePrefab, transform, false);
-        GameObject containerGameObject = Instantiate(containerPrefab, transform, false);
+        //GameObject containerGameObject = Instantiate(containerPrefab, transform, false);
         //container = containerGameObject.GetComponent<Container>();
 
         crane = craneGameObject.GetComponent<Crane>();
@@ -171,9 +171,19 @@ public class CraneAgent : Agent
         sensor.AddObservation(Utils.Normalize(crane.Spreader.transform.localPosition.z, -levelManager.PlaneHalfSize, levelManager.PlaneHalfSize));
         sensor.AddObservation(Utils.Normalize(crane.Spreader.transform.localPosition.y, 0, 50));
 
-        sensor.AddObservation(Utils.Normalize(container.transform.localPosition.x, -levelManager.PlaneHalfSize, levelManager.PlaneHalfSize));
-        sensor.AddObservation(Utils.Normalize(container.transform.localPosition.z, -levelManager.PlaneHalfSize, levelManager.PlaneHalfSize));
-        sensor.AddObservation(Utils.Normalize(container.transform.localPosition.y, 0, 50));
+        if (container != null)
+        {
+            sensor.AddObservation(Utils.Normalize(container.transform.localPosition.x, -levelManager.PlaneHalfSize, levelManager.PlaneHalfSize));
+            sensor.AddObservation(Utils.Normalize(container.transform.localPosition.z, -levelManager.PlaneHalfSize, levelManager.PlaneHalfSize));
+            sensor.AddObservation(Utils.Normalize(container.transform.localPosition.y, 0, 50));
+        }
+        else
+        {
+            sensor.AddObservation(0);
+            sensor.AddObservation(0);
+            sensor.AddObservation(0);
+        }
+
 
         sensor.AddObservation(false); // Spreader locked or not
         sensor.AddObservation(false); // Spreader white lights        
