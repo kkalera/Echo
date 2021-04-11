@@ -6,6 +6,11 @@ public class CraneV2 : MonoBehaviour, ICrane
 {
     [SerializeField] private Transform cabin;
     [SerializeField] private Transform spreader;
+    [SerializeField] private HingeJoint spoolLandRight;
+    [SerializeField] private HingeJoint spoolLandLeft;
+    [SerializeField] private HingeJoint spoolWaterRight;
+    [SerializeField] private HingeJoint spoolWaterLeft;
+
     [Space(20)]
     [Header("Crane specs")]
     [SerializeField] [Range(.1f, 10f)] private float craneSpeed = 0.75f; //Speed in m/s
@@ -15,6 +20,8 @@ public class CraneV2 : MonoBehaviour, ICrane
     private Rigidbody cabinBody;
     private Rigidbody craneBody;
     private Rigidbody spreaderBody;
+
+
 
     private void Start()
     {
@@ -40,7 +47,6 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     public void MoveCrane(float val)
     {
-
         Vector3 newPos = transform.localPosition;
         if (val < 0)
         {

@@ -38,5 +38,6 @@ public class CraneAgentV2 : Agent
         ActionSegment<float> continousActions = actions.ContinuousActions;
         crane.MoveCrane(continousActions[0]);
         crane.MoveCabin(continousActions[1]);
+        crane.MoveWinch(continousActions[2]);
     }
 }

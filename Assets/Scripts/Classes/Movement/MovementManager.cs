@@ -14,7 +14,7 @@ public class MovementManager : MonoBehaviour
     public void MoveTowards(Vector3 targetPosition, Rigidbody rb, float targetVel, float maxVel)
     {
         Vector3 moveToPosition = targetPosition - rb.transform.localPosition;
-        Vector3 velocityTarget = Time.fixedDeltaTime * targetVel * moveToPosition;
+        Vector3 velocityTarget = targetVel * moveToPosition;
         rb.velocity = Vector3.MoveTowards(rb.velocity, velocityTarget, maxVel);
     }
 }
