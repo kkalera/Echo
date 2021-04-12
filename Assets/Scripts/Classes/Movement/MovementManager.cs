@@ -5,16 +5,36 @@ using UnityEngine;
 public class MovementManager : MonoBehaviour
 {
     /// <summary>
-    /// Moves a rigidbody towards a position smoothly
+    /// Function that calculates the next speed in an acceleration movement
     /// </summary>
-    /// <param name="targetPosition">Target position</param>
-    /// <param name="rb">The rigidbody to be moved</param>
-    /// <param name="targetVel">The velocity to target during the motion</param>
-    /// <param name="maxVel">The maximum velocity possible</param>
-    public void MoveTowards(Vector3 targetPosition, Rigidbody rb, float targetVel, float maxVel)
+    /// <param name="inputValue"> The input between -1 and 1 </param>
+    /// <param name="currentSpeed"> The current speed </param>
+    /// <param name="acceleration"> The amount of acceleration from max speed (value between 0 and 1) </param>
+    /// <param name="maxSpeed"> The maximum speed </param>
+    /// <returns></returns>
+    public float GetNextSpeed(float inputValue, float currentSpeed, float acceleration, float maxSpeed)
     {
-        Vector3 moveToPosition = targetPosition - rb.transform.localPosition;
-        Vector3 velocityTarget = targetVel * moveToPosition;
-        rb.velocity = Vector3.MoveTowards(rb.velocity, velocityTarget, maxVel);
+        float requestedSpeed = inputValue * maxSpeed;
+
+        if (requestedSpeed >= currentSpeed && inputValue != 0)
+        {
+            inputValue = Mathf.Min(currentSpeed + acceleration, maxSpeed);
+        }
+
+        else if (requestedSpeed <= currentSpeed && inputValue != 0)
+        {
+            inputValue = Mathf.Max(currentSpeed - acceleration, -maxSpeed);
+        }
+
+        if (requestedSpeed == 0 && currentSpeed > 0)
+        {
+            inputValue = Mathf.Max(currentSpeed - acceleration, 0);
+        }
+        else if (requestedSpeed == 0 && currentSpeed < 0)
+        {
+            inputValue = Mathf.Min(currentSpeed + acceleration, 0);
+        }
+
+        return inputValue;
     }
 }
