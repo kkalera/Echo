@@ -16,6 +16,7 @@ public class CraneAgentV2 : Agent
     [SerializeField] private InputAction inputLift;
 
     private ICrane crane;
+    private Vector3 targetPosition;
 
     void Start()
     {
@@ -23,6 +24,17 @@ public class CraneAgentV2 : Agent
         inputCrane.Enable();
         inputLift.Enable();
         crane = craneObject.GetComponent<ICrane>();
+    }
+
+    private void Update()
+    {
+        CheckPosition();
+    }
+
+    public override void OnEpisodeBegin()
+    {
+        crane.ResetToRandomPosition();
+        targetPosition = new Vector3(0, 0, Random.Range(-20, 45));
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -39,5 +51,14 @@ public class CraneAgentV2 : Agent
         crane.MoveCrane(continousActions[0]);
         crane.MoveCabin(continousActions[1]);
         crane.MoveWinch(continousActions[2]);
+    }
+
+    private void CheckPosition()
+    {
+        Vector3 cabinPosition = crane.CabinPosition;
+        float targetDistance = Mathf.Abs(cabinPosition.z - targetPosition.z);
+        Debug.Log("Target: " + targetPosition.z + " || Distance: " + targetDistance);
+        if (targetDistance < 1) { SetReward(1f); EndEpisode(); }
+
     }
 }

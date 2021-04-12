@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class CraneV2 : MonoBehaviour, ICrane
 {
+    [Space(20)]
+    [Header("Crane state")]
+    [SerializeField] private bool craneMovementEnabled = true;
+    [SerializeField] private bool cabinMovementEnabled = true;
+    [SerializeField] private bool winchMovementEnabled = true;
+
+    [Space(20)]
+    [Header("Crane parts")]
     [SerializeField] private Transform cabin;
     [SerializeField] private Transform spreader;
     [SerializeField] private HingeJoint spoolLandRight;
@@ -23,7 +31,11 @@ public class CraneV2 : MonoBehaviour, ICrane
     private Rigidbody craneBody;
     private Rigidbody spreaderBody;
 
+    public Vector3 CabinPosition => cabin.localPosition;
 
+    public Vector3 CranePosition => transform.localPosition;
+
+    public Vector3 SpreaderPosition => spreader.localPosition;
 
     private void Start()
     {
@@ -35,6 +47,9 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     public void MoveCabin(float val)
     {
+        if (!cabinMovementEnabled) return;
+        if (cabin.localPosition.z > 45 && val > 0) val = 0;
+        if (cabin.localPosition.z < -20 && val < 0) val = 0;
         float targetSpeed = movementManager.GetNextSpeed(val, cabinBody.velocity.z, cabinSpeed * cabinAcceleration * Time.deltaTime, cabinSpeed);
         Vector3 newVelocity = cabinBody.velocity;
         newVelocity.z = targetSpeed;
@@ -43,6 +58,7 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     public void MoveCrane(float val)
     {
+        if (!craneMovementEnabled) return;
         float targetSpeed = movementManager.GetNextSpeed(val, craneBody.velocity.x, craneSpeed * craneAcceleration * Time.deltaTime, craneSpeed);
         Vector3 newVelocity = craneBody.velocity;
         newVelocity.x = targetSpeed;
@@ -51,6 +67,7 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     public void MoveWinch(float value)
     {
+        if (!winchMovementEnabled) return;
         if (value > 0 && spreader.localPosition.y > cabin.localPosition.y - 5) value = 0;
 
         // Adjust the value since the value provided is the speed in m/s
@@ -93,4 +110,19 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     }
 
+    public void ResetToRandomPosition()
+    {
+        cabin.localPosition = new Vector3(0, 32, Random.Range(-20, 45));
+        spreader.localPosition = new Vector3(cabin.localPosition.x, 25, cabin.localPosition.z + 1f);
+        Filo.Cable[] cables = GetComponentsInChildren<Filo.Cable>();
+        cables[0].Setup();
+        cables[1].Setup();
+        cables[2].Setup();
+        cables[3].Setup();
+
+
+        spreaderBody.isKinematic = true;
+        new WaitForSeconds(0.001f);
+        spreaderBody.isKinematic = false;
+    }
 }
