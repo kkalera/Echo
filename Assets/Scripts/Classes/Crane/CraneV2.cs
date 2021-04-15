@@ -37,12 +37,18 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     public Vector3 SpreaderPosition => spreader.localPosition;
 
+    public Vector3 CraneVelocity => craneBody.velocity;
+
+    public Vector3 CabinVelocity => cabinBody.velocity;
+
+    public Vector3 SpreaderVelocity => spreaderBody.velocity;
+
     private void Start()
     {
         movementManager = GetComponent<MovementManager>();
         cabinBody = cabin.GetComponent<Rigidbody>();
-        spreaderBody = cabin.GetComponent<Rigidbody>();
-        craneBody = this.GetComponent<Rigidbody>();
+        spreaderBody = spreader.GetComponent<Rigidbody>();
+        craneBody = GetComponent<Rigidbody>();
     }
 
     public void MoveCabin(float val)
@@ -112,17 +118,36 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     public void ResetToRandomPosition()
     {
+        Debug.Log("Reset to random position");
         cabin.localPosition = new Vector3(0, 32, Random.Range(-20, 45));
         spreader.localPosition = new Vector3(cabin.localPosition.x, 25, cabin.localPosition.z + 1f);
+
+        spreaderBody.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+        spreaderBody.velocity = Vector3.zero;
+        cabinBody.velocity = Vector3.zero;
+
         Filo.Cable[] cables = GetComponentsInChildren<Filo.Cable>();
         cables[0].Setup();
         cables[1].Setup();
         cables[2].Setup();
         cables[3].Setup();
+    }
 
+    public void ResetToPosition(Vector3 position)
+    {
+        Debug.Log("Reset to position");
+        transform.localPosition = new Vector3(position.x, 0.15f, -8f);
+        cabin.localPosition = new Vector3(0, 32, position.z);
+        spreader.localPosition = new Vector3(cabin.localPosition.x, position.y, cabin.localPosition.z + 1);
 
-        spreaderBody.isKinematic = true;
-        new WaitForSeconds(0.001f);
-        spreaderBody.isKinematic = false;
+        spreaderBody.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+        spreaderBody.velocity = Vector3.zero;
+        cabinBody.velocity = Vector3.zero;
+
+        Filo.Cable[] cables = GetComponentsInChildren<Filo.Cable>();
+        cables[0].Setup();
+        cables[1].Setup();
+        cables[2].Setup();
+        cables[3].Setup();
     }
 }

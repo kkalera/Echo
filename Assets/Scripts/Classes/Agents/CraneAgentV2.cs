@@ -6,8 +6,10 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 
-public class CraneAgentV2 : Agent
+public class CraneAgentV2 : Agent, IAgent
 {
+    [Header("Objects")]
+    [Space(10)]
     [SerializeField] private GameObject craneObject;
     [Header("Inputs")]
     [Space(10)]
@@ -16,27 +18,36 @@ public class CraneAgentV2 : Agent
     [SerializeField] private InputAction inputLift;
 
     private ICrane crane;
-    private Vector3 targetPosition;
+    private LevelManager3 levelManager;
+    private int level;
 
     void Start()
     {
         inputCabin.Enable();
         inputCrane.Enable();
         inputLift.Enable();
-        crane = craneObject.GetComponent<ICrane>();
-    }
-
-    private void Update()
-    {
-        CheckPosition();
+        crane = craneObject.GetComponentInChildren<ICrane>();
+        levelManager = GetComponent<LevelManager3>();
     }
 
     public override void OnEpisodeBegin()
     {
-        crane.ResetToRandomPosition();
-        targetPosition = new Vector3(0, 0, Random.Range(-20, 45));
+        level = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level_parameter", 0);
+        levelManager.Crane = crane;
+        levelManager.SetLevel(level);
+        levelManager.OnEpisodeBegin();
     }
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        sensor.AddObservation(crane.CranePosition);
+        sensor.AddObservation(crane.CraneVelocity);
+        sensor.AddObservation(crane.CabinPosition);
+        sensor.AddObservation(crane.CabinVelocity);
+        sensor.AddObservation(crane.SpreaderPosition);
+        sensor.AddObservation(crane.SpreaderVelocity);
+        sensor.AddObservation(levelManager.TargetPosition);
 
+    }
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
@@ -51,14 +62,33 @@ public class CraneAgentV2 : Agent
         crane.MoveCrane(continousActions[0]);
         crane.MoveCabin(continousActions[1]);
         crane.MoveWinch(continousActions[2]);
+        RewardData rewardData = levelManager.Step();
+        AddReward(rewardData.reward);
+        AddReward(-1 / MaxStep);
+        if (rewardData.endEpisode) EndEpisode();
     }
 
-    private void CheckPosition()
+    public void OnCollisionEnter(Collision col)
     {
-        Vector3 cabinPosition = crane.CabinPosition;
-        float targetDistance = Mathf.Abs(cabinPosition.z - targetPosition.z);
-        Debug.Log("Target: " + targetPosition.z + " || Distance: " + targetDistance);
-        if (targetDistance < 1) { SetReward(1f); EndEpisode(); }
+        RewardData rewardData = levelManager.Step(col);
+        AddReward(rewardData.reward);
+        if (rewardData.endEpisode) EndEpisode();
+    }
 
+    public void OnCollisionStay(Collision col)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        RewardData rewardData = levelManager.Step(null, other);
+        AddReward(rewardData.reward);
+        if (rewardData.endEpisode) EndEpisode();
+    }
+
+    public void OnTriggerStay(Collider other)
+    {
+        throw new System.NotImplementedException();
     }
 }

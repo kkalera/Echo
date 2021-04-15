@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class CollisionReporter : MonoBehaviour
 {
-    public CraneAgent agent;
+    public GameObject Environment;
+    private IAgent agent;
+    private void Start()
+    {
+        agent = Environment.GetComponent<IAgent>();
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -14,5 +19,14 @@ public class CollisionReporter : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         if (agent != null) agent.OnCollisionStay(collision);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (agent != null) agent.OnTriggerEnter(other);
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (agent != null) agent.OnTriggerStay(other);
     }
 }

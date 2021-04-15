@@ -16,7 +16,15 @@ public interface ICrane
     void MoveCabin(float val);
     void MoveWinch(float value);
     void ResetToRandomPosition();
-    Vector3 CabinPosition { get; }
+
+    void ResetToPosition(Vector3 position);
+
     Vector3 CranePosition { get; }
+    Vector3 CraneVelocity { get; }
+
+    Vector3 CabinPosition { get; }
+    Vector3 CabinVelocity { get; }
+
     Vector3 SpreaderPosition { get; }
+    Vector3 SpreaderVelocity { get; }
 }
