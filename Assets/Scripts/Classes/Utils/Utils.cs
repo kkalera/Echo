@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using System.Reflection;
 using System;
+using Unity.MLAgents;
 
 public static class Utils
 {
@@ -27,5 +28,11 @@ public static class Utils
     public static float Normalize(float val, float min, float max)
     {
         return (val - min) / (max - min);
+    }
+
+    public static void ReportStat(float value, string name)
+    {
+        var statsRecorder = Academy.Instance.StatsRecorder;
+        statsRecorder.Add(name, value);
     }
 }

@@ -36,61 +36,31 @@ behaviors:
 environment_parameters:
     level_parameter:
         curriculum:
-            - name: First
+            - name: Swing control
               completion_criteria:
                   measure: reward
                   behavior: Crane
                   signal_smoothing: true
-                  min_lesson_length: 10000
-                  threshold: 0.95
+                  min_lesson_length: 1000
+                  threshold: 1.1
               value: 0
 
-            - name: Second
+            - name: Dynamic lenght swing control
               completion_criteria:
                   measure: reward
                   behavior: Crane
                   signal_smoothing: true
-                  min_lesson_length: 10000
-                  threshold: 0.95
+                  min_lesson_length: 1000
+                  threshold: 1.25
                   require_reset: true
               value: 1
 
-            - name: Third
+            - name: End Training
               completion_criteria:
                   measure: reward
                   behavior: Crane
                   signal_smoothing: true
-                  min_lesson_length: 10000
+                  min_lesson_length: 1000
                   threshold: 0.95
                   require_reset: true
-              value: 2
-
-            - name: Third
-              completion_criteria:
-                  measure: reward
-                  behavior: Crane
-                  signal_smoothing: true
-                  min_lesson_length: 10000
-                  threshold: 0.95
-                  require_reset: true
-              value: 3
-
-            - name: Fourth
-              completion_criteria:
-                  measure: reward
-                  behavior: Crane
-                  signal_smoothing: true
-                  min_lesson_length: 10000
-                  threshold: 0.95
-                  require_reset: true
-              value: 4
-
-            - name: Fifth
-              completion_criteria:
-                  measure: reward
-                  behavior: Crane
-                  signal_smoothing: true
-                  min_lesson_length: 10000
-                  threshold: 0.95
-                  require_reset: true
-              value: 5
+              value: -1

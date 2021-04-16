@@ -19,6 +19,11 @@ public class CraneV2 : MonoBehaviour, ICrane
     [SerializeField] private HingeJoint spoolWaterRight;
     [SerializeField] private HingeJoint spoolWaterLeft;
 
+    [SerializeField] private Filo.Cable cableLandRight;
+    [SerializeField] private Filo.Cable cableLandLeft;
+    [SerializeField] private Filo.Cable cableWaterRight;
+    [SerializeField] private Filo.Cable cableWaterLeft;
+
     [Space(20)]
     [Header("Crane specs")]
     [SerializeField] [Range(.1f, 10f)] private float craneSpeed = 0.75f; //Speed in m/s
@@ -123,31 +128,31 @@ public class CraneV2 : MonoBehaviour, ICrane
         spreader.localPosition = new Vector3(cabin.localPosition.x, 25, cabin.localPosition.z + 1f);
 
         spreaderBody.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+        spreader.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
         spreaderBody.velocity = Vector3.zero;
         cabinBody.velocity = Vector3.zero;
 
-        Filo.Cable[] cables = GetComponentsInChildren<Filo.Cable>();
-        cables[0].Setup();
-        cables[1].Setup();
-        cables[2].Setup();
-        cables[3].Setup();
+        cableLandLeft.Setup();
+        cableLandRight.Setup();
+        cableWaterLeft.Setup();
+        cableWaterRight.Setup();
+        spreaderBody.isKinematic = false;
     }
 
     public void ResetToPosition(Vector3 position)
     {
-        Debug.Log("Reset to position");
         transform.localPosition = new Vector3(position.x, 0.15f, -8f);
         cabin.localPosition = new Vector3(0, 32, position.z);
         spreader.localPosition = new Vector3(cabin.localPosition.x, position.y, cabin.localPosition.z + 1);
 
         spreaderBody.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+        spreader.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
         spreaderBody.velocity = Vector3.zero;
         cabinBody.velocity = Vector3.zero;
 
-        Filo.Cable[] cables = GetComponentsInChildren<Filo.Cable>();
-        cables[0].Setup();
-        cables[1].Setup();
-        cables[2].Setup();
-        cables[3].Setup();
+        cableLandLeft.Setup();
+        cableLandRight.Setup();
+        cableWaterLeft.Setup();
+        cableWaterRight.Setup();
     }
 }

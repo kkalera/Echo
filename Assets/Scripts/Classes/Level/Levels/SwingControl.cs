@@ -23,12 +23,12 @@ public class SwingControl : CraneLevel
         if (frontSpawn)
         {
             crane.ResetToPosition(new Vector3(0, 25, 35));
-            target = new Vector3(0, 25, -10);
+            target = new Vector3(0, 0, -10);
         }
         else
         {
             crane.ResetToPosition(new Vector3(0, 25, -10));
-            target = new Vector3(0, 25, 35);
+            target = new Vector3(0, 0, 35);
         }
 
     }
@@ -40,6 +40,7 @@ public class SwingControl : CraneLevel
 
         // Calculate the amount of swing in the cable and give a reward accordingly
         float swingDistance = Vector3.Distance(new Vector3(0, 0, crane.CabinPosition.z), new Vector3(0, 0, crane.SpreaderPosition.z));
+        Utils.ReportStat(swingDistance, "swing");
         if (crane.CabinVelocity.z > 0 && swingDistance < 2)
         {
             rd.reward = 1 / maxstep;

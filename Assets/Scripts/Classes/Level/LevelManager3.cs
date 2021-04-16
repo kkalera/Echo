@@ -14,6 +14,7 @@ public class LevelManager3 : MonoBehaviour
 
     public void SetLevel(int level)
     {
+        if (level == -1) StopSimulation();
         currentLevel = levels[level];
         currentLevel.ResetEnvironment(Crane);
     }

@@ -16,6 +16,8 @@ public class CraneAgentV2 : Agent, IAgent
     [SerializeField] private InputAction inputCabin;
     [SerializeField] private InputAction inputCrane;
     [SerializeField] private InputAction inputLift;
+    public bool testmode;
+    public int testlevel = 1;
 
     private ICrane crane;
     private LevelManager3 levelManager;
@@ -33,20 +35,45 @@ public class CraneAgentV2 : Agent, IAgent
     public override void OnEpisodeBegin()
     {
         level = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level_parameter", 0);
+        if (testmode) level = testlevel;
         levelManager.Crane = crane;
         levelManager.SetLevel(level);
         levelManager.OnEpisodeBegin();
     }
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(crane.CranePosition);
-        sensor.AddObservation(crane.CraneVelocity);
-        sensor.AddObservation(crane.CabinPosition);
-        sensor.AddObservation(crane.CabinVelocity);
-        sensor.AddObservation(crane.SpreaderPosition);
-        sensor.AddObservation(crane.SpreaderVelocity);
-        sensor.AddObservation(levelManager.TargetPosition);
+        sensor.AddObservation(Utils.Normalize(crane.CranePosition.x, -25, 25));
+        sensor.AddObservation(crane.CraneVelocity.x);
 
+        sensor.AddObservation(Utils.Normalize(crane.CabinPosition.z, -25, 50));
+        sensor.AddObservation(crane.CabinVelocity.z);
+
+        sensor.AddObservation(Utils.Normalize(crane.SpreaderPosition.x, -25, 25));
+        sensor.AddObservation(Utils.Normalize(crane.SpreaderPosition.z, -25, 50));
+        sensor.AddObservation(Utils.Normalize(crane.SpreaderPosition.y, 0, 30));
+
+        sensor.AddObservation(crane.SpreaderVelocity.x);
+        sensor.AddObservation(crane.SpreaderVelocity.z);
+        sensor.AddObservation(crane.SpreaderVelocity.y);
+
+        sensor.AddObservation(Utils.Normalize(levelManager.TargetPosition.x, -25, 25));
+        sensor.AddObservation(Utils.Normalize(levelManager.TargetPosition.z, -25, 50));
+        sensor.AddObservation(Utils.Normalize(levelManager.TargetPosition.y, 0, 30));
+
+        //Add observations for:
+        // Spreader locked
+        // Flippers down
+
+        /*Debug.Log(
+            "Crane position normalized: " + Utils.Normalize(crane.CranePosition.x, -25, 25) +
+            " | " + Utils.Normalize(crane.CabinPosition.z, -25, 50) +
+            " | " + Utils.Normalize(crane.SpreaderPosition.x, -25, 25) +
+            " | " + Utils.Normalize(crane.SpreaderPosition.z, -25, 50) +
+            " | " + Utils.Normalize(crane.SpreaderPosition.y, 0, 30) +
+            "  |||  Target position normalized: " + Utils.Normalize(levelManager.TargetPosition.x, -25, 25) +
+            " | " + Utils.Normalize(levelManager.TargetPosition.z, -25, 50) +
+            " | " + Utils.Normalize(levelManager.TargetPosition.y, 0, 30)
+            );*/
     }
     public override void Heuristic(in ActionBuffers actionsOut)
     {
@@ -64,7 +91,6 @@ public class CraneAgentV2 : Agent, IAgent
         crane.MoveWinch(continousActions[2]);
         RewardData rewardData = levelManager.Step();
         AddReward(rewardData.reward);
-        AddReward(-1 / MaxStep);
         if (rewardData.endEpisode) EndEpisode();
     }
 
