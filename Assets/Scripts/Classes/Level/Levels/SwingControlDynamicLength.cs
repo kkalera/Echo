@@ -46,6 +46,10 @@ public class SwingControlDynamicLength : CraneLevel
         {
             rd.reward += 1f / maxstep;
         }
+        else
+        {
+            rd.reward += -5f / maxstep;
+        }
 
         // Calculate the distance to the target and give a reward when it's at the location. Also end the episode
         float targetDistance = Vector3.Distance(target, new Vector3(0, 0, crane.SpreaderPosition.z));

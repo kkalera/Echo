@@ -51,20 +51,33 @@ public class SwingControlDynamicHold : CraneLevel
         {
             rd.reward += 1f / maxstep;
         }
+        else
+        {
+            rd.reward += -5f / maxstep;
+        }
 
         // Calculate the distance to the target and give a reward when it's at the location. Also end the episode
         float targetDistance = Vector3.Distance(target, new Vector3(0, 0, crane.SpreaderPosition.z));
         if (targetDistance < 0.5f)
         {
+            rd.reward += 1 / maxstep;
+
             if (timeOnTarget == 0) timeOnTarget = Time.time;
+
             if (Time.time - timeOnTarget >= timeToStay)
             {
+                Utils.ReportStat(Time.time - timeOnTarget, "Time on target");
                 rd.reward += 1;
                 rd.endEpisode = true;
                 stayCounter += 1;
-                if (stayCounter >= stayCounterThreshold) timeToStay = Mathf.Min(timeToStay + 0.2f, stayMax);
+                timeOnTarget = 0;
+                if (stayCounter >= stayCounterThreshold)
+                {
+                    timeToStay = Mathf.Min(timeToStay + 0.2f, stayMax);
+                    stayCounter = 0;
+                }
             }
-            Debug.Log("Time on target: " + (Time.time - timeOnTarget));
+            
         }
         else
         {
