@@ -44,7 +44,11 @@ public class SwingControl : CraneLevel
         float maxSwingDistance = (crane.CabinPosition.y - crane.SpreaderPosition.y) * maximumSwing;
         if (crane.CabinVelocity.z > 0 && swingDistance <= maxSwingDistance)
         {
-            rd.reward = 1 / maxstep;
+            rd.reward += 1 / maxstep;
+        }
+        else
+        {
+            rd.reward += -1 / maxstep;
         }
 
         // Calculate the distance to the target and give a reward when it's at the location. Also end the episode

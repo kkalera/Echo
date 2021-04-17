@@ -54,7 +54,7 @@ public class SwingControlDynamicHold : CraneLevel
         }
         else
         {
-            rd.reward += -5f / maxstep;
+            rd.reward += -1f / maxstep;
         }
 
         // Calculate the distance to the target and give a reward when it's at the location. Also end the episode

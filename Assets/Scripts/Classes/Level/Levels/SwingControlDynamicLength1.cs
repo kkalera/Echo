@@ -23,12 +23,12 @@ public class SwingControlDynamicLength1 : CraneLevel
         bool frontSpawn = Random.value > 0.5;
         if (frontSpawn)
         {
-            crane.ResetToPosition(new Vector3(0, Random.Range(10, 25), 35));
+            crane.ResetToPosition(new Vector3(0, Random.Range(15, 25), 35));
             target = new Vector3(0, 0, -10);
         }
         else
         {
-            crane.ResetToPosition(new Vector3(0, Random.Range(10, 25), -10));
+            crane.ResetToPosition(new Vector3(0, Random.Range(15, 25), -10));
             target = new Vector3(0, 0, 35);
         }
 
@@ -49,7 +49,7 @@ public class SwingControlDynamicLength1 : CraneLevel
         }
         else
         {
-            rd.reward += -5f / maxstep;
+            rd.reward += -1f / maxstep;
         }
 
         // Calculate the distance to the target and give a reward when it's at the location. Also end the episode
