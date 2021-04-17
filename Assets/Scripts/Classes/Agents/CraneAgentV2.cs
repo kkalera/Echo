@@ -23,6 +23,10 @@ public class CraneAgentV2 : Agent, IAgent
     private LevelManager3 levelManager;
     private int level;
 
+    private float cabinValue;
+    private float craneValue;
+    private float winchValue;
+
     void Start()
     {
         inputCabin.Enable();
@@ -30,6 +34,13 @@ public class CraneAgentV2 : Agent, IAgent
         inputLift.Enable();
         crane = craneObject.GetComponentInChildren<ICrane>();
         levelManager = GetComponent<LevelManager3>();
+    }
+
+    private void FixedUpdate()
+    {
+        crane.MoveCrane(craneValue);
+        crane.MoveCabin(cabinValue);
+        crane.MoveWinch(winchValue);
     }
 
     public override void OnEpisodeBegin()
@@ -43,23 +54,28 @@ public class CraneAgentV2 : Agent, IAgent
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(Utils.Normalize(crane.CranePosition.x, -25, 25));
-        sensor.AddObservation(crane.CraneVelocity.x);
+        sensor.AddObservation(Utils.Normalize(crane.CraneVelocity.x, -10, 10));
 
         sensor.AddObservation(Utils.Normalize(crane.CabinPosition.z, -25, 50));
-        sensor.AddObservation(crane.CabinVelocity.z);
+        sensor.AddObservation(Utils.Normalize(crane.CabinVelocity.z, -10, 10));
 
         sensor.AddObservation(Utils.Normalize(crane.SpreaderPosition.x, -25, 25));
         sensor.AddObservation(Utils.Normalize(crane.SpreaderPosition.z, -25, 50));
         sensor.AddObservation(Utils.Normalize(crane.SpreaderPosition.y, 0, 30));
 
-        sensor.AddObservation(crane.SpreaderVelocity.x);
-        sensor.AddObservation(crane.SpreaderVelocity.z);
-        sensor.AddObservation(crane.SpreaderVelocity.y);
+        sensor.AddObservation(Utils.Normalize(crane.SpreaderVelocity.x, -10, 10));
+        sensor.AddObservation(Utils.Normalize(crane.SpreaderVelocity.z, -10, 10));
+        sensor.AddObservation(Utils.Normalize(crane.SpreaderVelocity.y, -10, 10));
 
         sensor.AddObservation(Utils.Normalize(levelManager.TargetPosition.x, -25, 25));
         sensor.AddObservation(Utils.Normalize(levelManager.TargetPosition.z, -25, 50));
         sensor.AddObservation(Utils.Normalize(levelManager.TargetPosition.y, 0, 30));
 
+        sensor.AddObservation(craneValue);
+        sensor.AddObservation(cabinValue);
+        sensor.AddObservation(winchValue);
+
+        //Debug.Log("Spreader: " + crane.SpreaderVelocity.z + "  ||  cabin: " + crane.CabinVelocity.z);
         //Add observations for:
         // Spreader locked
         // Flippers down
@@ -86,9 +102,10 @@ public class CraneAgentV2 : Agent, IAgent
     public override void OnActionReceived(ActionBuffers actions)
     {
         ActionSegment<float> continousActions = actions.ContinuousActions;
-        crane.MoveCrane(continousActions[0]);
-        crane.MoveCabin(continousActions[1]);
-        crane.MoveWinch(continousActions[2]);
+        craneValue = continousActions[0];
+        cabinValue = continousActions[1];
+        winchValue = continousActions[2];
+
         RewardData rewardData = levelManager.Step();
         AddReward(rewardData.reward);
         if (rewardData.endEpisode) EndEpisode();

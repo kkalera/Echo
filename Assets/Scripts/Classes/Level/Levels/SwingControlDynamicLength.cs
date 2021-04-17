@@ -11,7 +11,7 @@ using Unity.MLAgents;
 /// </summary>
 public class SwingControlDynamicLength : CraneLevel
 {
-    [SerializeField] float maximumSwing;
+    [SerializeField] [Range(0, 1)] float maximumSwing;
     private readonly float maxstep = 5000;
     private Vector3 target;
     private ICrane crane;
@@ -23,12 +23,12 @@ public class SwingControlDynamicLength : CraneLevel
         bool frontSpawn = Random.value > 0.5;
         if (frontSpawn)
         {
-            crane.ResetToPosition(new Vector3(0, Random.Range(10, 25), 35));
+            crane.ResetToPosition(new Vector3(0, Random.Range(17.5f, 25), 35));
             target = new Vector3(0, 0, -10);
         }
         else
         {
-            crane.ResetToPosition(new Vector3(0, Random.Range(10, 25), -10));
+            crane.ResetToPosition(new Vector3(0, Random.Range(17.5f, 25), -10));
             target = new Vector3(0, 0, 35);
         }
 
@@ -42,7 +42,8 @@ public class SwingControlDynamicLength : CraneLevel
         // Calculate the amount of swing in the cable and give a reward accordingly
         float swingDistance = Vector3.Distance(new Vector3(0, 0, crane.CabinPosition.z), new Vector3(0, 0, crane.SpreaderPosition.z));
         Utils.ReportStat(swingDistance, "swing");
-        if (crane.CabinVelocity.z > 0 && swingDistance < 2)
+        float maxSwingDistance = (crane.CabinPosition.y - crane.SpreaderPosition.y) * maximumSwing;
+        if (crane.CabinVelocity.z > 0 && swingDistance < maxSwingDistance)
         {
             rd.reward += 1f / maxstep;
         }
