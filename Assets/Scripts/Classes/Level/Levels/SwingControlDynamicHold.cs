@@ -20,6 +20,7 @@ public class SwingControlDynamicHold : CraneLevel
     int stayCounter = 0;
     int stayCounterThreshold = 100;
     int stayMax = 5;
+    private float maxSwingDistance;
 
     public override Vector3 TargetLocation => target;
 
@@ -36,7 +37,7 @@ public class SwingControlDynamicHold : CraneLevel
             crane.ResetToPosition(new Vector3(0, Random.Range(10, 25), -10));
             target = new Vector3(0, 0, 35);
         }
-
+        maxSwingDistance = (crane.CabinPosition.y - crane.SpreaderPosition.y) * maximumSwing;
     }
 
     public override RewardData Step(Collision col = null, Collider other = null)
@@ -47,10 +48,12 @@ public class SwingControlDynamicHold : CraneLevel
         // Calculate the amount of swing in the cable and give a reward accordingly
         float swingDistance = Vector3.Distance(new Vector3(0, 0, crane.CabinPosition.z), new Vector3(0, 0, crane.SpreaderPosition.z));
         Utils.ReportStat(swingDistance, "swing");
-        float maxSwingDistance = (crane.CabinPosition.y - crane.SpreaderPosition.y) * maximumSwing;
+
         if (crane.CabinVelocity.z > 0 && swingDistance < maxSwingDistance)
         {
-            rd.reward += 1f / maxstep;
+            float distanceNormalized = Mathf.Min(Utils.Normalize(swingDistance, 0, maxSwingDistance), 1);
+            float invertedDistance = 1 - distanceNormalized;
+            rd.reward += Mathf.Min(Mathf.Pow(invertedDistance, 2), 1) / maxstep;
         }
         else
         {

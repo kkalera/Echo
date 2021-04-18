@@ -14,6 +14,7 @@ public class SwingControl : CraneLevel
     private readonly float maxstep = 5000;
     private Vector3 target;
     private ICrane crane;
+    private float maxSwingDistance;
 
     public override Vector3 TargetLocation => target;
 
@@ -30,6 +31,7 @@ public class SwingControl : CraneLevel
             crane.ResetToPosition(new Vector3(0, 25, -10));
             target = new Vector3(0, 0, 35);
         }
+        maxSwingDistance = (crane.CabinPosition.y - crane.SpreaderPosition.y) * maximumSwing;
 
     }
 
@@ -41,10 +43,12 @@ public class SwingControl : CraneLevel
         // Calculate the amount of swing in the cable and give a reward accordingly
         float swingDistance = Vector3.Distance(new Vector3(0, 0, crane.CabinPosition.z), new Vector3(0, 0, crane.SpreaderPosition.z));
         Utils.ReportStat(swingDistance, "swing");
-        float maxSwingDistance = (crane.CabinPosition.y - crane.SpreaderPosition.y) * maximumSwing;
+
         if (crane.CabinVelocity.z > 0 && swingDistance <= maxSwingDistance)
         {
-            rd.reward += 1 / maxstep;
+            float distanceNormalized = Mathf.Min(Utils.Normalize(swingDistance, 0, maxSwingDistance), 1);
+            float invertedDistance = 1 - distanceNormalized;
+            rd.reward += Mathf.Min(Mathf.Pow(invertedDistance, 2), 1) / maxstep;
         }
         else
         {

@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07aacb931555da1498aebbb65ed00541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumSwing: 0.2
+  maximumSwing: 0.35
 --- !u!1 &1422043068
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 751312df12f7bb14e9558e6c3280adc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumSwing: 0.2
+  maximumSwing: 0.35
 --- !u!1 &1678393917
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e811453dd8b7216499f7b2d0e3203122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumSwing: 0.2
+  maximumSwing: 0.35
 --- !u!1 &2217716945389648577
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 423a508dc702ed24281a1a19c6baa8b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumSwing: 0.2
+  maximumSwing: 0.35
 --- !u!1 &7794852832115429324
 GameObject:
   m_ObjectHideFlags: 0
