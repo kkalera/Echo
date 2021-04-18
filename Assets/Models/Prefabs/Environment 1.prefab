@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e811453dd8b7216499f7b2d0e3203122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumSwing: 0.35
+  maximumSwing: 0.6
 --- !u!1 &2217716945389648577
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,7 +270,7 @@ MonoBehaviour:
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
-  m_InferenceDevice: 1
+  m_InferenceDevice: 2
   m_BehaviorType: 0
   m_BehaviorName: Crane
   TeamId: 0

@@ -15,6 +15,7 @@ public class SwingControl : CraneLevel
     private Vector3 target;
     private ICrane crane;
     private float maxSwingDistance;
+    private float lastDistance;
 
     public override Vector3 TargetLocation => target;
 
@@ -32,6 +33,7 @@ public class SwingControl : CraneLevel
             target = new Vector3(0, 0, 35);
         }
         maxSwingDistance = (crane.CabinPosition.y - crane.SpreaderPosition.y) * maximumSwing;
+        lastDistance = Vector3.Distance(new Vector3(0, 0, crane.SpreaderPosition.z), target);
 
     }
 
@@ -50,10 +52,6 @@ public class SwingControl : CraneLevel
             float invertedDistance = 1 - distanceNormalized;
             rd.reward += Mathf.Min(Mathf.Pow(invertedDistance, 2), 1) / maxstep;
         }
-        else
-        {
-            rd.reward += -1 / maxstep;
-        }
 
         // Calculate the distance to the target and give a reward when it's at the location. Also end the episode
         float targetDistance = Vector3.Distance(target, new Vector3(0, 0, crane.SpreaderPosition.z));
@@ -61,6 +59,11 @@ public class SwingControl : CraneLevel
         {
             rd.reward += 1;
             rd.endEpisode = true;
+        }
+
+        if(targetDistance < lastDistance)
+        {
+            rd.reward += 1 / maxstep;
         }
 
         // Check wether the crane collided with an object

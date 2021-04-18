@@ -42,7 +42,7 @@ environment_parameters:
                   behavior: Crane
                   signal_smoothing: true
                   min_lesson_length: 1000
-                  threshold: 1
+                  threshold: 1.6
               value: 0
 
             - name: Dynamic length swing control 17.5 meters
@@ -51,7 +51,7 @@ environment_parameters:
                   behavior: Crane
                   signal_smoothing: true
                   min_lesson_length: 1000
-                  threshold: 0.9
+                  threshold: 0.8
                   require_reset: true
               value: 1
 
@@ -61,7 +61,7 @@ environment_parameters:
                   behavior: Crane
                   signal_smoothing: true
                   min_lesson_length: 1000
-                  threshold: 0.9
+                  threshold: 0.8
                   require_reset: true
               value: 2
 
@@ -71,7 +71,7 @@ environment_parameters:
                   behavior: Crane
                   signal_smoothing: true
                   min_lesson_length: 1000
-                  threshold: 0.9
+                  threshold: 0.8
                   require_reset: true
               value: 3
 

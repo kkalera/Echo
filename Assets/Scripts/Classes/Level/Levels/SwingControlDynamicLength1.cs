@@ -47,11 +47,7 @@ public class SwingControlDynamicLength1 : CraneLevel
         {
             float distanceNormalized = Mathf.Min(Utils.Normalize(swingDistance, 0, maxSwingDistance), 1);
             float invertedDistance = 1 - distanceNormalized;
-            rd.reward += Mathf.Min(Mathf.Pow(invertedDistance, 2), 1) / maxstep;
-        }
-        else
-        {
-            rd.reward += -1f / maxstep;
+            rd.reward += Mathf.Min(Mathf.Pow(invertedDistance, 2), 1)*2 / maxstep;
         }
 
         // Calculate the distance to the target and give a reward when it's at the location. Also end the episode
