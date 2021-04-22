@@ -61,9 +61,10 @@ public class SwingControl : CraneLevel
             rd.endEpisode = true;
         }
 
-        if(targetDistance < lastDistance)
+        if (targetDistance < lastDistance)
         {
             rd.reward += 1 / maxstep;
+            lastDistance = targetDistance;
         }
 
         // Check wether the crane collided with an object

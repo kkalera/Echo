@@ -29,4 +29,8 @@ public class CollisionReporter : MonoBehaviour
     {
         if (agent != null) agent.OnTriggerStay(other);
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (agent != null) agent.OnTriggerExit(other);
+    }
 }

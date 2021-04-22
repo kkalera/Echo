@@ -8,4 +8,5 @@ public interface IAgent
     void OnCollisionStay(Collision col);
     void OnTriggerEnter(Collider other);
     void OnTriggerStay(Collider other);
+    void OnTriggerExit(Collider other);
 }

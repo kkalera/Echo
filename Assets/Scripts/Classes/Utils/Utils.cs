@@ -35,4 +35,8 @@ public static class Utils
         var statsRecorder = Academy.Instance.StatsRecorder;
         statsRecorder.Add(name, value);
     }
+    public static void StopSimulation()
+    {
+        EditorApplication.isPlaying = false; //EditorApplication.ExecuteMenuItem("Edit/Play");
+    }
 }

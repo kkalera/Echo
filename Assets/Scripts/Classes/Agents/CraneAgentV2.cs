@@ -134,4 +134,9 @@ public class CraneAgentV2 : Agent, IAgent
     {
         throw new System.NotImplementedException();
     }
+
+    public void OnTriggerExit(Collider other)
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -9,6 +9,7 @@ public class CraneV2 : MonoBehaviour, ICrane
     [SerializeField] private bool craneMovementEnabled = true;
     [SerializeField] private bool cabinMovementEnabled = true;
     [SerializeField] private bool winchMovementEnabled = true;
+    [SerializeField] private bool swingDisabled = true;
 
     [Space(20)]
     [Header("Crane parts")]
@@ -48,12 +49,28 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     public Vector3 SpreaderVelocity => spreaderBody.velocity;
 
+
+    public bool SwingDisabled { get => swingDisabled; set => swingDisabled = value; }
+    public bool CraneMovementDisabled { get => !craneMovementEnabled; set => craneMovementEnabled = !value; }
+    public bool CabinMovementDisabled { get => !cabinMovementEnabled; set => cabinMovementEnabled = !value; }
+    public bool WinchMovementDisabled { get => !winchMovementEnabled; set => winchMovementEnabled = !value; }
+
+
     private void Start()
     {
         movementManager = GetComponent<MovementManager>();
         cabinBody = cabin.GetComponent<Rigidbody>();
         spreaderBody = spreader.GetComponent<Rigidbody>();
         craneBody = GetComponent<Rigidbody>();
+    }
+
+    private void Update()
+    {
+        if (swingDisabled)
+        {
+            spreader.localPosition = new Vector3(cabin.localPosition.x, spreader.localPosition.y, cabin.localPosition.z + 1);
+        }
+        if (spreader.localPosition.y >= cabin.localPosition.y - 5) Debug.Log("test");
     }
 
     public void MoveCabin(float val)
@@ -70,6 +87,8 @@ public class CraneV2 : MonoBehaviour, ICrane
     public void MoveCrane(float val)
     {
         if (!craneMovementEnabled) return;
+        if (transform.localPosition.x > 25 && val > 0) val = 0;
+        if (transform.localPosition.x < -25 && val < 0) val = 0;
         float targetSpeed = movementManager.GetNextSpeed(val, craneBody.velocity.x, craneSpeed * craneAcceleration * Time.deltaTime, craneSpeed);
         Vector3 newVelocity = craneBody.velocity;
         newVelocity.x = targetSpeed;
@@ -80,24 +99,25 @@ public class CraneV2 : MonoBehaviour, ICrane
     {
         if (!winchMovementEnabled) return;
         if (value > 0 && spreader.localPosition.y > cabin.localPosition.y - 5) value = 0;
+        if (value < 0 && spreader.localPosition.y < cabin.localPosition.y - 40) value = 0;
 
         // Adjust the value since the value provided is the speed in m/s
         // The motor target velocity is in degree/s
         // Since our pulleys have a diameter of 1m we want 1 rotation/pi per m/s requested.
-        value *= 360 / Mathf.PI;
+        if (value != 0) value *= 360 / Mathf.PI;
 
         // Get 2 motors (one side turns clockwise while the other side turns counter-clockwise
         JointMotor motor = spoolWaterLeft.motor;
         JointMotor motor2 = spoolLandLeft.motor;
 
         float currentVelocity = motor.targetVelocity;
-        float acceleration = 360 * Time.deltaTime;
+        float acceleration = 360 * Time.fixedDeltaTime;
 
-        if (value > currentVelocity && value != 0)
+        if (value != 0 && value > currentVelocity)
         {
             value = Mathf.Min(currentVelocity + acceleration, value);
         }
-        else if (value < currentVelocity && value != 0)
+        else if (value != 0 && value < currentVelocity)
         {
             value = Mathf.Max(currentVelocity - acceleration, value);
         }
@@ -123,7 +143,6 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     public void ResetToRandomPosition()
     {
-        Debug.Log("Reset to random position");
         cabin.localPosition = new Vector3(0, 32, Random.Range(-20, 45));
         spreader.localPosition = new Vector3(cabin.localPosition.x, 25, cabin.localPosition.z + 1f);
 
@@ -154,5 +173,27 @@ public class CraneV2 : MonoBehaviour, ICrane
         cableLandRight.Setup();
         cableWaterLeft.Setup();
         cableWaterRight.Setup();
+
+        Filo.Cable.Link linkLandLeft = cableLandLeft.links[0];
+        linkLandLeft.orientation = true;
+        linkLandLeft.storedCable = 50;
+        cableLandLeft.links[0] = linkLandLeft;
+
+        Filo.Cable.Link linkLandRight = cableLandRight.links[0];
+        linkLandRight.orientation = true;
+        linkLandRight.storedCable = 50;
+        cableLandRight.links[0] = linkLandRight;
+
+        Filo.Cable.Link linkWaterLeft = cableWaterLeft.links[0];
+        linkWaterLeft.orientation = false;
+        linkWaterLeft.storedCable = 50;
+        cableWaterLeft.links[0] = linkWaterLeft;
+
+        Filo.Cable.Link linkWaterRight = cableWaterRight.links[0];
+        linkWaterRight.orientation = false;
+        linkWaterRight.storedCable = 50;
+        cableWaterRight.links[0] = linkWaterRight;
+
+
     }
 }

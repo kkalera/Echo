@@ -15,8 +15,11 @@ public interface ICrane
     void MoveCrane(float val);
     void MoveCabin(float val);
     void MoveWinch(float value);
+    bool SwingDisabled { set; get; }
+    bool CraneMovementDisabled { set; get; }
+    bool CabinMovementDisabled { set; get; }
+    bool WinchMovementDisabled { set; get; }
     void ResetToRandomPosition();
-
     void ResetToPosition(Vector3 position);
 
     Vector3 CranePosition { get; }
