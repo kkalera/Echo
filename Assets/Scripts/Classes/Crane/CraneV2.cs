@@ -31,6 +31,7 @@ public class CraneV2 : MonoBehaviour, ICrane
     [SerializeField] [Range(.1f, 1f)] private float craneAcceleration = 0.25f; //Acceleration in %
     [SerializeField] [Range(.1f, 10f)] private float cabinSpeed = 4; //Speed in m/s
     [SerializeField] [Range(.1f, 1f)] private float cabinAcceleration = 0.25f; //Acceleration in %
+    [SerializeField] private float minSpreaderHeight = 0;
 
     private MovementManager movementManager;
     private Rigidbody cabinBody;
@@ -49,6 +50,7 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     public Vector3 SpreaderVelocity => spreaderBody.velocity;
 
+    public float MinSpreaderHeight { get => minSpreaderHeight; set => minSpreaderHeight = value; }
 
     public bool SwingDisabled { get => swingDisabled; set => swingDisabled = value; }
     public bool CraneMovementDisabled { get => !craneMovementEnabled; set => craneMovementEnabled = !value; }
@@ -70,7 +72,6 @@ public class CraneV2 : MonoBehaviour, ICrane
         {
             spreader.localPosition = new Vector3(cabin.localPosition.x, spreader.localPosition.y, cabin.localPosition.z + 1);
         }
-        if (spreader.localPosition.y >= cabin.localPosition.y - 5) Debug.Log("test");
     }
 
     public void MoveCabin(float val)
@@ -99,7 +100,7 @@ public class CraneV2 : MonoBehaviour, ICrane
     {
         if (!winchMovementEnabled) return;
         if (value > 0 && spreader.localPosition.y > cabin.localPosition.y - 5) value = 0;
-        if (value < 0 && spreader.localPosition.y < cabin.localPosition.y - 40) value = 0;
+        if (value < 0 && spreader.localPosition.y < minSpreaderHeight) value = 0;
 
         // Adjust the value since the value provided is the speed in m/s
         // The motor target velocity is in degree/s

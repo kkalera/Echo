@@ -16,6 +16,49 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 6
   m_CollisionDetection: 0
+--- !u!54 &7732633182810449333
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7591867049248942702}
+  serializedVersion: 2
+  m_Mass: 10
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &7732633182810449332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7591867049248942702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84619fe3aeba6448abb74c01eb352b10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plane: 0
+  freezeRotation: 0
+--- !u!114 &7794852833748026963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7591867049248942702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 628a32a32d1321e419d624f21126ba6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Environment: {fileID: 0}
 --- !u!1 &7732633182806058507
 GameObject:
   m_ObjectHideFlags: 0
@@ -30,7 +73,7 @@ GameObject:
   - component: {fileID: 7732633182806058510}
   - component: {fileID: 7732633182806058505}
   m_Layer: 0
-  m_Name: Cable (2)
+  m_Name: Cable Land Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,36 +196,6 @@ MonoBehaviour:
   section: {fileID: 11400000, guid: f5860ebf9a0c54ffb898feaf0a3ea546, type: 2}
   uvScale: {x: 1, y: 1}
   thickness: 0.025
---- !u!54 &7732633182810449333
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7591867049248942702}
-  serializedVersion: 2
-  m_Mass: 10
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &7732633182810449332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7591867049248942702}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84619fe3aeba6448abb74c01eb352b10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  plane: 0
-  freezeRotation: 0
 --- !u!1 &7732633182840868412
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,7 +453,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 0
-    force: 100
+    force: 3.4028233e+38
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -469,7 +482,7 @@ GameObject:
   - component: {fileID: 7732633183085355706}
   - component: {fileID: 7732633183085355701}
   m_Layer: 0
-  m_Name: Cable (1)
+  m_Name: Wable Water Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -618,7 +631,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7732633183221991371}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.15, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -643,16 +656,22 @@ MonoBehaviour:
   craneMovementEnabled: 0
   cabinMovementEnabled: 1
   winchMovementEnabled: 0
+  swingDisabled: 0
   cabin: {fileID: 4776894958271403235}
   spreader: {fileID: 7591867049249240654}
   spoolLandRight: {fileID: 7732633184313419159}
   spoolLandLeft: {fileID: 7732633184180602518}
   spoolWaterRight: {fileID: 7732633182859580949}
   spoolWaterLeft: {fileID: 7732633184187058780}
+  cableLandRight: {fileID: 7732633182806058508}
+  cableLandLeft: {fileID: 7732633184229624846}
+  cableWaterRight: {fileID: 7732633183640204572}
+  cableWaterLeft: {fileID: 7732633183085355704}
   craneSpeed: 0.75
   craneAcceleration: 0.25
   cabinSpeed: 4
   cabinAcceleration: 0.25
+  minSpreaderHeight: 0
 --- !u!54 &7732633183221991374
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -865,7 +884,7 @@ GameObject:
   - component: {fileID: 7732633183640204574}
   - component: {fileID: 7732633183640204569}
   m_Layer: 0
-  m_Name: Cable
+  m_Name: Cable Water right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1123,7 +1142,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 0
-    force: 100
+    force: 3.4028233e+38
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -1223,7 +1242,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 0
-    force: 100
+    force: 3.4028233e+38
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -1252,7 +1271,7 @@ GameObject:
   - component: {fileID: 7732633184229624840}
   - component: {fileID: 7732633184229624843}
   m_Layer: 0
-  m_Name: Cable (3)
+  m_Name: Cable Land Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1460,7 +1479,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 0
-    force: 100
+    force: 3.4028233e+38
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -1913,11 +1932,11 @@ PrefabInstance:
       objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 3968535058692116202, guid: 6c005d612bef8c84381b9ee0ebbbe537, type: 3}
       propertyPath: m_Convex
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3968535058692116202, guid: 6c005d612bef8c84381b9ee0ebbbe537, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c005d612bef8c84381b9ee0ebbbe537, type: 3}
@@ -2120,11 +2139,6 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 81cf2261dcd5e574b9174f3a89649c23, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 683c5687542c6384cba523a4ac249949, type: 3}
---- !u!4 &4776894958271403235 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2955808650089256853, guid: 683c5687542c6384cba523a4ac249949, type: 3}
-  m_PrefabInstance: {fileID: 7732633183644533622}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4776894958270974147 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2955808650089679797, guid: 683c5687542c6384cba523a4ac249949, type: 3}
@@ -2133,5 +2147,10 @@ GameObject:
 --- !u!4 &5761388903618576802 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2646784280102421204, guid: 683c5687542c6384cba523a4ac249949, type: 3}
+  m_PrefabInstance: {fileID: 7732633183644533622}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4776894958271403235 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2955808650089256853, guid: 683c5687542c6384cba523a4ac249949, type: 3}
   m_PrefabInstance: {fileID: 7732633183644533622}
   m_PrefabAsset: {fileID: 0}

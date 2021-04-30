@@ -8,21 +8,35 @@ using Unity.MLAgents;
 /// Every time the environment is set, it is set to either the back of the crane, or the front randomly.
 /// The goal for the AI is to move to the other side of the crane, keeping its swing below a set value.
 /// </summary>
-public class MoveZ : CraneLevel
+public class MoveYZStay : CraneLevel
 {
+
+    [SerializeField] private Transform targetObject;
+    [SerializeField] private TMPro.TextMeshPro tmpro;
+    [SerializeField] private float stayTime = 0;
+    [SerializeField] private float maxStayTime = 5;
+    [SerializeField] private float stayIncrement = 0.01f;
+    [SerializeField] private float minY = 25;
+    [SerializeField] private float yDiscount = 0.01f;
+
     private readonly float maxstep = 5000;
     private Vector3 target;
     private ICrane crane;
+    private float enterTime = 0;
 
     public override Vector3 TargetLocation => target;
 
     public override void OnEpisodeBegin()
     {
+        minY = Mathf.Max(minY - yDiscount, 15);
         crane.ResetToPosition(new Vector3(0, 25, Random.Range(-15, 40)));
-        target = new Vector3(0, 25, Random.Range(-15, 40));
+        target = new Vector3(0, Random.Range(minY, 25), Random.Range(-15, 40));
+        targetObject.localScale = Vector3.one;
+        targetObject.localPosition = target;
 
-        crane.SwingDisabled = true;
-        crane.WinchMovementDisabled = true;
+        crane.MinSpreaderHeight = minY;
+        crane.SwingDisabled = false;
+        crane.WinchMovementDisabled = false;
         crane.CabinMovementDisabled = false;
     }
 
@@ -33,10 +47,29 @@ public class MoveZ : CraneLevel
 
         // Calculate the distance to the target and give a reward when it's at the location. Also end the episode
         float targetDistance = Vector3.Distance(target, crane.SpreaderPosition);
-        if (targetDistance < 0.5f)
+        if (targetDistance < 1f)
         {
-            rd.reward += 1;
-            rd.endEpisode = true;
+            if (enterTime == 0)
+            {
+                enterTime = Time.time;
+            }
+            else
+            {
+                if (tmpro != null) { tmpro.text = "Time.time : " + Time.time + "  ||  goal: " + (enterTime + stayTime); }
+                if (Time.time > enterTime + stayTime)
+                {
+                    if (stayTime == maxStayTime && minY == 15) { rd.reward += 1; } else { rd.reward += 0.8f; }
+                    rd.endEpisode = true;
+                }
+                else
+                {
+                    rd.reward += 1f / maxstep;
+                }
+            }
+        }
+        else
+        {
+            enterTime = 0;
         }
 
         // Check wether the crane collided with an object
@@ -49,11 +82,11 @@ public class MoveZ : CraneLevel
 
             switch (tag)
             {
-                case "target": rd.reward += 1; rd.endEpisode = true; break;
                 case "dead": rd.reward += -1; rd.endEpisode = true; break;
                 default: break;
             }
         }
+
         if (crane.SpreaderPosition.y >= 30)
         {
             rd.reward += -1;
