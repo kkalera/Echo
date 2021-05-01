@@ -27,10 +27,7 @@ Transform:
   m_LocalPosition: {x: -110.4005, y: -10.74271, z: -63.026123}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4709143456018294008}
-  - {fileID: 55237662735491759}
-  - {fileID: 5498140820414435256}
-  - {fileID: 6182280522486407616}
+  - {fileID: 5288593853249132136}
   m_Father: {fileID: 7794852832115429325}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -130,7 +127,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!1 &818834404392877516
+--- !u!1 &6317223470829076682
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,120 +135,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 55237662735491759}
-  - component: {fileID: 8809508183202844537}
+  - component: {fileID: 5288593853249132136}
+  - component: {fileID: 80234032116979670}
   m_Layer: 0
-  m_Name: MoveZStay
+  m_Name: V2SCCabin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &55237662735491759
+--- !u!4 &5288593853249132136
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818834404392877516}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1422043069}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8809508183202844537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818834404392877516}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15f37337030c40945b90547c0bd9fc7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stayTime: 4.5
-  maxStayTime: 5
-  stayIncrement: 0.01
-  targetObject: {fileID: 1481360613}
-  tmpro: {fileID: 8538930300774720593}
---- !u!1 &1877189893720408309
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5498140820414435256}
-  - component: {fileID: 589195336638858953}
-  m_Layer: 0
-  m_Name: MoveZYStay
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5498140820414435256
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1877189893720408309}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1422043069}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &589195336638858953
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1877189893720408309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 988c6d55e2ad18f46b5b08676b85c95f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetObject: {fileID: 1481360613}
-  tmpro: {fileID: 8538930300774720593}
-  stayTime: 5
-  maxStayTime: 5
-  stayIncrement: 0.01
-  minY: 15
-  yDiscount: 0.01
---- !u!1 &2186406705461141481
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4709143456018294008}
-  - component: {fileID: 533008407421690036}
-  m_Layer: 0
-  m_Name: MoveZ
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4709143456018294008
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2186406705461141481}
+  m_GameObject: {fileID: 6317223470829076682}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -259,70 +158,24 @@ Transform:
   m_Father: {fileID: 1422043069}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &533008407421690036
+--- !u!114 &80234032116979670
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2186406705461141481}
+  m_GameObject: {fileID: 6317223470829076682}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11ea47971e20a8a49b235a89c9427e1f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fee7bd8c4d5e4a38aaa5f3f8aa68246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &3338481828520478909
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6182280522486407616}
-  - component: {fileID: 6821671471013390206}
-  m_Layer: 0
-  m_Name: MoveZYStaySwing
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6182280522486407616
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3338481828520478909}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1422043069}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6821671471013390206
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3338481828520478909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e1b77247fb8a8445a5a026de325bf62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetObject: {fileID: 1481360613}
-  tmpro: {fileID: 8538930300774720593}
-  stayTime: 0
-  maxStayTime: 5
-  stayIncrement: 0.01
-  minY: 15
-  startMaxSwing: 5
-  finalMaxSwing: 1
-  yDiscount: 0.01
+  startSpreaderHeight: 0
+  endSpreaderHeight: 0
+  heightDiscount: 0
+  startSwingAllowed: 0
+  endSwingAllowed: 0
+  swingDiscount: 0
 --- !u!1 &7478012133753600042
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,10 +584,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
-  - {fileID: 533008407421690036}
-  - {fileID: 8809508183202844537}
-  - {fileID: 589195336638858953}
-  - {fileID: 6821671471013390206}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &7794852833710462489
 GameObject:
   m_ObjectHideFlags: 0
