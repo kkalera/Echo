@@ -2,25 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class V2SCCabin : CraneLevel
+public class V2SWCCabin : CraneLevel
 {
     [Header("Height")]
-    [SerializeField] [Range(1, 25)] float startSpreaderHeight = 25;
-    [SerializeField] [Range(1, 25)] float endSpreaderHeight = 10;
-    [SerializeField] [Range(-0.0001f, 1)] float heightDiscount = 0.01f;
+    [SerializeField] [Range(-0.0001f, 1)] float _discount = 0.01f;
+    [SerializeField] [Range(1, 25)] private float spawnRadius = 2;
     [Space(10)]
-    [SerializeField] [Range(-10, -1)] private float spawnMin = -1f;
-    [SerializeField] [Range(1, 35)] private float spawnMax = 1f;
+
     [Space(10)]
     [SerializeField] int _maxStep = 5000;
     [SerializeField] Transform targetIndicator;
     [SerializeField] TMPro.TextMeshPro _tmpro;
 
-
     private ICrane crane;
     private Vector3 _targetLocation;
     private readonly List<float> swings = new List<float>();
-
+    private bool goalReached;
+    private bool ended;
 
     public override Vector3 TargetLocation => _targetLocation;
 
@@ -33,23 +31,22 @@ public class V2SCCabin : CraneLevel
     {
         crane.CabinMovementDisabled = false;
         crane.SwingDisabled = false;
-        crane.WinchMovementDisabled = true;
+        crane.WinchMovementDisabled = false;
 
-        spawnMin = Mathf.Max(spawnMin - heightDiscount, -10);
-        spawnMax = Mathf.Min(spawnMax + heightDiscount, 35);
-
-        startSpreaderHeight = Mathf.Clamp(startSpreaderHeight - heightDiscount, endSpreaderHeight, startSpreaderHeight);
-
-        _targetLocation = new Vector3(0, startSpreaderHeight, Random.Range(spawnMin, spawnMax));
+        float randomSpreaderHeight = Random.Range(15, 27);
+        float randomTargetHeight = Mathf.Clamp(Random.Range(randomSpreaderHeight - spawnRadius / 2, randomSpreaderHeight + spawnRadius / 2), 15, 27);
+        _targetLocation = new Vector3(0, randomTargetHeight, Random.Range(-10, 35));
         targetIndicator.transform.localPosition = _targetLocation;
 
-        Vector3 newCraneLocation = new Vector3(0, startSpreaderHeight, Random.Range(spawnMin, spawnMax));
+        crane.SetWinchLimits(randomSpreaderHeight - spawnRadius / 2, randomSpreaderHeight + spawnRadius / 2);
+
+        Vector3 newCraneLocation = new Vector3(0, randomSpreaderHeight, Random.Range(-10, 35));
         crane.ResetToPosition(newCraneLocation);
 
-        Utils.ReportStat(startSpreaderHeight, "Spreader height");
-        Utils.ReportStat(spawnMin, "SpawnMin");
-        Utils.ReportStat(spawnMax, "Spawnmax");
+        Utils.ReportStat(spawnRadius, "SpawnRadius");
 
+        ended = false;
+        goalReached = false;
     }
 
     public override RewardData Step(Collision col = null, Collider other = null)
@@ -57,16 +54,26 @@ public class V2SCCabin : CraneLevel
         // Define rewardData variable
         RewardData rd = new RewardData(-0.5f / _maxStep);
 
+        if (col != null)
+        {
+            if (col.collider.CompareTag("dead")) { rd.reward += -1f; rd.endEpisode = true; return rd; }
+        }
+
+        if (other != null)
+        {
+            if (other.CompareTag("dead")) { rd.reward += -1f; rd.endEpisode = true; return rd; }
+        }
+
         // Add the swing reward
         rd.reward += GetSwingReward();
 
-        bool endEpisode = Vector3.Distance(_targetLocation, crane.SpreaderPosition) < 1;
 
         // Add a reward for finishing the environment
-        if (endEpisode) rd.reward += 1;
+        if (goalReached) rd.reward += 1;
+        if (goalReached) spawnRadius = Mathf.Max(spawnRadius + _discount, 20);
 
         // Calculate the distance to the target to determine wether or not to end the episode at the next step       
-        rd.endEpisode = endEpisode;
+        rd.endEpisode = goalReached;
 
         return rd;
 
@@ -76,6 +83,10 @@ public class V2SCCabin : CraneLevel
         // Calculate and save the amount of swing
         float swing = Mathf.Abs(crane.CabinPosition.z - crane.SpreaderPosition.z + 1);
         swings.Add(swing);
+
+        // Check if the episode is finished
+        if (!ended)
+            goalReached = Vector3.Distance(_targetLocation, crane.SpreaderPosition) < 1;
     }
     private float GetSwingReward()
     {
@@ -95,9 +106,12 @@ public class V2SCCabin : CraneLevel
         Utils.ReportStat(avgSwing, "Swing");
 
         // Calculate a reward based upon the average swing. 
-        float maxSwing = Mathf.Abs(crane.CabinPosition.y - crane.SpreaderPosition.y);
+        float maxSwing = Vector3.Distance(crane.CabinPosition, crane.SpreaderPosition);
+        //float maxSwing = Mathf.Abs(crane.CabinPosition.y - crane.SpreaderPosition.y);
+
         float swingNorm = Utils.Normalize(avgSwing, 0, maxSwing);
         float swingReward = Mathf.Pow(1 - swingNorm, 8) / _maxStep;
+        //_tmpro.text = "" + swingReward;
         swingReward = Mathf.Clamp(swingReward, 0, 1);
 
         return swingReward;

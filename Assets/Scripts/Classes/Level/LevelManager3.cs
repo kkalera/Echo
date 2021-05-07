@@ -15,7 +15,19 @@ public class LevelManager3 : MonoBehaviour
     public void SetLevel(int level)
     {
         if (level == -1) StopSimulation();
+
+        for (int i = 0; i < levels.Count; i++)
+        {
+            if (i != level)
+            {
+                var l = levels[i];
+                l.enabled = false;
+            }
+        }
+
         currentLevel = levels[level];
+
+        currentLevel.enabled = true;
         currentLevel.ResetEnvironment(Crane);
     }
 

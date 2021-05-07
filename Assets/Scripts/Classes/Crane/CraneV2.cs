@@ -32,6 +32,7 @@ public class CraneV2 : MonoBehaviour, ICrane
     [SerializeField] [Range(.1f, 10f)] private float cabinSpeed = 4; //Speed in m/s
     [SerializeField] [Range(.1f, 1f)] private float cabinAcceleration = 0.25f; //Acceleration in %
     [SerializeField] private float minSpreaderHeight = 0;
+    [SerializeField] private float maxSpreaderHeight = 0;
 
     private MovementManager movementManager;
     private Rigidbody cabinBody;
@@ -64,6 +65,7 @@ public class CraneV2 : MonoBehaviour, ICrane
         cabinBody = cabin.GetComponent<Rigidbody>();
         spreaderBody = spreader.GetComponent<Rigidbody>();
         craneBody = GetComponent<Rigidbody>();
+        maxSpreaderHeight = cabin.localPosition.y - 5;
     }
 
     private void Update()
@@ -99,7 +101,7 @@ public class CraneV2 : MonoBehaviour, ICrane
     public void MoveWinch(float value)
     {
         if (!winchMovementEnabled) return;
-        if (value > 0 && spreader.localPosition.y > cabin.localPosition.y - 5) value = 0;
+        if (value > 0 && spreader.localPosition.y > maxSpreaderHeight) value = 0;
         if (value < 0 && spreader.localPosition.y < minSpreaderHeight) value = 0;
 
         // Adjust the value since the value provided is the speed in m/s
@@ -196,5 +198,11 @@ public class CraneV2 : MonoBehaviour, ICrane
         cableWaterRight.links[0] = linkWaterRight;
 
 
+    }
+
+    public void SetWinchLimits(float minHeight, float maxHeight)
+    {
+        minSpreaderHeight = Mathf.Max(minHeight, 0);
+        maxSpreaderHeight = Mathf.Min(maxHeight, cabin.localPosition.y - 5);
     }
 }

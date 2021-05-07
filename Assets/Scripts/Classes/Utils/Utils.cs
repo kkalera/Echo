@@ -2,6 +2,7 @@
 using System.Reflection;
 using System;
 using Unity.MLAgents;
+using UnityEngine;
 
 public static class Utils
 {
@@ -27,7 +28,7 @@ public static class Utils
 
     public static float Normalize(float val, float min, float max)
     {
-        return (val - min) / (max - min);
+        return Mathf.Clamp(((val - min) / (max - min)), 0, 1);
     }
 
     public static void ReportStat(float value, string name)

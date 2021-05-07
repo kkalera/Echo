@@ -120,7 +120,9 @@ public class CraneAgentV2 : Agent, IAgent
 
     public void OnCollisionStay(Collision col)
     {
-        throw new System.NotImplementedException();
+        RewardData rewardData = levelManager.Step(col);
+        AddReward(rewardData.reward);
+        if (rewardData.endEpisode) EndEpisode();
     }
 
     public void OnTriggerEnter(Collider other)

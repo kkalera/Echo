@@ -22,6 +22,7 @@ public interface ICrane
     bool WinchMovementDisabled { set; get; }
     void ResetToRandomPosition();
     void ResetToPosition(Vector3 position);
+    void SetWinchLimits(float minHeight, float maxHeight);
 
     Vector3 CranePosition { get; }
     Vector3 CraneVelocity { get; }
