@@ -43,7 +43,7 @@ environment_parameters:
                   signal_smoothing: true
                   min_lesson_length: 1000
                   threshold: 0.9
-              value: 0
+              value: 1
 
             - name: Swing and winch control
               completion_criteria:
@@ -52,7 +52,7 @@ environment_parameters:
                   signal_smoothing: true
                   min_lesson_length: 10000
                   threshold: 1.5
-              value: 1
+              value: 2
 
             - name: End
               completion_criteria:

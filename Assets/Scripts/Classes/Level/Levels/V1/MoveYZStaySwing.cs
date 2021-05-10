@@ -15,7 +15,7 @@ public class MoveYZStaySwing : CraneLevel
     [SerializeField] private TMPro.TextMeshPro tmpro;
     [SerializeField] private float stayTime = 0;
     [SerializeField] private float maxStayTime = 5;
-    [SerializeField] private float stayIncrement = 0.01f;
+    //[SerializeField] private float stayIncrement = 0.01f;
     [SerializeField] private float minY = 15;
     [SerializeField] private float startMaxSwing = 5;
     [SerializeField] private float finalMaxSwing = 1f;

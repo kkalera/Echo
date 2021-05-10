@@ -10,7 +10,7 @@ using Unity.MLAgents;
 /// </summary>
 public class MoveXZ : CraneLevel
 {
-    private readonly float maxstep = 5000;
+    //private readonly float maxstep = 5000;
     private Vector3 target;
     private ICrane crane;
     private float yHeight = 25;

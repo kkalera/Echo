@@ -90,7 +90,7 @@ public class V2SWCCabin : CraneLevel
     }
     private float GetSwingReward()
     {
-        if (swings.Count == 0 || crane.CabinVelocity.magnitude == 0) return 0;
+        if (swings.Count == 0 || (crane.CabinVelocity.magnitude == 0 && !goalReached)) return 0;
 
         // Calculate the amount of average swing between steps.
         float totalSwing = 0;
@@ -111,8 +111,8 @@ public class V2SWCCabin : CraneLevel
 
         float swingNorm = Utils.Normalize(avgSwing, 0, maxSwing);
         float swingReward = Mathf.Pow(1 - swingNorm, 8) / _maxStep;
-        //_tmpro.text = "" + swingReward;
-        swingReward = Mathf.Clamp(swingReward, 0, 1);
+        if (swingNorm > 0.5) swingReward = -1f / _maxStep;
+        swingReward = Mathf.Clamp(swingReward, -1f, 1f);
 
         return swingReward;
     }
