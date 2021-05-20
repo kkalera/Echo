@@ -36,12 +36,19 @@ public class CraneAgentV2 : Agent, IAgent
         levelManager = GetComponent<LevelManager3>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         crane.MoveCrane(craneValue);
         crane.MoveCabin(cabinValue);
         crane.MoveWinch(winchValue);
     }
+    /*
+    private void FixedUpdate()
+    {
+        crane.MoveCrane(craneValue);
+        crane.MoveCabin(cabinValue);
+        crane.MoveWinch(winchValue);
+    }*/
 
     public override void OnEpisodeBegin()
     {

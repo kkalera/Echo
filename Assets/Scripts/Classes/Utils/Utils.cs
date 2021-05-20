@@ -13,9 +13,9 @@ public static class Utils
         {
             if (_clearConsoleMethod == null)
             {
-                Assembly assembly = Assembly.GetAssembly(typeof(SceneView));
+                /*Assembly assembly = Assembly.GetAssembly(typeof(SceneView));
                 Type logEntries = assembly.GetType("UnityEditor.LogEntries");
-                _clearConsoleMethod = logEntries.GetMethod("Clear");
+                _clearConsoleMethod = logEntries.GetMethod("Clear");*/
             }
             return _clearConsoleMethod;
         }
@@ -38,6 +38,7 @@ public static class Utils
     }
     public static void StopSimulation()
     {
-        EditorApplication.isPlaying = false; //EditorApplication.ExecuteMenuItem("Edit/Play");
+        //EditorApplication.isPlaying = false; //EditorApplication.ExecuteMenuItem("Edit/Play");
+        Application.Quit();
     }
 }

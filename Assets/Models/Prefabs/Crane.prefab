@@ -668,10 +668,11 @@ MonoBehaviour:
   cableWaterRight: {fileID: 7732633183640204572}
   cableWaterLeft: {fileID: 7732633183085355704}
   craneSpeed: 0.75
-  craneAcceleration: 0.25
+  craneAcceleration: 1
   cabinSpeed: 4
-  cabinAcceleration: 0.25
+  cabinAcceleration: 1
   minSpreaderHeight: 0
+  maxSpreaderHeight: 0
 --- !u!54 &7732633183221991374
 Rigidbody:
   m_ObjectHideFlags: 0

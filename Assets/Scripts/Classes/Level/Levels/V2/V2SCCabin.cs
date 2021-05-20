@@ -20,6 +20,9 @@ public class V2SCCabin : CraneLevel
     private ICrane crane;
     private Vector3 _targetLocation;
     private readonly List<float> swings = new List<float>();
+    private bool finalTraining = false;
+    private bool endEpisode = false;
+    private bool flawlessEpisode = false;
 
 
     public override Vector3 TargetLocation => _targetLocation;
@@ -34,11 +37,7 @@ public class V2SCCabin : CraneLevel
         crane.CabinMovementDisabled = false;
         crane.SwingDisabled = false;
         crane.WinchMovementDisabled = true;
-
-        spawnMin = Mathf.Max(spawnMin - heightDiscount, -10);
-        spawnMax = Mathf.Min(spawnMax + heightDiscount, 35);
-
-        startSpreaderHeight = Mathf.Clamp(startSpreaderHeight - heightDiscount, endSpreaderHeight, startSpreaderHeight);
+        flawlessEpisode = true;
 
         _targetLocation = new Vector3(0, startSpreaderHeight, Random.Range(spawnMin, spawnMax));
         targetIndicator.transform.localPosition = _targetLocation;
@@ -46,24 +45,21 @@ public class V2SCCabin : CraneLevel
         Vector3 newCraneLocation = new Vector3(0, startSpreaderHeight, Random.Range(spawnMin, spawnMax));
         crane.ResetToPosition(newCraneLocation);
 
-        Utils.ReportStat(startSpreaderHeight, "Spreader height");
-        Utils.ReportStat(spawnMin, "SpawnMin");
-        Utils.ReportStat(spawnMax, "Spawnmax");
 
     }
 
     public override RewardData Step(Collision col = null, Collider other = null)
     {
-        // Define rewardData variable
+        // Define rewardData variable        
         RewardData rd = new RewardData(-0.5f / _maxStep);
 
         // Add the swing reward
         rd.reward += GetSwingReward();
 
-        bool endEpisode = Vector3.Distance(_targetLocation, crane.SpreaderPosition) < 1;
-
         // Add a reward for finishing the environment
-        if (endEpisode) rd.reward += 1;
+        if (endEpisode && finalTraining) rd.reward += 1;
+        if (endEpisode && !finalTraining) rd.reward += 0.5f;
+        if (endEpisode && flawlessEpisode) UpdateDynamicValues();
 
         // Calculate the distance to the target to determine wether or not to end the episode at the next step       
         rd.endEpisode = endEpisode;
@@ -76,10 +72,27 @@ public class V2SCCabin : CraneLevel
         // Calculate and save the amount of swing
         float swing = Mathf.Abs(crane.CabinPosition.z - crane.SpreaderPosition.z + 1);
         swings.Add(swing);
+
+        endEpisode = Vector3.Distance(_targetLocation, crane.SpreaderPosition) < 1;
     }
+
+    private void UpdateDynamicValues()
+    {
+        spawnMin = Mathf.Max(spawnMin - heightDiscount, -10);
+        spawnMax = Mathf.Min(spawnMax + heightDiscount, 35);
+        startSpreaderHeight = Mathf.Clamp(startSpreaderHeight - heightDiscount, endSpreaderHeight, startSpreaderHeight);
+
+        if (spawnMin == -10 && spawnMax == 35 && startSpreaderHeight == endSpreaderHeight) finalTraining = true;
+
+        Utils.ReportStat(startSpreaderHeight, "Level 0 / Spreader height");
+        Utils.ReportStat(spawnMin, "Level 0 / SpawnMin");
+        Utils.ReportStat(spawnMax, "Level 0 / Spawnmax");
+    }
+
+
     private float GetSwingReward()
     {
-        if (swings.Count == 0 || crane.CabinVelocity.magnitude == 0) return 0;
+        if (swings.Count == 0 || (crane.CabinVelocity.magnitude == 0 && !endEpisode)) return 0;
 
         // Calculate the amount of average swing between steps.
         float totalSwing = 0;
@@ -95,10 +108,12 @@ public class V2SCCabin : CraneLevel
         Utils.ReportStat(avgSwing, "Swing");
 
         // Calculate a reward based upon the average swing. 
-        float maxSwing = Mathf.Abs(crane.CabinPosition.y - crane.SpreaderPosition.y);
+        float maxSwing = Vector3.Distance(crane.CabinPosition, crane.SpreaderPosition);
+
         float swingNorm = Utils.Normalize(avgSwing, 0, maxSwing);
         float swingReward = Mathf.Pow(1 - swingNorm, 8) / _maxStep;
-        swingReward = Mathf.Clamp(swingReward, 0, 1);
+        if (swingNorm > 0.5) { swingReward = -1f / _maxStep; flawlessEpisode = false; }
+        swingReward = Mathf.Clamp(swingReward, -1f, 1f);
 
         return swingReward;
     }

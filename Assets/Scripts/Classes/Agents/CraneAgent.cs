@@ -104,7 +104,7 @@ public class CraneAgent : Agent
         if (!testMode) level = (int)Academy.Instance.EnvironmentParameters.GetWithDefault("level_parameter", 0);
         rewardManager.level = level;
 
-        if (level == 4) EditorApplication.isPlaying = false; //EditorApplication.ExecuteMenuItem("Edit/Play");
+        //if (level == 4) EditorApplication.isPlaying = false; //EditorApplication.ExecuteMenuItem("Edit/Play");
 
         // Destroy the current crane and container
         if (crane != null) Destroy(crane.gameObject);

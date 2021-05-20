@@ -21,7 +21,7 @@ public class V2SWCCabinStay : CraneLevel
     private bool goalReached;
     private bool endEpisodeAtNextStep;
     private float enterTime = -1f;
-    private int attempts = 0;
+    private bool flawlessEpisode;
 
 
     public override Vector3 TargetLocation => _targetLocation;
@@ -36,6 +36,7 @@ public class V2SWCCabinStay : CraneLevel
         crane.CabinMovementDisabled = false;
         crane.SwingDisabled = false;
         crane.WinchMovementDisabled = false;
+        flawlessEpisode = true;
 
         _targetLocation = new Vector3(0, Random.Range(15, 27), Random.Range(-10, 35));
         targetIndicator.transform.localPosition = _targetLocation;
@@ -47,9 +48,8 @@ public class V2SWCCabinStay : CraneLevel
 
         endEpisodeAtNextStep = false;
         goalReached = false;
-        Utils.ReportStat(timeTarget, "Time target");
-        Utils.ReportStat(attempts, "Attempts");
-        attempts = 0;
+        Utils.ReportStat(timeTarget, "Level 2 / Time target");
+
     }
 
     public override RewardData Step(Collision col = null, Collider other = null)
@@ -79,9 +79,9 @@ public class V2SWCCabinStay : CraneLevel
 
         // Add a reward for finishing the environment
         if (endEpisodeAtNextStep) rd.reward += 1;
-        if (endEpisodeAtNextStep) timeTarget = Mathf.Min(timeTarget + _discount, finalTimeTarget);
+        if (endEpisodeAtNextStep && flawlessEpisode) timeTarget = Mathf.Min(timeTarget + _discount, finalTimeTarget);
 
-        // Calculate the distance to the target to determine wether or not to end the episode at the next step       
+        // Set the endEpisode boolean
         rd.endEpisode = endEpisodeAtNextStep;
 
         return rd;
@@ -100,7 +100,7 @@ public class V2SWCCabinStay : CraneLevel
             goalReached = Vector3.Distance(_targetLocation, crane.SpreaderPosition) < 1;
 
             // Set the time of reaching the goal to the current time if no time is set
-            if (goalReached && enterTime == -1f) { enterTime = Time.time; attempts += 1; }
+            if (goalReached && enterTime == -1f) { enterTime = Time.time; }
 
             // Reset the time whenever the agent moves too far from the target
             if (!goalReached && enterTime != -1f) enterTime = -1f;
@@ -129,11 +129,10 @@ public class V2SWCCabinStay : CraneLevel
 
         // Calculate a reward based upon the average swing. 
         float maxSwing = Vector3.Distance(crane.CabinPosition, crane.SpreaderPosition);
-        //float maxSwing = Mathf.Abs(crane.CabinPosition.y - crane.SpreaderPosition.y);
 
         float swingNorm = Utils.Normalize(avgSwing, 0, maxSwing);
         float swingReward = Mathf.Pow(1 - swingNorm, 8) / _maxStep;
-        if (swingNorm > 0.5) swingReward = -1f / _maxStep;
+        if (swingNorm > 0.5) { swingReward = -1f / _maxStep; flawlessEpisode = false; }
         swingReward = Mathf.Clamp(swingReward, -1f, 1f);
 
         return swingReward;

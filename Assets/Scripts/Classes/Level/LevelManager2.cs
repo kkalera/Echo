@@ -40,7 +40,8 @@ public class LevelManager2 : MonoBehaviour, ILevelManager
     }
     private void StopEnvironment()
     {
-        EditorApplication.isPlaying = false; //EditorApplication.ExecuteMenuItem("Edit/Play");
+        //EditorApplication.isPlaying = false; //EditorApplication.ExecuteMenuItem("Edit/Play");
+        Application.Quit();
     }
     private RewardData GetCollisionReward(Collision col, RewardData rData)
     {

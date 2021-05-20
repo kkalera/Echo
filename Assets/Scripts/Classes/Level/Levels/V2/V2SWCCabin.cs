@@ -18,7 +18,7 @@ public class V2SWCCabin : CraneLevel
     private Vector3 _targetLocation;
     private readonly List<float> swings = new List<float>();
     private bool goalReached;
-    private bool ended;
+    private bool flawlessEpisode;
 
     public override Vector3 TargetLocation => _targetLocation;
 
@@ -33,6 +33,8 @@ public class V2SWCCabin : CraneLevel
         crane.SwingDisabled = false;
         crane.WinchMovementDisabled = false;
 
+        flawlessEpisode = true;
+
         float randomSpreaderHeight = Random.Range(15, 27);
         float randomTargetHeight = Mathf.Clamp(Random.Range(randomSpreaderHeight - spawnRadius / 2, randomSpreaderHeight + spawnRadius / 2), 15, 27);
         _targetLocation = new Vector3(0, randomTargetHeight, Random.Range(-10, 35));
@@ -43,9 +45,7 @@ public class V2SWCCabin : CraneLevel
         Vector3 newCraneLocation = new Vector3(0, randomSpreaderHeight, Random.Range(-10, 35));
         crane.ResetToPosition(newCraneLocation);
 
-        Utils.ReportStat(spawnRadius, "SpawnRadius");
-
-        ended = false;
+        //ended = false;
         goalReached = false;
     }
 
@@ -70,7 +70,7 @@ public class V2SWCCabin : CraneLevel
 
         // Add a reward for finishing the environment
         if (goalReached) rd.reward += 1;
-        if (goalReached) spawnRadius = Mathf.Max(spawnRadius + _discount, 20);
+        if (goalReached && flawlessEpisode) UpdateDynamicValues();
 
         // Calculate the distance to the target to determine wether or not to end the episode at the next step       
         rd.endEpisode = goalReached;
@@ -85,9 +85,16 @@ public class V2SWCCabin : CraneLevel
         swings.Add(swing);
 
         // Check if the episode is finished
-        if (!ended)
-            goalReached = Vector3.Distance(_targetLocation, crane.SpreaderPosition) < 1;
+        //if (!ended)
+        goalReached = Vector3.Distance(_targetLocation, crane.SpreaderPosition) < 1;
     }
+
+    private void UpdateDynamicValues()
+    {
+        spawnRadius = Mathf.Min(spawnRadius + _discount, 20);
+        Utils.ReportStat(spawnRadius, "Level 1 / SpawnRadius");
+    }
+
     private float GetSwingReward()
     {
         if (swings.Count == 0 || (crane.CabinVelocity.magnitude == 0 && !goalReached)) return 0;
@@ -111,7 +118,7 @@ public class V2SWCCabin : CraneLevel
 
         float swingNorm = Utils.Normalize(avgSwing, 0, maxSwing);
         float swingReward = Mathf.Pow(1 - swingNorm, 8) / _maxStep;
-        if (swingNorm > 0.5) swingReward = -1f / _maxStep;
+        if (swingNorm > 0.5) { swingReward = -1f / _maxStep; flawlessEpisode = false; }
         swingReward = Mathf.Clamp(swingReward, -1f, 1f);
 
         return swingReward;

@@ -59,6 +59,7 @@ public class LevelManager3 : MonoBehaviour
 
     private void StopSimulation()
     {
-        EditorApplication.isPlaying = false; //EditorApplication.ExecuteMenuItem("Edit/Play");
+        //EditorApplication.isPlaying = false; //EditorApplication.ExecuteMenuItem("Edit/Play");
+        Application.Quit();
     }
 }
