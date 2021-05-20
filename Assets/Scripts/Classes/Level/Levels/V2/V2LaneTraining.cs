@@ -67,10 +67,18 @@ public class V2LaneTraining : CraneLevel
         // Create a base negative reward to promote speed
         float startReward = -0.5f / _maxStep;
 
-        float radius = ((crane.SpreaderPosition.y - 3) * 0.2f) + 1;
+        float radius = ((crane.SpreaderPosition.y - 3) * 0.3f) + 1;
+
         bool closeEnoughToLowerWinch = Mathf.Abs(_targetLocation.z - crane.SpreaderPosition.z) < radius;
-        if (closeEnoughToLowerWinch) startReward = 0.5f / _maxStep;
-        if (!closeEnoughToLowerWinch && crane.SpreaderPosition.y < 15) { startReward = -2f / _maxStep; flawlessEpisode = false; }
+
+        if (!closeEnoughToLowerWinch && crane.SpreaderPosition.y < 15)
+        {
+            startReward = -1f / _maxStep; flawlessEpisode = false;
+        }
+        else
+        {
+            startReward = 0f;
+        }
 
         // Set the base reward to positive whenever the agent is at the target to promote staying there
         if (goalReached) startReward = 1f / _maxStep;
@@ -157,7 +165,6 @@ public class V2LaneTraining : CraneLevel
     }
     private float GetSpeedReward()
     {
-        _tmpro.text = "" + Mathf.Clamp(Mathf.Abs(_targetLocation.z - crane.SpreaderPosition.z), 0, 8);
         float distance = Utils.Normalize(Mathf.Clamp(Mathf.Abs(_targetLocation.z - crane.SpreaderPosition.z), 0, 8), 0, 8);
         float speed = Utils.Normalize(Mathf.Clamp(crane.SpreaderVelocity.x, 0, 4), 0f, 4);
         float reward = (1 - Mathf.Abs(distance - speed)) / 2;

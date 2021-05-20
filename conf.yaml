@@ -1,7 +1,7 @@
 # Finish configuration for slower but more stable training
 env_settings:
     env_path: Build/echo
-    num_envs: 2
+    num_envs: 3
 behaviors:
     Crane:
         trainer_type: ppo
