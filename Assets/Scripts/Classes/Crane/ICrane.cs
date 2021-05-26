@@ -20,9 +20,13 @@ public interface ICrane
     bool CraneMovementDisabled { set; get; }
     bool CabinMovementDisabled { set; get; }
     bool WinchMovementDisabled { set; get; }
+
+    Transform Transform { get; }
     void ResetToRandomPosition();
     void ResetToPosition(Vector3 position);
     void SetWinchLimits(float minHeight, float maxHeight);
+    void GrabContainer(Transform container);
+    void ReleaseContainer(Transform newParent);
 
     Vector3 CranePosition { get; }
     Vector3 CraneVelocity { get; }

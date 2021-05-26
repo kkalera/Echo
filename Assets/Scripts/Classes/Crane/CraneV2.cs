@@ -38,6 +38,7 @@ public class CraneV2 : MonoBehaviour, ICrane
     private Rigidbody cabinBody;
     private Rigidbody craneBody;
     private Rigidbody spreaderBody;
+    private Transform currentContainer;
 
     public Vector3 CabinPosition => cabin.localPosition;
 
@@ -57,7 +58,7 @@ public class CraneV2 : MonoBehaviour, ICrane
     public bool CraneMovementDisabled { get => !craneMovementEnabled; set => craneMovementEnabled = !value; }
     public bool CabinMovementDisabled { get => !cabinMovementEnabled; set => cabinMovementEnabled = !value; }
     public bool WinchMovementDisabled { get => !winchMovementEnabled; set => winchMovementEnabled = !value; }
-
+    public Transform Transform { get => transform; }
 
     private void Start()
     {
@@ -171,11 +172,22 @@ public class CraneV2 : MonoBehaviour, ICrane
         spreader.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
         spreaderBody.velocity = Vector3.zero;
         cabinBody.velocity = Vector3.zero;
+        spreaderBody.isKinematic = true;
+
+        JointMotor motor = spoolWaterLeft.motor;
+        JointMotor motor2 = spoolLandLeft.motor;
+        motor.targetVelocity = 0;
+        motor2.targetVelocity = 0;
+        spoolLandLeft.motor = motor;
+        spoolLandRight.motor = motor2;
+        spoolWaterLeft.motor = motor;
+        spoolWaterRight.motor = motor2;
 
         cableLandLeft.Setup();
         cableLandRight.Setup();
         cableWaterLeft.Setup();
         cableWaterRight.Setup();
+
 
         Filo.Cable.Link linkLandLeft = cableLandLeft.links[0];
         linkLandLeft.orientation = true;
@@ -197,12 +209,42 @@ public class CraneV2 : MonoBehaviour, ICrane
         linkWaterRight.storedCable = 50;
         cableWaterRight.links[0] = linkWaterRight;
 
-
+        spreaderBody.isKinematic = false;
     }
 
     public void SetWinchLimits(float minHeight, float maxHeight)
     {
         minSpreaderHeight = Mathf.Max(minHeight, 0);
         maxSpreaderHeight = Mathf.Min(maxHeight, cabin.localPosition.y - 5);
+    }
+
+    public void GrabContainer(Transform container)
+    {
+        // Set the rotation of the container to match the current rotation of the spreader;
+        container.rotation = Quaternion.Euler(new Vector3(spreader.rotation.z, 0, spreader.rotation.x));
+
+        // Set the parent of the container to be the spreader. Attaching it to the spreader.
+        container.parent = spreader;
+
+        // Set the position of the container to match the position of the spreader
+        // This prevents issues with the center of mass when the positions aren'ts matched exactly
+        container.localPosition = Vector3.zero;
+
+        // Save the container as the current container
+        currentContainer = container;
+
+    }
+
+    public void ReleaseContainer(Transform newParent)
+    {
+        // Check wether a current container exists
+        if (currentContainer != null)
+        {
+            // Set the parent of the container to its new parent
+            currentContainer.parent = newParent;
+
+            // Set the current container back to null
+            currentContainer = null;
+        }
     }
 }
