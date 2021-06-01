@@ -31,6 +31,7 @@ public class CraneV2 : MonoBehaviour, ICrane
     [SerializeField] [Range(.1f, 1f)] private float craneAcceleration = 0.25f; //Acceleration in %
     [SerializeField] [Range(.1f, 10f)] private float cabinSpeed = 4; //Speed in m/s
     [SerializeField] [Range(.1f, 1f)] private float cabinAcceleration = 0.25f; //Acceleration in %
+    [SerializeField] [Range(.1f, 10f)] private float winchSpeed = 4; //Speed in m/s    
     [SerializeField] private float minSpreaderHeight = 0;
     [SerializeField] private float maxSpreaderHeight = 0;
 
@@ -101,9 +102,13 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     public void MoveWinch(float value)
     {
+        value *= winchSpeed;
+
         if (!winchMovementEnabled) return;
         if (value > 0 && spreader.localPosition.y > maxSpreaderHeight) value = 0;
         if (value < 0 && spreader.localPosition.y < minSpreaderHeight) value = 0;
+
+
 
         // Adjust the value since the value provided is the speed in m/s
         // The motor target velocity is in degree/s
@@ -228,6 +233,7 @@ public class CraneV2 : MonoBehaviour, ICrane
 
         // Set the position of the container to match the position of the spreader
         // This prevents issues with the center of mass when the positions aren'ts matched exactly
+        //container.localPosition = new Vector3(0, -2.85f, 0);
         container.localPosition = Vector3.zero;
 
         // Save the container as the current container

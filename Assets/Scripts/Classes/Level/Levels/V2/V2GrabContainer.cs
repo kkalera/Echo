@@ -11,13 +11,16 @@ public class V2GrabContainer : CraneLevel
 {
     [Header("Training variables")]
     [SerializeField] [Range(0.01f, 10)] private float timeTarget = 0.1f; // The amount of time to stay at the target
+    [SerializeField] [Range(0.01f, 10)] private float timeToGrab = 2f; // The amount of time to stay at the target
     [SerializeField] [Range(0.01f, 1f)] private float grabRadius = 1f; // The radius wherein the agent can grab the container
-    [SerializeField] [Range(0.001f, 1f)] private float discount = 0.01f; // The amount to decrease the grabRadius on every succesful episode
+    [SerializeField] [Range(0.001f, 1f)] private float discount = 0.001f; // The amount to decrease the grabRadius on every succesful episode
+    [SerializeField] [Range(8f, 35f)] private float shipZ = 8f;
+    [SerializeField] [Range(8f, 35f)] private float maxShipZ = 35f;
     [Space(10)]
 
     [SerializeField] bool training = true;
     [SerializeField] GameObject containerObject;
-    [SerializeField] Transform targetPlane;
+    [SerializeField] Transform containerTarget;
 
     [Space(10)]
     [SerializeField] int _maxStep = 5000;
@@ -32,7 +35,7 @@ public class V2GrabContainer : CraneLevel
     private float enterTime = -1f;
     private bool flawlessEpisode;
     private bool finalTraining;
-    private Vector3 grabbedPosition;
+    private Vector3 lanePosition;
     private bool grabbedContainer;
     private readonly List<int> lanes = new List<int>();
 
@@ -68,13 +71,10 @@ public class V2GrabContainer : CraneLevel
 
         // Set the final training boolean that provides an increased reward when the final difficulty has been reached
         // This larger reward is used to determine wether or not the training is finished.
-        // TODO: Define final training requirements
-        finalTraining = false;
+        finalTraining = shipZ == maxShipZ;
 
         // Choose a random Lane to position the container at
         _targetLocation = new Vector3(0, 3f, lanes[Random.Range(0, lanes.Count)]);
-
-        targetPlane.localPosition = new Vector3(0, Random.Range(0f, 10f), Random.Range(15f, 35f));
 
         // Enable the container object
         containerObject.SetActive(true);
@@ -103,102 +103,89 @@ public class V2GrabContainer : CraneLevel
 
     public override RewardData Step(Collision col = null, Collider other = null)
     {
-        // Create a reward float that will be determined later
-        float startReward;
+        RewardData rd = new RewardData();
 
-
-        // Calculate the distance forwards and backwards wherein the crane is allowed to lower below 15m height
-        float radius = ((crane.SpreaderPosition.y - 3) * 0.3f) + 1;
-
-        // Determine wether the spreader is close enough to be lowered.
-        bool closeEnoughToLowerWinch = Mathf.Abs(_targetLocation.z - crane.SpreaderPosition.z) < radius;
-
-        // If the spreader is nog close enough to lower the winch, and the spreader is below
-        // 15 meters, add a negative reward to incentivise the agent to stay above 15m.
-        if (!closeEnoughToLowerWinch && crane.SpreaderPosition.y < 15)
-        {
-            startReward = -10f / _maxStep; flawlessEpisode = false;
-        }
-
-        // Set a base reward of 0 when the agent is above 15m, or is close enough to the target lane that it can lower the spreader.
-        else
-        {
-            if (crane.SpreaderPosition.y > 15)
-            {
-                startReward = 0.5f / _maxStep;
-            }
-            else
-            {
-                startReward = -0.5f / _maxStep;
-            }
-
-        }
-
-        if (grabbedContainer && crane.SpreaderPosition.y < 15)
-        {
-            if (crane.SpreaderPosition.z > grabbedPosition.z + radius || crane.SpreaderPosition.z < grabbedPosition.z - radius)
-            {
-                startReward = -10f / _maxStep; flawlessEpisode = false;
-            }
-        }
-
-        // Set the base reward to positive whenever the agent is at the target to promote staying there
-        if (goalReached) startReward = 1f / _maxStep;
-
-        // Define rewardData variable
-        RewardData rd = new RewardData(startReward);
-
-        // Check for collisions with objects that end the episode
-        if (col != null)
-        {
-            if (col.collider.CompareTag("dead")) { rd.reward += -1f; rd.endEpisode = true; return rd; }
-            if (col.collider.CompareTag("target")) { rd.reward += 1f; rd.endEpisode = true; return rd; }
-        }
-
-        if (other != null)
-        {
-            if (other.CompareTag("dead")) { rd.reward += -1f; rd.endEpisode = true; return rd; }
-            if (col.collider.CompareTag("target")) { rd.reward += 1f; rd.endEpisode = true; return rd; }
-        }
-
-        // Add the swing reward
+        // Add swing and speed reward
         rd.reward += GetSwingReward();
-
-        // Add a reward based on speed, promoting high speed when far from the target, and low speed when close.
         rd.reward += GetSpeedReward();
 
-        // Add a reward every step when at the final training stage to use in curriculum training as a trigger to continue
-        if (finalTraining) rd.reward += 10 / _maxStep;
+        // Add a reward when lowering
+        rd.reward += GetLoweredBetweenLegsReward();
 
-        if (endEpisodeAtNextStep && flawlessEpisode) grabRadius = Mathf.Max(grabRadius - discount, 0.05f);
+        // Check for collisions with objects that end the episode
+        if (col != null) { if (col.collider.CompareTag("dead")) { rd.reward += -1f; rd.endEpisode = true; return rd; } }
+        if (other != null) { if (other.CompareTag("dead")) { rd.reward += -1f; rd.endEpisode = true; return rd; } }
 
         // Set the endEpisode boolean
         rd.endEpisode = endEpisodeAtNextStep;
 
-        // Add a reward for finishing the environment
-        if (endEpisodeAtNextStep) rd.reward += 1;
+        // Add a reward for completing the episode
+        if (endEpisodeAtNextStep)
+        {
+            rd.reward += 1;
+            if (flawlessEpisode)
+            {
+                grabRadius = Mathf.Max(grabRadius - discount, 0.1f);
+                shipZ = Mathf.Max(shipZ + discount, maxShipZ);
+            }
+        }
+
+        if (finalTraining) rd.reward += 1f / _maxStep;
+        _tmpro.text = "" + rd.reward;
 
         return rd;
+
     }
     private void Update()
     {
         // Calculate and save the amount of swing
         float swing = Mathf.Abs(crane.CabinPosition.z - crane.SpreaderPosition.z + 1);
         swings.Add(swing);
+        //---------------------------------------------------------------------------------
+
 
         // Check if the episode is finished
-        if (!endEpisodeAtNextStep)
+        if (!endEpisodeAtNextStep && grabbedContainer)
         {
             // Determine if the distance between the target and the spreader is close enough
-            if (!goalReached) goalReached = Vector3.Distance(_targetLocation, crane.SpreaderPosition) < grabRadius;
+            goalReached = Vector3.Distance(_targetLocation, crane.SpreaderPosition) < 1;
+
+            // Set the time of reaching the goal to the current time if no time is set
+            if (goalReached && enterTime == -1f) { enterTime = Time.time; }
+
+            // Reset the time whenever the agent moves too far from the target
+            if (!goalReached && enterTime != -1f) enterTime = -1f;
+
+            // Determine if the episode is finished.
+            if (goalReached) endEpisodeAtNextStep = Time.time > enterTime + timeTarget;
+        }
+        //---------------------------------------------------------------------------------
+
+
+        // Check if the crane can grab the container
+        if (!grabbedContainer)
+        {
+            // Determine if the distance between the target and the spreader is close enough
+            if (!goalReached)
+            {
+                goalReached = Vector3.Distance(_targetLocation, crane.SpreaderPosition) < grabRadius;
+                if (goalReached && enterTime == -1f) { enterTime = Time.time; }
+
+                // Reset the time whenever the agent moves too far from the target
+                if (!goalReached && enterTime != -1f) enterTime = -1f;
+            }
 
             if (goalReached)
             {
-                crane.GrabContainer(targetIndicator);
-                grabbedPosition = _targetLocation;
-                _targetLocation = targetPlane.localPosition + new Vector3(0, 2.75f, 0);
+                if (Time.time > enterTime + timeTarget)
+                {
+                    crane.GrabContainer(targetIndicator);
+                    _targetLocation = new Vector3(0, 16f, shipZ);
+                    containerTarget.localPosition = _targetLocation - new Vector3(0, 2.75f, 0);
+                    enterTime = -1f;
+                    grabbedContainer = true;
+                }
             }
-
         }
     }
 
@@ -235,5 +222,36 @@ public class V2GrabContainer : CraneLevel
         float speed = Utils.Normalize(Mathf.Clamp(crane.SpreaderVelocity.x, 0, 4), 0f, 4);
         float reward = (1 - Mathf.Abs(distance - speed)) / 2;
         return reward / _maxStep;
+    }
+    private float GetLoweredBetweenLegsReward()
+    {
+        float r = 0;
+
+        // Only calculate a reward when below 15m
+        if (crane.SpreaderPosition.y < 15)
+        {
+            // Calculate the distance allowed from the container position
+            // The allowed distance is a cone of 20% of the height.
+            float radiusAllowed = Mathf.Max(crane.SpreaderPosition.y, 2f) * 0.2f;
+
+            // Calculate the distance from the lane 
+            float distance = Mathf.Abs(crane.SpreaderPosition.x - lanePosition.z);
+
+            // If the distance is below the radius, add a positive reward            
+            if (distance <= radiusAllowed)
+            {
+                r = 1f / _maxStep;
+            }
+
+            // If the agent is outside of the allowed range, add a negative reward
+            else
+            {
+                flawlessEpisode = false;
+                r = -1f / _maxStep;
+            }
+
+        }
+
+        return r;
     }
 }

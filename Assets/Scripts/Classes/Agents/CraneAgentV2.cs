@@ -82,6 +82,11 @@ public class CraneAgentV2 : Agent, IAgent
         sensor.AddObservation(cabinValue);
         sensor.AddObservation(winchValue);
 
+        sensor.AddObservation(false);
+        sensor.AddObservation(false);
+        sensor.AddObservation(false);
+        sensor.AddObservation(false);
+
         //Debug.Log("Spreader: " + crane.SpreaderVelocity.z + "  ||  cabin: " + crane.CabinVelocity.z);
         //Add observations for:
         // Spreader locked
@@ -100,10 +105,21 @@ public class CraneAgentV2 : Agent, IAgent
     }
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
+        /*ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
         continuousActions[0] = inputCrane.ReadValue<float>();
         continuousActions[1] = inputCabin.ReadValue<float>();
-        continuousActions[2] = inputLift.ReadValue<float>();
+        continuousActions[2] = inputLift.ReadValue<float>();*/
+
+        Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.5f);
+        ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
+        continuousActions[0] = inputs.x;
+        continuousActions[1] = inputs.z;
+        continuousActions[2] = inputs.y;
+
+        /*ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
+        continuousActions[0] = inputCrane.ReadValue<float>();
+        continuousActions[1] = AutoPilot.GetInputValue(levelManager.TargetPosition.z, crane.SpreaderPosition.z, 4f, 0.5f);
+        continuousActions[2] = AutoPilot.GetInputValue(levelManager.TargetPosition.y, crane.SpreaderPosition.y, 4f, 0.5f);*/
     }
 
     public override void OnActionReceived(ActionBuffers actions)
