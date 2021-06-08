@@ -754,7 +754,7 @@ MonoBehaviour:
       m_Action: Input Lift
       m_Flags: 8
   testmode: 1
-  testlevel: 1
+  testlevel: 0
 --- !u!114 &3030279274946217795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1073,14 +1073,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
---- !u!1 &7794852833069052135 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7732633183221991371, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
-  m_PrefabInstance: {fileID: 532328226020620076}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7794852833069052132 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7732633183221991368, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
+  m_PrefabInstance: {fileID: 532328226020620076}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7794852833069052135 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7732633183221991371, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
   m_PrefabInstance: {fileID: 532328226020620076}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7794852831928185356

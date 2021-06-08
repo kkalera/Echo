@@ -331,7 +331,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8190423418166364037}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 14.754015, y: 10.332713, z: 6.105261}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -354,7 +354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 16
+    VectorObservationSize: 20
     NumStackedVectorObservations: 4
     m_ActionSpec:
       m_NumContinuousActions: 3
@@ -580,7 +580,7 @@ MonoBehaviour:
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0, y: 0, z: 0}
-    outAnchor: {x: 0, y: -0.2445097, z: -0.43613625}
+    outAnchor: {x: 0, y: -0.24451113, z: -0.4361357}
   - body: {fileID: 8190423417614452936}
     type: 0
     orientation: 0
@@ -892,7 +892,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 14.754015, y: 16.332714, z: 6.605261}
+  m_ConnectedAnchor: {x: 0, y: 6, z: 0.5}
   m_UseSpring: 0
   m_Spring:
     spring: 0

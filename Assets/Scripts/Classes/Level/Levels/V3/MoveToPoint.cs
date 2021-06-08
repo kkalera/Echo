@@ -24,10 +24,11 @@ public class MoveToPoint : CraneLevel
 
     public override void OnEpisodeBegin()
     {
+
         if (_timeTarget == 5 && _spreaderMin == 3) _finalTraining = true;
         if (!_winchDisabled && _spreaderMin > 3) _timeTarget = 0.01f;
         if (_timeTarget == 5 && _winchDisabled) _winchDisabled = false;
-        if (!_winchDisabled) _crane.SetWinchLimits(_spreaderMin, 30);
+        if (!_winchDisabled) { _crane.SetWinchLimits(_spreaderMin, 30); Utils.ReportStat(_timeTarget, "_timeTarget"); }
 
         // Set the allowed movements for the crane.
         _crane.CabinMovementDisabled = false;
@@ -43,7 +44,7 @@ public class MoveToPoint : CraneLevel
         if (randomZ > 4 && randomZ < 14) randomZ = 14;
         if (randomZ < -4 && randomZ > -13) randomZ = -13;
 
-        _targetIndicator.localPosition = new Vector3(0, Random.Range(_spreaderMin, 25), randomZ);
+        _targetIndicator.localPosition = new Vector3(0, _spreaderMin, randomZ);
         _targetLocation = _targetIndicator.localPosition;
 
     }
@@ -68,7 +69,7 @@ public class MoveToPoint : CraneLevel
             rd.reward += 1f;
             _timeTarget = Mathf.Min(_timeTarget * 1.1f, 5);
 
-            if (!_winchDisabled) _spreaderMin = Mathf.Max(_spreaderMin * 0.999f, 3);
+            if (!_winchDisabled) _spreaderMin = Mathf.Max(_spreaderMin * 0.99f, 3);
         }
 
         if (_targetReached)
@@ -93,11 +94,13 @@ public class MoveToPoint : CraneLevel
     {
         if (col != null)
         {
+            if (!_winchDisabled) _spreaderMin = Mathf.Min(_spreaderMin * 1.01f, 25);
             return col.collider.CompareTag("dead");
         }
 
         if (other != null)
         {
+            if (!_winchDisabled) _spreaderMin = Mathf.Min(_spreaderMin * 1.01f, 25);
             return other.CompareTag("dead");
         }
 
