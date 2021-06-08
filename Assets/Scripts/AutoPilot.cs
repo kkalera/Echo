@@ -32,14 +32,14 @@ public static class AutoPilot
         else
         {
             // When target is not between legs, but spreader is
-            if (spreaderPosition.y < 15 && spreaderPosition.z > -10 && spreaderPosition.z < 10)
+            if (spreaderPosition.y < 18 && spreaderPosition.z > -10 && spreaderPosition.z < 10)
             {
                 targetPosition = new Vector3(0, 20f, spreaderPosition.z);
             }
 
-            if (spreaderPosition.y > 15 && spreaderPosition.z > -10 && spreaderPosition.z < 10)
+            if (spreaderPosition.y > 18 && spreaderPosition.z > -10 && spreaderPosition.z < 10)
             {
-                targetPosition = new Vector3(0, 16f, targetPosition.z);
+                targetPosition = new Vector3(0, 20f, targetPosition.z);
             }
         }
 

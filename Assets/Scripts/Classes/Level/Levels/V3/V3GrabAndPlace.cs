@@ -36,11 +36,11 @@ public class V3GrabAndPlace : CraneLevel
         _containerGrabbed = false;
         _episodeComplete = false;
 
-        _crane.ResetToPosition(new Vector3(0, Random.Range(15, 25), Random.Range(-10, 35)));
+        _crane.ResetToPosition(new Vector3(0, 15, -15));
         _crane.ReleaseContainer(_crane.Transform);
         //_container.localPosition = new Vector3(0, -2.85f, 0);        
 
-        _targetIndicator.localPosition = new Vector3(0, 3, Random.Range(-4, 4));
+        _targetIndicator.localPosition = new Vector3(0, 3, 0);
         _targetLocation = _targetIndicator.localPosition;
 
     }
@@ -79,7 +79,7 @@ public class V3GrabAndPlace : CraneLevel
             {
                 _crane.GrabContainer(_targetIndicator);
                 _containerGrabbed = true;
-                _targetLocation = new Vector3(0, Random.Range(0, 10), Random.Range(16, 35));
+                _targetLocation = new Vector3(0, 0, 25);
                 _targetPlane.localPosition = _targetLocation - new Vector3(0, 3, 0);
             }
             else

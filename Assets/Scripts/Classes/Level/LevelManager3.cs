@@ -14,7 +14,7 @@ public class LevelManager3 : MonoBehaviour
 
     public void SetLevel(int level)
     {
-        if (level == -1) StopSimulation();
+        if (level >= levels.Count) StopSimulation();
 
         for (int i = 0; i < levels.Count; i++)
         {
