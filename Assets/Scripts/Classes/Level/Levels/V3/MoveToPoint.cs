@@ -26,11 +26,11 @@ public class MoveToPoint : CraneLevel
 
     public override void OnEpisodeBegin()
     {
-
+        Utils.ReportStat(_timeTarget, "_timeTarget");
         if (_timeTarget == 5 && _spreaderMin == 3) _finalTraining = true;
         if (!_winchDisabled && _spreaderMin > 3) _timeTarget = 0.01f;
         if (_timeTarget == 5 && _winchDisabled) _winchDisabled = false;
-        if (!_winchDisabled) { _crane.SetWinchLimits(_spreaderMin, 30); Utils.ReportStat(_timeTarget, "_timeTarget"); }
+        if (!_winchDisabled) { _crane.SetWinchLimits(_spreaderMin - 2f, 30); }
 
         // Set the allowed movements for the crane.
         _crane.CabinMovementDisabled = false;
@@ -41,40 +41,18 @@ public class MoveToPoint : CraneLevel
         _episodeComplete = false;
 
 
-        if (Random.Range(0f, 1f) > 0.5f)
-        {
-            float randomZCrane = Random.Range(-25, 35);
-            if (randomZCrane > 4 && randomZCrane < 14) randomZCrane = 14;
-            if (randomZCrane < -4 && randomZCrane > -13) randomZCrane = -13;
 
-            _crane.ResetToPosition(new Vector3(0, Random.Range(_spreaderMin, 25), randomZCrane));
+        float randomZCrane = Random.Range(-25, 35);
+        if (randomZCrane > 4 && randomZCrane < 14) randomZCrane = 14;
+        if (randomZCrane < -4 && randomZCrane > -13) randomZCrane = -13;
 
-            float randomZ = Random.Range(-25, 35);
-            if (randomZ > 4 && randomZ < 14) randomZ = 14;
-            if (randomZ < -4 && randomZ > -13) randomZ = -13;
+        _crane.ResetToPosition(new Vector3(0, _spreaderMin, randomZCrane));
 
-            _target.position = _environment.position + new Vector3(0, Random.Range(_spreaderMin, 25), randomZ);
-        }
-        else
-        {
-            float randomZCrane = Random.Range(-25, 35);
-            if (randomZCrane > 4 && randomZCrane < 14) randomZCrane = 14;
-            if (randomZCrane < -4 && randomZCrane > -13) randomZCrane = -13;
+        float randomZ = Random.Range(-25, 35);
+        if (randomZ > 4 && randomZ < 14) randomZ = 14;
+        if (randomZ < -4 && randomZ > -13) randomZ = -13;
 
-            _crane.ResetToPosition(new Vector3(0, _spreaderMin, randomZCrane));
-
-            float randomZ = Random.Range(-25, 35);
-            if (randomZ > 4 && randomZ < 14) randomZ = 14;
-            if (randomZ < -4 && randomZ > -13) randomZ = -13;
-
-            _target.position = _environment.position + new Vector3(0, _spreaderMin, randomZ);
-        }
-
-
-
-
-
-
+        _target.position = _environment.position + new Vector3(0, _spreaderMin, randomZ);
     }
 
     public override void ResetEnvironment(ICrane crane)
@@ -95,7 +73,7 @@ public class MoveToPoint : CraneLevel
             rd.reward += 1f;
             _timeTarget = Mathf.Min(_timeTarget * 1.1f, 5);
 
-            if (!_winchDisabled && Mathf.Approximately(_target.position.y, _spreaderMin)) _spreaderMin = Mathf.Max(_spreaderMin * 0.99f, 3);
+            if (!_winchDisabled) _spreaderMin = Mathf.Max(_spreaderMin * 0.99f, 3);
         }
 
         if (_targetReached)
@@ -108,6 +86,7 @@ public class MoveToPoint : CraneLevel
         {
             rd.endEpisode = dead;
             rd.reward = -1f;
+            if (!_winchDisabled) _spreaderMin = Mathf.Min(_spreaderMin * 1.01f, 25);
         }
 
         return rd;
@@ -127,13 +106,11 @@ public class MoveToPoint : CraneLevel
     {
         if (col != null)
         {
-            if (!_winchDisabled) _spreaderMin = Mathf.Min(_spreaderMin * 1.01f, 25);
             return col.collider.CompareTag("dead");
         }
 
         if (other != null)
         {
-            if (!_winchDisabled) _spreaderMin = Mathf.Min(_spreaderMin * 1.01f, 25);
             return other.CompareTag("dead");
         }
 
