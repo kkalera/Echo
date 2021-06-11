@@ -29,11 +29,14 @@ public interface ICrane
     void ReleaseContainer(Transform newParent);
 
     Vector3 CranePosition { get; }
+    Vector3 CraneWorldPosition { get; }
     Vector3 CraneVelocity { get; }
 
     Vector3 CabinPosition { get; }
+    Vector3 CabinWorldPosition { get; }
     Vector3 CabinVelocity { get; }
 
     Vector3 SpreaderPosition { get; }
+    Vector3 SpreaderWorldPosition { get; }
     Vector3 SpreaderVelocity { get; }
 }

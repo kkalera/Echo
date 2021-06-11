@@ -115,11 +115,6 @@ public class CraneAgentV2 : Agent, IAgent
         continuousActions[0] = inputs.x;
         continuousActions[1] = inputs.z;
         continuousActions[2] = inputs.y;
-
-        /*ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
-        continuousActions[0] = inputCrane.ReadValue<float>();
-        continuousActions[1] = AutoPilot.GetInputValue(levelManager.TargetPosition.z, crane.SpreaderPosition.z, 4f, 0.5f);
-        continuousActions[2] = AutoPilot.GetInputValue(levelManager.TargetPosition.y, crane.SpreaderPosition.y, 4f, 0.5f);*/
     }
 
     public override void OnActionReceived(ActionBuffers actions)

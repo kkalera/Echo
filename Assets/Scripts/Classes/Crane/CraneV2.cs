@@ -41,11 +41,15 @@ public class CraneV2 : MonoBehaviour, ICrane
     private Rigidbody spreaderBody;
     private Transform currentContainer;
 
-    public Vector3 CabinPosition => cabin.localPosition;
+    public Vector3 CabinPosition => cabin.position - transform.parent.position;
+    public Vector3 CabinWorldPosition => cabin.position;
 
-    public Vector3 CranePosition => transform.localPosition;
+    public Vector3 CranePosition => transform.position - transform.parent.position;
+    public Vector3 CraneWorldPosition => transform.position;
 
-    public Vector3 SpreaderPosition => spreader.localPosition;
+    public Vector3 SpreaderPosition => spreader.position - transform.parent.position;
+    public Vector3 SpreaderWorldPosition => spreader.position;
+
 
     public Vector3 CraneVelocity => craneBody.velocity;
 
@@ -169,7 +173,7 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     public void ResetToPosition(Vector3 position)
     {
-        transform.localPosition = new Vector3(position.x, 0.15f, -8f);
+        transform.localPosition = new Vector3(position.x, 0, 0f);
         cabin.localPosition = new Vector3(0, 32, position.z);
         spreader.localPosition = new Vector3(cabin.localPosition.x, position.y, cabin.localPosition.z + 1);
 
