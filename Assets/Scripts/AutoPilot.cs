@@ -18,31 +18,16 @@ public static class AutoPilot
     {
         Vector3 inputs = new Vector3(0, 0, 0);
 
-        // When target between legs
-        if (targetPosition.z > -10 && targetPosition.z < 10)
+        // Check if we're to far from the target to lower the spreader
+        float r = (spreaderPosition.y * 0.2f) + 1;
+        if (spreaderPosition.y < 16 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
         {
-            float r = (spreaderPosition.y * 0.2f) + 1;
-
-            // When going to container but not close enough to lower
-            if (Mathf.Abs(spreaderPosition.z - targetPosition.z) > 1)
-            {
-                targetPosition = new Vector3(0, 16f, targetPosition.z);
-            }
+            targetPosition = new Vector3(0, 20f, spreaderPosition.z);
         }
-        else
+        else if (spreaderPosition.y >= 16 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
         {
-            // When target is not between legs, but spreader is
-            if (spreaderPosition.y < 18 && spreaderPosition.z > -10 && spreaderPosition.z < 10)
-            {
-                targetPosition = new Vector3(0, 20f, spreaderPosition.z);
-            }
-
-            if (spreaderPosition.y > 18 && spreaderPosition.z > -10 && spreaderPosition.z < 10)
-            {
-                targetPosition = new Vector3(0, 20f, targetPosition.z);
-            }
+            targetPosition = new Vector3(0, spreaderPosition.y, targetPosition.z);
         }
-
 
 
         float distanceToTravelY = Mathf.Abs(targetPosition.y - spreaderPosition.y);

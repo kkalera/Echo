@@ -26,7 +26,7 @@ public class MoveToPointSAC : CraneLevel
     {
         Utils.ReportStat(_timeTarget, "MoveToPoint/_timeTarget");
         Utils.ReportStat(_spreaderMin, "MoveToPoint/_spreaderMin");
-        if (_timeTarget == 5 && _spreaderMin == 3) _finalTraining = true;
+        if (_timeTarget == 5 && _spreaderMin == 3) { _finalTraining = true; Application.Quit(); }
 
         // Set the allowed movements for the crane.
         _crane.CabinMovementDisabled = false;
@@ -68,7 +68,7 @@ public class MoveToPointSAC : CraneLevel
             rd.reward += 1f;
             _timeTarget = Mathf.Min(_timeTarget * 1.1f, 5);
 
-            if(Mathf.Approximately(_timeTarget, 5f))_spreaderMin = Mathf.Max(_spreaderMin * 0.99f, 3);
+            if (Mathf.Approximately(_timeTarget, 5f)) _spreaderMin = Mathf.Max(_spreaderMin * 0.99f, 3);
         }
 
         if (_targetReached)
