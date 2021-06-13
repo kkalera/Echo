@@ -16,6 +16,7 @@ public class MoveToPoint : CraneLevel
     private bool _finalTraining = false;
     private bool _episodeComplete = false;
     private bool _winchDisabled = true;
+    private bool _heightTraining = false;
 
 
     private float _enterTime = -1f;
@@ -26,7 +27,9 @@ public class MoveToPoint : CraneLevel
 
     public override void OnEpisodeBegin()
     {
-        Utils.ReportStat(_timeTarget, "_timeTarget");
+        Utils.ReportStat(_timeTarget, "MoveToPoint/_timeTarget");
+        Utils.ReportStat(_spreaderMin, "MoveToPoint/_spreaderMin");
+
         if (_timeTarget == 5 && _spreaderMin == 3) _finalTraining = true;
         if (!_winchDisabled && _spreaderMin > 3) _timeTarget = 0.01f;
         if (_timeTarget == 5 && _winchDisabled) _winchDisabled = false;
@@ -46,11 +49,21 @@ public class MoveToPoint : CraneLevel
         if (randomZCrane > 4 && randomZCrane < 14) randomZCrane = 14;
         if (randomZCrane < -4 && randomZCrane > -13) randomZCrane = -13;
 
+        int craneStart = 0;
+        if (randomZCrane >= -4 && randomZCrane <= 4) craneStart = 1;
+        if (randomZCrane > 14) craneStart = 2;
+
         _crane.ResetToPosition(new Vector3(0, _spreaderMin, randomZCrane));
 
         float randomZ = Random.Range(-25, 35);
         if (randomZ > 4 && randomZ < 14) randomZ = 14;
         if (randomZ < -4 && randomZ > -13) randomZ = -13;
+
+        int targetStart = 0;
+        if (randomZ >= -4 && randomZ <= 4) targetStart = 1;
+        if (randomZ > 14) targetStart = 2;
+
+        _heightTraining = craneStart != targetStart;
 
         _target.position = _environment.position + new Vector3(0, _spreaderMin, randomZ);
     }
@@ -73,7 +86,7 @@ public class MoveToPoint : CraneLevel
             rd.reward += 1f;
             _timeTarget = Mathf.Min(_timeTarget * 1.1f, 5);
 
-            if (!_winchDisabled) _spreaderMin = Mathf.Max(_spreaderMin * 0.99f, 3);
+            if (!_winchDisabled && _heightTraining) _spreaderMin = Mathf.Max(_spreaderMin - .1f, 3);
         }
 
         if (_targetReached)
@@ -86,7 +99,7 @@ public class MoveToPoint : CraneLevel
         {
             rd.endEpisode = dead;
             rd.reward = -1f;
-            if (!_winchDisabled) _spreaderMin = Mathf.Min(_spreaderMin * 1.01f, 25);
+            if (!_winchDisabled && _heightTraining) _spreaderMin = Mathf.Min(_spreaderMin + .1f, 25);
         }
 
         return rd;
