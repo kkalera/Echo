@@ -31,7 +31,7 @@ public class MoveToPoint : CraneLevel
         Utils.ReportStat(_spreaderMin, "MoveToPoint/_spreaderMin");
 
         if (_timeTarget == 5 && _spreaderMin == 3) _finalTraining = true;
-        if (!_winchDisabled && _spreaderMin > 3) _timeTarget = 0.01f;
+        if (!_winchDisabled && _spreaderMin > 3.1f) _timeTarget = 0.01f;
         if (_timeTarget == 5 && _winchDisabled) _winchDisabled = false;
         if (!_winchDisabled) { _crane.SetWinchLimits(_spreaderMin - 2f, 30); }
 
@@ -99,7 +99,7 @@ public class MoveToPoint : CraneLevel
         {
             rd.endEpisode = dead;
             rd.reward = -1f;
-            if (!_winchDisabled && _heightTraining) _spreaderMin = Mathf.Min(_spreaderMin + .1f, 25);
+            if (!_winchDisabled && _heightTraining&&!_finalTraining) _spreaderMin = Mathf.Min(_spreaderMin + .1f, 25);
         }
 
         return rd;
