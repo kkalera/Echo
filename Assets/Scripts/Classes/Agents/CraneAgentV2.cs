@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using System;
 
 public class CraneAgentV2 : Agent, IAgent
 {
@@ -105,16 +106,16 @@ public class CraneAgentV2 : Agent, IAgent
     }
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        /*ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
+        ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
         continuousActions[0] = inputCrane.ReadValue<float>();
         continuousActions[1] = inputCabin.ReadValue<float>();
-        continuousActions[2] = inputLift.ReadValue<float>();*/
+        continuousActions[2] = inputLift.ReadValue<float>();
 
-        Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.5f);
+        /*Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.5f);
         ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
         continuousActions[0] = inputs.x;
         continuousActions[1] = inputs.z;
-        continuousActions[2] = inputs.y;
+        continuousActions[2] = inputs.y;*/
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -126,7 +127,20 @@ public class CraneAgentV2 : Agent, IAgent
 
         RewardData rewardData = levelManager.Step();
         AddReward(rewardData.reward);
+
+        AddReward(GetInputReward(continousActions) / MaxStep);
+
         if (rewardData.endEpisode) EndEpisode();
+    }
+
+    private float GetInputReward(ActionSegment<float> continousActions)
+    {
+        Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.5f);
+        float xVal = Mathf.Clamp(1 - Mathf.Abs(continousActions[0] - inputs.x), -1, 1);
+        float zVal = Mathf.Clamp(1 - Mathf.Abs(continousActions[1] - inputs.z), -1, 1);
+        float yVal = Mathf.Clamp(1 - Mathf.Abs(continousActions[2] - inputs.y), -1, 1);
+
+        return (xVal + zVal + yVal) / 3;
     }
 
     public void OnCollisionEnter(Collision col)

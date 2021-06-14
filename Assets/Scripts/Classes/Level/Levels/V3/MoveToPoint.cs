@@ -94,6 +94,7 @@ public class MoveToPoint : CraneLevel
             rd.reward += 1f / 5000;
         }
 
+
         bool dead = ProcessCollision(col, other);
         if (dead)
         {
@@ -129,4 +130,6 @@ public class MoveToPoint : CraneLevel
 
         return false;
     }
+
+
 }
