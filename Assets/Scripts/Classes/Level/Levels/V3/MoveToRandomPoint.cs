@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveToPointSAC : CraneLevel
+public class MoveToRandomPoint : CraneLevel
 {
     [SerializeField] [Range(0.001f, 1)] float increment = 0.01f;
     [SerializeField] [Range(0.001f, 10)] float _timeTarget = 0.01f;
@@ -24,9 +24,7 @@ public class MoveToPointSAC : CraneLevel
 
     public override void OnEpisodeBegin()
     {
-        Utils.ReportStat(_timeTarget, "MoveToPoint/_timeTarget");
-        Utils.ReportStat(_spreaderMin, "MoveToPoint/_spreaderMin");
-        if (_timeTarget == 5 && _spreaderMin == 3) { _finalTraining = true; Application.Quit(); }
+        Utils.ReportStat(_timeTarget, "MoveToRandomPoint/_timeTarget");
 
         // Set the allowed movements for the crane.
         _crane.CabinMovementDisabled = false;
@@ -36,19 +34,19 @@ public class MoveToPointSAC : CraneLevel
         _targetReached = false;
         _episodeComplete = false;
 
-
+        if (Mathf.Approximately(_timeTarget, 5f)) _finalTraining = true;
 
         float randomZCrane = Random.Range(-25, 35);
         if (randomZCrane > 4 && randomZCrane < 14) randomZCrane = 14;
         if (randomZCrane < -4 && randomZCrane > -13) randomZCrane = -13;
 
-        _crane.ResetToPosition(new Vector3(0, _spreaderMin, randomZCrane));
+        _crane.ResetToPosition(new Vector3(0, Random.Range(_spreaderMin, 25f), randomZCrane));
 
         float randomZ = Random.Range(-25, 35);
         if (randomZ > 4 && randomZ < 14) randomZ = 14;
         if (randomZ < -4 && randomZ > -13) randomZ = -13;
 
-        _target.position = _environment.position + new Vector3(0, _spreaderMin, randomZ);
+        _target.position = _environment.position + new Vector3(0, Random.Range(_spreaderMin, 25f), randomZ);
     }
 
     public override void ResetEnvironment(ICrane crane)
@@ -65,10 +63,8 @@ public class MoveToPointSAC : CraneLevel
             if (_finalTraining) rd.reward += 1f;
 
             rd.endEpisode = true;
-            rd.reward += 1f;
-            _timeTarget = Mathf.Min(_timeTarget * 1.1f, 5);
-
-            if (Mathf.Approximately(_timeTarget, 5f)) _spreaderMin = Mathf.Max(_spreaderMin * 0.99f, 3);
+            rd.reward += 3f;
+            _timeTarget = Mathf.Min(_timeTarget + increment, 5);
         }
 
         if (_targetReached)
@@ -76,12 +72,12 @@ public class MoveToPointSAC : CraneLevel
             rd.reward += 1f / 5000;
         }
 
+
         bool dead = ProcessCollision(col, other);
         if (dead)
         {
             rd.endEpisode = dead;
             rd.reward = -1f;
-            _spreaderMin = Mathf.Min(_spreaderMin * 1.001f, 25);
         }
 
         return rd;
@@ -111,4 +107,6 @@ public class MoveToPointSAC : CraneLevel
 
         return false;
     }
+
+
 }
