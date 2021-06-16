@@ -1,7 +1,7 @@
 # Finish configuration for slower but more stable training
 env_settings:
     env_path: Build/echo
-    num_envs: 2
+    num_envs: 1
 
 engine_settings:
     width: 1920
@@ -68,4 +68,4 @@ environment_parameters:
                   min_lesson_length: 100
                   threshold: 1
                   require_reset: true
-              value: -1
+              value: 1

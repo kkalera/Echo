@@ -15,7 +15,8 @@ public class MoveToPoint : CraneLevel
     private bool _targetReached = false;
     private bool _finalTraining = false;
     private bool _episodeComplete = false;
-    private bool _winchDisabled = true;
+    [SerializeField] private bool _winchDisabled = true;
+    [SerializeField] private bool _lowTimeTraining = false;
     private bool _heightTraining = false;
 
 
@@ -30,9 +31,10 @@ public class MoveToPoint : CraneLevel
         Utils.ReportStat(_timeTarget, "MoveToPoint/_timeTarget");
         Utils.ReportStat(_spreaderMin, "MoveToPoint/_spreaderMin");
 
-        if (_timeTarget == 5 && _spreaderMin == 3) _finalTraining = true;
-        if (!_winchDisabled && _spreaderMin > 3.1f) _timeTarget = 0.01f;
-        if (_timeTarget == 5 && _winchDisabled) _winchDisabled = false;
+        if (_timeTarget == 5 && _spreaderMin == 3 && !_finalTraining) _finalTraining = true;
+        if (!_winchDisabled && _spreaderMin > 3.01f) _timeTarget = 0.01f;
+        if (!_winchDisabled && Mathf.Approximately(_spreaderMin, 3f)) _lowTimeTraining = true;
+        if ((_timeTarget == 5 || _lowTimeTraining) && _winchDisabled) _winchDisabled = false;
         if (!_winchDisabled) { _crane.SetWinchLimits(_spreaderMin - 2f, 30); }
 
         // Set the allowed movements for the crane.
@@ -84,7 +86,7 @@ public class MoveToPoint : CraneLevel
 
             rd.endEpisode = true;
             rd.reward += 1f;
-            _timeTarget = Mathf.Min(_timeTarget * 1.1f, 5);
+            _timeTarget = Mathf.Min(_timeTarget * 1.01f, 5);
 
             if (!_winchDisabled && _heightTraining) _spreaderMin = Mathf.Max(_spreaderMin - .1f, 3);
         }
@@ -100,7 +102,7 @@ public class MoveToPoint : CraneLevel
         {
             rd.endEpisode = dead;
             rd.reward = -1f;
-            if (!_winchDisabled && _heightTraining&&!_finalTraining) _spreaderMin = Mathf.Min(_spreaderMin + .1f, 25);
+            if (!_winchDisabled && !_finalTraining && !_lowTimeTraining) _spreaderMin = Mathf.Min(_spreaderMin + .1f, 25);
         }
 
         return rd;

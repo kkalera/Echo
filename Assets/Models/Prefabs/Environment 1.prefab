@@ -76,10 +76,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   increment: 0.01
   _timeTarget: 0.01
-  _spreaderMin: 25
+  _spreaderMin: 3
   _tmpro: {fileID: 8538930300774720593}
   _environment: {fileID: 7794852832115429325}
   _target: {fileID: 4448393714846924525}
+  _winchDisabled: 0
+  _lowTimeTraining: 0
 --- !u!1 &7478012133753600042
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,7 +475,7 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Input Lift
       m_Flags: 8
-  testmode: 1
+  testmode: 0
   testlevel: 0
 --- !u!114 &3030279274946217795
 MonoBehaviour:
