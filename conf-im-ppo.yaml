@@ -51,7 +51,7 @@ behaviors:
 environment_parameters:
     level_parameter:
         curriculum:
-            - name: Swing control
+            - name: MoveToPoint
               completion_criteria:
                   measure: reward
                   behavior: Crane
@@ -59,6 +59,16 @@ environment_parameters:
                   min_lesson_length: 1000
                   threshold: 2.5
               value: 0
+
+            - name: MoveToRandomPoint
+              completion_criteria:
+                  measure: reward
+                  behavior: Crane
+                  signal_smoothing: true
+                  min_lesson_length: 1000
+                  threshold: 3.5
+                  require_reset: true
+              value: 1
 
             - name: End
               completion_criteria:
@@ -68,4 +78,4 @@ environment_parameters:
                   min_lesson_length: 100
                   threshold: 1
                   require_reset: true
-              value: 1
+              value: 2

@@ -32,7 +32,7 @@ public class MoveToPoint : CraneLevel
         Utils.ReportStat(_spreaderMin, "MoveToPoint/_spreaderMin");
 
         if (_timeTarget == 5 && _spreaderMin == 3 && !_finalTraining) _finalTraining = true;
-        if (!_winchDisabled && _spreaderMin > 3.01f) _timeTarget = 0.01f;
+        if (!_winchDisabled && _spreaderMin > 20f) _timeTarget = 0.01f;
         if (!_winchDisabled && Mathf.Approximately(_spreaderMin, 3f)) _lowTimeTraining = true;
         if ((_timeTarget == 5 || _lowTimeTraining) && _winchDisabled) _winchDisabled = false;
         if (!_winchDisabled) { _crane.SetWinchLimits(_spreaderMin - 2f, 30); }

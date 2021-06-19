@@ -1,11 +1,11 @@
 # Finish configuration for slower but more stable training
 env_settings:
     env_path: Build/echo
-    num_envs: 2
+    num_envs: 4    
 
 engine_settings:
-    width: 1920
-    height: 1080
+    width: 1600
+    height: 1440
 
 behaviors:
     Crane:
@@ -42,18 +42,39 @@ behaviors:
                 gamma: 0.99
                 encoding_size: 256
 
+
 # Add this section
 environment_parameters:
     level_parameter:
         curriculum:
-            - name: Swing control
+            - name: MoveToPoint
               completion_criteria:
                   measure: reward
                   behavior: Crane
-                  signal_smoothing: true
+                  signal_smoothing: false
                   min_lesson_length: 1000
-                  threshold: 2.8
+                  threshold: 1.25
               value: 0
+
+            - name: MoveToRandomPoint
+              completion_criteria:
+                  measure: reward
+                  behavior: Crane
+                  signal_smoothing: false
+                  min_lesson_length: 1000
+                  threshold: 1.25
+                  require_reset: true
+              value: 1
+            
+            - name: GrabAndPlace
+              completion_criteria:
+                  measure: reward
+                  behavior: Crane
+                  signal_smoothing: false
+                  min_lesson_length: 10000
+                  threshold: 1.25
+                  require_reset: true
+              value: 2
 
             - name: End
               completion_criteria:
@@ -61,6 +82,6 @@ environment_parameters:
                   behavior: Crane
                   signal_smoothing: true
                   min_lesson_length: 100
-                  threshold: 1
+                  threshold: 5
                   require_reset: true
-              value: -1
+              value: 3

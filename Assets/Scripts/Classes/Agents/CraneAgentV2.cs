@@ -14,6 +14,7 @@ public class CraneAgentV2 : Agent, IAgent
     [SerializeField] private GameObject craneObject;
     [Header("Inputs")]
     [Space(10)]
+    [SerializeField] private bool _autopilot = true;
     [SerializeField] private InputAction inputCabin;
     [SerializeField] private InputAction inputCrane;
     [SerializeField] private InputAction inputLift;
@@ -83,7 +84,7 @@ public class CraneAgentV2 : Agent, IAgent
         sensor.AddObservation(cabinValue);
         sensor.AddObservation(winchValue);
 
-        sensor.AddObservation(false);
+        sensor.AddObservation(crane.ContainerGrabbed);
         sensor.AddObservation(false);
         sensor.AddObservation(false);
         sensor.AddObservation(false);
@@ -107,15 +108,21 @@ public class CraneAgentV2 : Agent, IAgent
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
-        continuousActions[0] = inputCrane.ReadValue<float>();
-        continuousActions[1] = inputCabin.ReadValue<float>();
-        continuousActions[2] = inputLift.ReadValue<float>();
+        if (!_autopilot)
+        {
 
-        /*Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.5f);
-        ActionSegment<float> continuousActions = actionsOut.ContinuousActions;
-        continuousActions[0] = inputs.x;
-        continuousActions[1] = inputs.z;
-        continuousActions[2] = inputs.y;*/
+            continuousActions[0] = inputCrane.ReadValue<float>();
+            continuousActions[1] = inputCabin.ReadValue<float>();
+            continuousActions[2] = inputLift.ReadValue<float>();
+        }
+        else
+        {
+            Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.5f);
+            continuousActions[0] = inputs.x;
+            continuousActions[1] = inputs.z;
+            continuousActions[2] = inputs.y;
+        }
+
     }
 
     public override void OnActionReceived(ActionBuffers actions)

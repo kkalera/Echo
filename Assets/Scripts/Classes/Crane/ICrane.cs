@@ -21,6 +21,8 @@ public interface ICrane
     bool CabinMovementDisabled { set; get; }
     bool WinchMovementDisabled { set; get; }
 
+    bool ContainerGrabbed { get; }
+
     Transform Transform { get; }
     void ResetToRandomPosition();
     void ResetToPosition(Vector3 position);

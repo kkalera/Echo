@@ -4,29 +4,41 @@ using UnityEngine;
 
 public class V3GrabAndPlace : CraneLevel
 {
-    [SerializeField] [Range(0.001f, 1)] float increment = 0.01f;
-    [SerializeField] [Range(0.001f, 10)] float _timeTarget = 0.01f;
-    [SerializeField] Transform _targetIndicator;
     [SerializeField] TMPro.TextMeshPro _tmpro;
-    [SerializeField] Transform _container;
-    [SerializeField] Transform _targetPlane;
+    [SerializeField] GameObject containerPrefab;
+    [SerializeField] GameObject targetPlanePrefab;
+    [SerializeField] Transform _environment;
+    [SerializeField] GameObject _sphere;
 
+    private Transform _targetPlane;
+    private Transform _container;
+    private Transform _target;
     private bool _targetReached = false;
     private bool _containerGrabbed = false;
     private bool _episodeComplete = false;
+    private bool _grabRewarded = false;
 
     private ICrane _crane;
 
-    public override Vector3 TargetLocation => _targetLocation;
-    private Vector3 _targetLocation;
-
-    private void Start()
-    {
-        _targetIndicator.GetComponent<MeshRenderer>().enabled = false;
-    }
+    public override Vector3 TargetLocation => (_target.position + new Vector3(0, 3, 0)) - _environment.position;
 
     public override void OnEpisodeBegin()
     {
+        _sphere.SetActive(false);
+
+        if (_container == null)
+        {
+            GameObject cp = Instantiate(containerPrefab, _environment);
+            _container = cp.transform;
+            _container.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+        }
+
+        if (_targetPlane == null)
+        {
+            GameObject cp = Instantiate(targetPlanePrefab, _environment);
+            _targetPlane = cp.transform;
+        }
+
         // Set the allowed movements for the crane.
         _crane.CabinMovementDisabled = false;
         _crane.WinchMovementDisabled = false;
@@ -34,15 +46,25 @@ public class V3GrabAndPlace : CraneLevel
 
         _targetReached = false;
         _containerGrabbed = false;
+        _grabRewarded = false;
         _episodeComplete = false;
 
-        _crane.ResetToPosition(new Vector3(0, 15, -15));
-        _crane.ReleaseContainer(_crane.Transform);
-        //_container.localPosition = new Vector3(0, -2.85f, 0);        
 
-        _targetIndicator.localPosition = new Vector3(0, 3, 0);
-        _targetLocation = _targetIndicator.localPosition;
+        float randomZCrane = Random.Range(-25, 35);
+        if (randomZCrane > 4 && randomZCrane < 14) randomZCrane = 14;
+        if (randomZCrane < -4 && randomZCrane > -13) randomZCrane = -13;
 
+        _crane.ResetToPosition(new Vector3(0, Random.Range(15, 25), randomZCrane));
+        _crane.ReleaseContainer(_environment);
+
+        float randomZContainer = Random.Range(-25, 4);
+        if (randomZContainer < -4 && randomZContainer > -13) randomZContainer = -13;
+        _container.localPosition = new Vector3(0, 0, randomZContainer);
+
+
+        _targetPlane.localPosition = new Vector3(0, Random.Range(0, 10), Random.Range(14, 40));
+
+        _target = _container;
     }
 
     public override void ResetEnvironment(ICrane crane)
@@ -57,12 +79,13 @@ public class V3GrabAndPlace : CraneLevel
         if (_episodeComplete)
         {
             rd.endEpisode = true;
-            rd.reward += 1f;
+            rd.reward += .75f;
         }
 
-        if (_targetReached)
+        if (_containerGrabbed && !_grabRewarded)
         {
-            rd.reward += 1f / 5000;
+            rd.reward += .5f;
+            _grabRewarded = true;
         }
 
         return rd;
@@ -71,26 +94,20 @@ public class V3GrabAndPlace : CraneLevel
 
     void Update()
     {
-        _targetReached = Vector3.Distance(_crane.SpreaderPosition, _targetLocation) < 0.2;
+        _targetReached = Vector3.Distance(_crane.SpreaderWorldPosition + new Vector3(0, -3, 0), _target.position) < 0.5;
 
         if (_targetReached && _crane.SpreaderVelocity.magnitude < 0.5)
         {
             if (!_containerGrabbed)
             {
-                _crane.GrabContainer(_targetIndicator);
+                _crane.GrabContainer(_container);
                 _containerGrabbed = true;
-                _targetLocation = new Vector3(0, 0, 25);
-                _targetPlane.localPosition = _targetLocation - new Vector3(0, 3, 0);
+                _target = _targetPlane;
             }
             else
             {
                 _episodeComplete = true;
             }
-
         }
-
-
-
-        _tmpro.text = "" + Vector3.Distance(_crane.SpreaderPosition, _targetLocation);
     }
 }
