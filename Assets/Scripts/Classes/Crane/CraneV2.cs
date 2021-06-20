@@ -90,7 +90,7 @@ public class CraneV2 : MonoBehaviour, ICrane
         if (!cabinMovementEnabled) return;
         if (cabin.localPosition.z > 45 && val > 0) val = 0;
         if (cabin.localPosition.z < -30 && val < 0) val = 0;
-        float targetSpeed = movementManager.GetNextSpeed(val, cabinBody.velocity.z, cabinSpeed * cabinAcceleration * Time.deltaTime, cabinSpeed);
+        float targetSpeed = movementManager.GetNextSpeed(val, cabinBody.velocity.z, cabinAcceleration, cabinSpeed);
         Vector3 newVelocity = cabinBody.velocity;
         newVelocity.z = targetSpeed;
         cabinBody.velocity = newVelocity;
@@ -101,7 +101,8 @@ public class CraneV2 : MonoBehaviour, ICrane
         if (!craneMovementEnabled) return;
         if (transform.localPosition.x > 25 && val > 0) val = 0;
         if (transform.localPosition.x < -25 && val < 0) val = 0;
-        float targetSpeed = movementManager.GetNextSpeed(val, craneBody.velocity.x, craneSpeed * craneAcceleration * Time.deltaTime, craneSpeed);
+        //float targetSpeed = movementManager.GetNextSpeed(val, craneBody.velocity.x, craneSpeed * craneAcceleration * Time.deltaTime, craneSpeed);
+        float targetSpeed = movementManager.GetNextSpeed(val, craneBody.velocity.x, craneAcceleration, craneSpeed);
         Vector3 newVelocity = craneBody.velocity;
         newVelocity.x = targetSpeed;
         craneBody.velocity = newVelocity;

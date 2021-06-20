@@ -117,7 +117,7 @@ public class CraneAgentV2 : Agent, IAgent
         }
         else
         {
-            Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.5f);
+            Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.25f);
             continuousActions[0] = inputs.x;
             continuousActions[1] = inputs.z;
             continuousActions[2] = inputs.y;
@@ -142,7 +142,7 @@ public class CraneAgentV2 : Agent, IAgent
 
     private float GetInputReward(ActionSegment<float> continousActions)
     {
-        Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.5f);
+        Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.25f);
         float xVal = Mathf.Clamp(1 - Mathf.Abs(continousActions[0] - inputs.x), -1, 1);
         float zVal = Mathf.Clamp(1 - Mathf.Abs(continousActions[1] - inputs.z), -1, 1);
         float yVal = Mathf.Clamp(1 - Mathf.Abs(continousActions[2] - inputs.y), -1, 1);

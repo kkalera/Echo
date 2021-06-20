@@ -15,26 +15,27 @@ public class MovementManager : MonoBehaviour
     public float GetNextSpeed(float inputValue, float currentSpeed, float acceleration, float maxSpeed)
     {
         float requestedSpeed = inputValue * maxSpeed;
+        float speed = 0;
 
         if (requestedSpeed >= currentSpeed && inputValue != 0)
         {
-            inputValue = Mathf.Min(currentSpeed + acceleration, maxSpeed);
+            speed = Mathf.Min(currentSpeed + maxSpeed * acceleration * Time.deltaTime, maxSpeed);
         }
 
         else if (requestedSpeed <= currentSpeed && inputValue != 0)
         {
-            inputValue = Mathf.Max(currentSpeed - acceleration, -maxSpeed);
+            speed = Mathf.Max(currentSpeed - maxSpeed * acceleration * Time.deltaTime, -maxSpeed);
         }
 
         if (requestedSpeed == 0 && currentSpeed > 0)
         {
-            inputValue = Mathf.Max(currentSpeed - acceleration, 0);
+            speed = Mathf.Max(currentSpeed - maxSpeed *acceleration * Time.deltaTime, 0);
         }
         else if (requestedSpeed == 0 && currentSpeed < 0)
         {
-            inputValue = Mathf.Min(currentSpeed + acceleration, 0);
+            speed = Mathf.Min(currentSpeed + maxSpeed* acceleration * Time.deltaTime, 0);
         }
 
-        return inputValue;
+        return speed;
     }
 }
