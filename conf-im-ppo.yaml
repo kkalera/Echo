@@ -1,7 +1,7 @@
 # Finish configuration for slower but more stable training
 env_settings:
     env_path: Build/echo
-    num_envs: 1
+    num_envs: 24
 
 engine_settings:
     width: 1920
@@ -38,7 +38,7 @@ behaviors:
                 strength: 1.0
                 gamma: 0.99
             curiosity:
-                strength: 0.02
+                strength: 0.01
                 gamma: 0.99
                 encoding_size: 256
             gail:
@@ -55,20 +55,30 @@ environment_parameters:
               completion_criteria:
                   measure: reward
                   behavior: Crane
-                  signal_smoothing: true
+                  signal_smoothing: false
                   min_lesson_length: 1000
-                  threshold: 2.5
+                  threshold: 1.15
               value: 0
 
             - name: MoveToRandomPoint
               completion_criteria:
                   measure: reward
                   behavior: Crane
-                  signal_smoothing: true
+                  signal_smoothing: false
                   min_lesson_length: 1000
-                  threshold: 3.5
+                  threshold: 1.15
                   require_reset: true
               value: 1
+            
+            - name: GrabAndPlace
+              completion_criteria:
+                  measure: reward
+                  behavior: Crane
+                  signal_smoothing: false
+                  min_lesson_length: 10000
+                  threshold: 1.15
+                  require_reset: true
+              value: 2
 
             - name: End
               completion_criteria:
@@ -76,6 +86,6 @@ environment_parameters:
                   behavior: Crane
                   signal_smoothing: true
                   min_lesson_length: 100
-                  threshold: 1
+                  threshold: 5
                   require_reset: true
-              value: 2
+              value: 3

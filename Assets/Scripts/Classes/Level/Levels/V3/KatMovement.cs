@@ -23,7 +23,7 @@ public class KatMovement : CraneLevel
     {
         Utils.ReportStat(_velocityTarget, "KatMovement/_velocityTarget");
 
-        if (Mathf.Approximately(_velocityTarget, 0) && !_finalTraining) _finalTraining = true;
+        if (Mathf.Approximately(_velocityTarget, 0.1f) && !_finalTraining) _finalTraining = true;
 
         // Set the allowed movements for the crane.
         _crane.CabinMovementDisabled = false;
@@ -62,7 +62,7 @@ public class KatMovement : CraneLevel
             rd.endEpisode = true;
             rd.reward += 1f;
             //_timeTarget = Mathf.Min(_timeTarget + increment, 5);
-            _velocityTarget = Mathf.Clamp(_velocityTarget - increment, 0, 4f);
+            _velocityTarget = Mathf.Clamp(_velocityTarget - increment, 0.1f, 4f);
 
         }
 

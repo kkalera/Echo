@@ -5,7 +5,7 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class EnvSpawner : MonoBehaviour
 {
-    [SerializeField] [Range(0, 25)] int numEnvironments = 1;
+    [SerializeField] int numEnvironments = 1;
     [SerializeField] GameObject environmentPrefab;
     [SerializeField] int envSizeX;
     [SerializeField] int envSizeZ;

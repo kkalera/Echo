@@ -26,7 +26,7 @@ public class WinchMovement : CraneLevel
         Utils.ReportStat(_velocityTarget, "WinchMovement/_timeTarget");
         Utils.ReportStat(_spreaderHeight, "WinchMovement/_spreaderHeight");
 
-        if (Mathf.Approximately(_velocityTarget, 0f) && Mathf.Approximately(_spreaderHeight, 3f) && !_finalTraining) _finalTraining = true;
+        if (Mathf.Approximately(_velocityTarget, 0.1f) && Mathf.Approximately(_spreaderHeight, 3f) && !_finalTraining) _finalTraining = true;
 
         // Set the allowed movements for the crane.
         _crane.CabinMovementDisabled = false;
@@ -69,7 +69,7 @@ public class WinchMovement : CraneLevel
             rd.endEpisode = true;
             rd.reward += 1f;
             //_timeTarget = Mathf.Min(_timeTarget + (increment / 2), 5);
-            if (Mathf.Approximately(_spreaderHeight, 3f)) _velocityTarget = Mathf.Clamp(_velocityTarget - increment, 0, 4f);
+            if (Mathf.Approximately(_spreaderHeight, 3f)) _velocityTarget = Mathf.Clamp(_velocityTarget - increment, 0.1f, 4f);
             if (!_randomHeightChosen) _spreaderHeight = Mathf.Max(_spreaderHeight - increment, 3f);
 
         }

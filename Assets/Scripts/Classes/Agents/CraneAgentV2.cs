@@ -134,8 +134,8 @@ public class CraneAgentV2 : Agent, IAgent
 
         RewardData rewardData = levelManager.Step();
         AddReward(rewardData.reward);
-
         AddReward(GetInputReward(continousActions) / MaxStep);
+        AddReward(-1f / MaxStep);
 
         if (rewardData.endEpisode) EndEpisode();
     }

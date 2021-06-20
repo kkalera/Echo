@@ -88,6 +88,13 @@ public class V3GrabAndPlace : CraneLevel
             _grabRewarded = true;
         }
 
+        bool dead = ProcessCollision(col, other);
+        if (dead)
+        {
+            rd.endEpisode = dead;
+            rd.reward = -1f;
+        }
+
         return rd;
     }
 
@@ -109,5 +116,20 @@ public class V3GrabAndPlace : CraneLevel
                 _episodeComplete = true;
             }
         }
+    }
+
+    private bool ProcessCollision(Collision col = null, Collider other = null)
+    {
+        if (col != null)
+        {
+            return col.collider.CompareTag("dead");
+        }
+
+        if (other != null)
+        {
+            return other.CompareTag("dead");
+        }
+
+        return false;
     }
 }
