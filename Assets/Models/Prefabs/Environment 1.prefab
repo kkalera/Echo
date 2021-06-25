@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1289115607
 Transform:
   m_ObjectHideFlags: 0
@@ -448,6 +448,9 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 5000
+  testmode: 0
+  testlevel: 1
+  NegativeRewardsEnabled: 0
   craneObject: {fileID: 7794852833069052135}
   _autopilot: 1
   inputCabin:
@@ -570,8 +573,6 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Input Lift
       m_Flags: 8
-  testmode: 0
-  testlevel: 0
 --- !u!114 &3030279274946217795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,7 +588,6 @@ MonoBehaviour:
   levels:
   - {fileID: 1079057450}
   - {fileID: 1079057452}
-  - {fileID: 1289115608}
 --- !u!114 &1715625787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,9 +600,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2902496c0120472b90269f94a0aec7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Record: 0
-  NumStepsToRecord: 50000
-  DemonstrationName: GrabAndPlace
+  Record: 1
+  NumStepsToRecord: 1000000
+  DemonstrationName: WinchMovement
   DemonstrationDirectory: Demos
 --- !u!1 &7794852833710462489
 GameObject:

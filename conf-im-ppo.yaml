@@ -45,7 +45,7 @@ behaviors:
                 strength: 0.01
                 gamma: 0.99
                 encoding_size: 128
-                demo_path: Demos/GrabAndPlace.demo
+                demo_path: Demos/WinchMovement.demo
 
 # Add this section
 environment_parameters:
@@ -57,7 +57,7 @@ environment_parameters:
                   behavior: Crane
                   signal_smoothing: false
                   min_lesson_length: 1000
-                  threshold: 1.15
+                  threshold: 1.25
               value: 0
 
             - name: MoveToRandomPoint
@@ -66,7 +66,7 @@ environment_parameters:
                   behavior: Crane
                   signal_smoothing: false
                   min_lesson_length: 1000
-                  threshold: 1.15
+                  threshold: 1.25
                   require_reset: true
               value: 1
             
@@ -76,7 +76,7 @@ environment_parameters:
                   behavior: Crane
                   signal_smoothing: false
                   min_lesson_length: 10000
-                  threshold: 1.15
+                  threshold: 1.25
                   require_reset: true
               value: 2
 

@@ -49,7 +49,9 @@ public class WinchMovement : CraneLevel
         float randomZ = Random.Range(-25, 35);
         if (randomZ > 4 && randomZ < 14) randomZ = 14;
         if (randomZ < -4 && randomZ > -13) randomZ = -13;
-        _target.position = _environment.position + new Vector3(0, 25, randomZ);
+        
+        if (!_randomHeightChosen) _target.position = _environment.position + new Vector3(0, _spreaderHeight, randomZ);
+        if (_randomHeightChosen) _target.position = _environment.position + new Vector3(0, Random.Range(_spreaderHeight, 25f), randomZ);
 
     }
 
