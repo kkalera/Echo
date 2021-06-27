@@ -1,20 +1,20 @@
 # Finish configuration for slower but more stable training
 env_settings:
     env_path: Build/echo
-    num_envs: 4    
+    num_envs: 8
 
 engine_settings:
-    width: 1600
-    height: 1440
+    width: 640
+    height: 480
 
 behaviors:
     Crane:
         trainer_type: ppo
         keep_checkpoints: 1000
-        checkpoint_interval: 50000
+        checkpoint_interval: 100000
         max_steps: 1e08
         time_horizon: 128
-        summary_freq: 10000
+        summary_freq: 100000
         threaded: true
 
         hyperparameters:

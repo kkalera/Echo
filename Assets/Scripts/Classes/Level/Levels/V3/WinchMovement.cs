@@ -23,8 +23,8 @@ public class WinchMovement : CraneLevel
 
     public override void OnEpisodeBegin()
     {
-        Utils.ReportStat(_velocityTarget, "WinchMovement/_timeTarget");
-        Utils.ReportStat(_spreaderHeight, "WinchMovement/_spreaderHeight");
+        Utils.ReportStat(_velocityTarget, "Environment / WinchMovement / _timeTarget");
+        Utils.ReportStat(_spreaderHeight, "Environment / WinchMovement / _spreaderHeight");
 
         if (Mathf.Approximately(_velocityTarget, 0.1f) && Mathf.Approximately(_spreaderHeight, 3f) && !_finalTraining) _finalTraining = true;
 
@@ -32,11 +32,13 @@ public class WinchMovement : CraneLevel
         _crane.CabinMovementDisabled = false;
         _crane.WinchMovementDisabled = false;
         _crane.SwingDisabled = true;
+        _crane.SetWinchLimits(_spreaderHeight, 25);
 
         _targetReached = false;
         _episodeComplete = false;
 
-        _randomHeightChosen = Random.Range(0f, 1f) > 0.5f;
+        //_randomHeightChosen = Random.Range(0f, 1f) > 0.5f;
+        _randomHeightChosen = false;
 
         float randomZCrane = Random.Range(-25, 35);
         if (randomZCrane > 4 && randomZCrane < 14) randomZCrane = 14;
@@ -46,7 +48,10 @@ public class WinchMovement : CraneLevel
         if (_randomHeightChosen) _crane.ResetToPosition(new Vector3(0, Random.Range(_spreaderHeight, 25f), randomZCrane));
 
 
-        float randomZ = Random.Range(-25, 35);
+        float randomZ = Random.Range(-25, 35);       
+        if (randomZCrane < -13) randomZ = Random.Range(-4,35);
+        if (randomZCrane > 14) randomZ = Random.Range(-25, 4);
+
         if (randomZ > 4 && randomZ < 14) randomZ = 14;
         if (randomZ < -4 && randomZ > -13) randomZ = -13;
         
@@ -84,6 +89,7 @@ public class WinchMovement : CraneLevel
         {
             rd.endEpisode = dead;
             rd.reward = -1f;
+            _spreaderHeight = Mathf.Max(_spreaderHeight + increment, 3f);
         }
 
         return rd;

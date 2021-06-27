@@ -13,7 +13,7 @@ public class CraneAgentV2 : Agent, IAgent
     [Space(10)]
     [SerializeField] public bool testmode;
     [SerializeField] public int testlevel = 1;
-    [SerializeField] public bool NegativeRewardsEnabled;
+    //[SerializeField] public bool NegativeRewardsEnabled;
     [Header("Objects")]
     [Space(10)]
     [SerializeField] private GameObject craneObject;
@@ -137,21 +137,21 @@ public class CraneAgentV2 : Agent, IAgent
 
         RewardData rewardData = levelManager.Step();
         AddReward(rewardData.reward);
-        AddReward(GetInputReward(continousActions) / MaxStep);
-        if(NegativeRewardsEnabled)AddReward(-1f / MaxStep);
+        
+        
 
         if (rewardData.endEpisode) EndEpisode();
     }
 
-    private float GetInputReward(ActionSegment<float> continousActions)
+    private Vector3 GetInputRewards(ActionSegment<float> continousActions)
     {
-        float minClamp = NegativeRewardsEnabled==false ? 0f : -1f;
+        
         Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.25f);
-        float xVal = Mathf.Clamp(1 - Mathf.Abs(continousActions[0] - inputs.x), minClamp, 1);
-        float zVal = Mathf.Clamp(1 - Mathf.Abs(continousActions[1] - inputs.z), minClamp, 1);
-        float yVal = Mathf.Clamp(1 - Mathf.Abs(continousActions[2] - inputs.y), minClamp, 1);
+        float xVal = Mathf.Clamp(1f - Mathf.Abs(continousActions[0] - inputs.x), -1f, 1f);
+        float zVal = Mathf.Clamp(1f - Mathf.Abs(continousActions[1] - inputs.z), -1f, 1f);
+        float yVal = Mathf.Clamp(1f - Mathf.Abs(continousActions[2] - inputs.y), -1f, 1f);
 
-        return (xVal + zVal + yVal) / 3;
+        return new Vector3(xVal,yVal, zVal);
     }
 
     public void OnCollisionEnter(Collision col)

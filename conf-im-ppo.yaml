@@ -51,14 +51,14 @@ behaviors:
 environment_parameters:
     level_parameter:
         curriculum:
-            - name: MoveToPoint
+            - name: WinchTraining
               completion_criteria:
                   measure: reward
                   behavior: Crane
                   signal_smoothing: false
                   min_lesson_length: 1000
                   threshold: 1.25
-              value: 0
+              value: 1
 
             - name: MoveToRandomPoint
               completion_criteria:
@@ -68,7 +68,7 @@ environment_parameters:
                   min_lesson_length: 1000
                   threshold: 1.25
                   require_reset: true
-              value: 1
+              value: 2
             
             - name: GrabAndPlace
               completion_criteria:

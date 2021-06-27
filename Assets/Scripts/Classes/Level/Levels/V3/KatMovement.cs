@@ -13,15 +13,13 @@ public class KatMovement : CraneLevel
     private bool _finalTraining = false;
     private bool _episodeComplete = false;
 
-    private float _enterTime = -1f;
-
     private ICrane _crane;
 
     public override Vector3 TargetLocation => _target.position - _environment.position;
 
     public override void OnEpisodeBegin()
     {
-        Utils.ReportStat(_velocityTarget, "KatMovement/_velocityTarget");
+        Utils.ReportStat(_velocityTarget, "Environment / KatMovement / _velocityTarget");
 
         if (Mathf.Approximately(_velocityTarget, 0.1f) && !_finalTraining) _finalTraining = true;
 
@@ -61,7 +59,6 @@ public class KatMovement : CraneLevel
 
             rd.endEpisode = true;
             rd.reward += 1f;
-            //_timeTarget = Mathf.Min(_timeTarget + increment, 5);
             _velocityTarget = Mathf.Clamp(_velocityTarget - increment, 0.1f, 4f);
 
         }
@@ -84,9 +81,6 @@ public class KatMovement : CraneLevel
     {
         _targetReached = Vector3.Distance(_crane.SpreaderWorldPosition, _target.position) < 1;
         _episodeComplete = (_targetReached && _crane.SpreaderVelocity.magnitude < _velocityTarget);
-        /*if (_targetReached && _enterTime == -1f) _enterTime = Time.time;
-        if (_targetReached && _enterTime != -1f) _episodeComplete = Time.time > _enterTime + _timeTarget;
-        if (!_targetReached) _enterTime = -1f;*/
     }
 
     private bool ProcessCollision(Collision col = null, Collider other = null)

@@ -33,6 +33,7 @@ public class EnvSpawner : MonoBehaviour
 
     private void SpawnEnvironments()
     {
+        environmentPrefab.SetActive(true);
         spawnedPrefabs = GameObject.FindGameObjectsWithTag("Environment");
         for (int i = 0; i < spawnedPrefabs.Length; i++)
         {
@@ -75,5 +76,6 @@ public class EnvSpawner : MonoBehaviour
             //transform.Find("Environment" + spawned).transform.localPosition = new Vector3(spawnX, 0, spawnZ);
             spawned++;
         }
+        environmentPrefab.SetActive(false);
     }
 }
