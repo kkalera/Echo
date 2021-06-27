@@ -60,10 +60,10 @@ public class MoveToRandomPoint : CraneLevel
 
         if (_episodeComplete)
         {
-            if (_finalTraining) rd.reward += 1f;
+            if (_finalTraining) rd.reward += .25f;
 
             rd.endEpisode = true;
-            rd.reward += 3f;
+            rd.reward += .75f;
             _timeTarget = Mathf.Min(_timeTarget + increment, 5);
         }
 

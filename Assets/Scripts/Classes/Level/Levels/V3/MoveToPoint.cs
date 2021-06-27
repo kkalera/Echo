@@ -81,11 +81,11 @@ public class MoveToPoint : CraneLevel
 
         if (_episodeComplete)
         {
-            if (_finalTraining) rd.reward += 1f;
-            if (!_winchDisabled) rd.reward += 1f;
+            if (_finalTraining) rd.reward += .25f;
+            if (!_winchDisabled) rd.reward += .25f;
 
             rd.endEpisode = true;
-            rd.reward += 1f;
+            rd.reward += .5f;
             _timeTarget = Mathf.Min(_timeTarget * 1.01f, 5);
 
             if (!_winchDisabled && _heightTraining) _spreaderMin = Mathf.Max(_spreaderMin - .1f, 3);
