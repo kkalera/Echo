@@ -53,7 +53,7 @@ environment_parameters:
                   behavior: Crane
                   signal_smoothing: false
                   min_lesson_length: 1000
-                  threshold: 1.15
+                  threshold: 1
               value: 0
 
             - name: MoveToRandomPoint
@@ -62,7 +62,7 @@ environment_parameters:
                   behavior: Crane
                   signal_smoothing: false
                   min_lesson_length: 1000
-                  threshold: 1.15
+                  threshold: 1
                   require_reset: true
               value: 1
             
