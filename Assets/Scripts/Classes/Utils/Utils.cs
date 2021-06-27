@@ -13,9 +13,11 @@ public static class Utils
         {
             if (_clearConsoleMethod == null)
             {
-                /*Assembly assembly = Assembly.GetAssembly(typeof(SceneView));
+#if UNITY_EDITOR
+                Assembly assembly = Assembly.GetAssembly(typeof(SceneView));
                 Type logEntries = assembly.GetType("UnityEditor.LogEntries");
-                _clearConsoleMethod = logEntries.GetMethod("Clear");*/
+                _clearConsoleMethod = logEntries.GetMethod("Clear");
+#endif
             }
             return _clearConsoleMethod;
         }
