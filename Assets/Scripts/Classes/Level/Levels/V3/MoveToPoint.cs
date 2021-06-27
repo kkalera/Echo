@@ -111,11 +111,15 @@ public class MoveToPoint : CraneLevel
 
     void Update()
     {
-        _targetReached = Vector3.Distance(_crane.SpreaderWorldPosition, _target.position) < 1;
+        if(_crane != null)
+        {
+            _targetReached = Vector3.Distance(_crane.SpreaderWorldPosition, _target.position) < 1;
 
-        if (_targetReached && _enterTime == -1f) _enterTime = Time.time;
-        if (_targetReached && _enterTime != -1f) _episodeComplete = Time.time > _enterTime + _timeTarget;
-        if (!_targetReached) _enterTime = -1f;
+            if (_targetReached && _enterTime == -1f) _enterTime = Time.time;
+            if (_targetReached && _enterTime != -1f) _episodeComplete = Time.time > _enterTime + _timeTarget;
+            if (!_targetReached) _enterTime = -1f;
+        }
+        
     }
 
     private bool ProcessCollision(Collision col = null, Collider other = null)
