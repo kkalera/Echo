@@ -6,7 +6,7 @@ public class MoveToPoint : CraneLevel
 {
     [SerializeField] [Range(0.001f, 1)] float increment = 0.01f;
     [SerializeField] [Range(0.001f, 10)] float _timeTarget = 0.01f;
-    [SerializeField] [Range(0, 25)] float _spreaderMin = 25f;
+    [SerializeField] [Range(0, 23)] float _spreaderMin = 23f;
     [SerializeField] TMPro.TextMeshPro _tmpro;
     [SerializeField] private Transform _environment;
     [SerializeField] private Transform _target;
@@ -55,7 +55,8 @@ public class MoveToPoint : CraneLevel
         if (randomZCrane >= -4 && randomZCrane <= 4) craneStart = 1;
         if (randomZCrane > 14) craneStart = 2;
 
-        _crane.ResetToPosition(new Vector3(0, _spreaderMin, randomZCrane));
+        if( !_winchDisabled) _crane.ResetToPosition(new Vector3(0, Random.Range(_spreaderMin +2f, _spreaderMin-2f), randomZCrane));
+        if (_winchDisabled) _crane.ResetToPosition(new Vector3(0, _spreaderMin, randomZCrane));
 
         float randomZ = Random.Range(-25, 35);
         if (randomZ > 4 && randomZ < 14) randomZ = 14;
@@ -86,7 +87,7 @@ public class MoveToPoint : CraneLevel
 
             rd.endEpisode = true;
             rd.reward += .5f;
-            _timeTarget = Mathf.Min(_timeTarget * 1.01f, 5);
+            _timeTarget = Mathf.Min(_timeTarget * 1.1f, 5);
 
             if (!_winchDisabled && _heightTraining) _spreaderMin = Mathf.Max(_spreaderMin - .1f, 3);
         }
@@ -102,7 +103,7 @@ public class MoveToPoint : CraneLevel
         {
             rd.endEpisode = dead;
             rd.reward = -1f;
-            if (!_winchDisabled && !_finalTraining && !_lowTimeTraining) _spreaderMin = Mathf.Min(_spreaderMin + .1f, 25);
+            if (!_winchDisabled && !_finalTraining && !_lowTimeTraining) _spreaderMin = Mathf.Min(_spreaderMin + .1f, 23);
         }
 
         return rd;
