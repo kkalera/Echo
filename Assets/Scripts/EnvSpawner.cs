@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 [ExecuteInEditMode]
 public class EnvSpawner : MonoBehaviour
@@ -9,11 +10,25 @@ public class EnvSpawner : MonoBehaviour
     [SerializeField] GameObject environmentPrefab;
     [SerializeField] int envSizeX;
     [SerializeField] int envSizeZ;
+    public bool building = false;
 
     private GameObject[] spawnedPrefabs;
+#if UNITY_EDITOR
+    private void OnEnable()
+    {
+        EditorApplication.update += Update;
+
+    }
+
+    private void OnDisable()
+    {
+        EditorApplication.update -= Update;
+    }
+#endif
 
     private void Awake()
-    {
+    { 
+     
         spawnedPrefabs = null;
 
         //Transform result = transform.Find("Environment");
@@ -23,15 +38,26 @@ public class EnvSpawner : MonoBehaviour
         }*/
 
         spawnedPrefabs = GameObject.FindGameObjectsWithTag("Environment");
-        if (spawnedPrefabs != null && spawnedPrefabs.Length != numEnvironments) SpawnEnvironments();
+        //if (spawnedPrefabs != null && spawnedPrefabs.Length != numEnvironments) SpawnEnvironments();
+        
     }
-
+    
     private void Update()
     {
-        if (spawnedPrefabs != null && spawnedPrefabs.Length != numEnvironments) SpawnEnvironments();
+        //if (spawnedPrefabs != null && spawnedPrefabs.Length != numEnvironments) SpawnEnvironments();
+        if (!building)
+        {
+            environmentPrefab.SetActive(true);
+            spawnedPrefabs = GameObject.FindGameObjectsWithTag("Environment");
+            for (int i = 0; i < spawnedPrefabs.Length; i++)
+            {
+                DestroyImmediate(spawnedPrefabs[i]);
+            }
+            spawnedPrefabs = null;
+        }
     }
 
-    private void SpawnEnvironments()
+    public void SpawnEnvironments()
     {
         environmentPrefab.SetActive(true);
         spawnedPrefabs = GameObject.FindGameObjectsWithTag("Environment");
