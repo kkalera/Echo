@@ -91,11 +91,11 @@ public class MoveToPoint : CraneLevel
 
             if (!_winchDisabled && _heightTraining) _spreaderMin = Mathf.Max(_spreaderMin - .1f, 3);
         }
-
+        /*
         if (_targetReached)
         {
             rd.reward += 1f / 5000;
-        }
+        }*/
 
 
         bool dead = ProcessCollision(col, other);

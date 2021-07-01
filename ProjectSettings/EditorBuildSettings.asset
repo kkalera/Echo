@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Crane Training.unity
+    path: Assets/Scenes/AutoPilotTraining.unity
     guid: 070a1e68991661940a9f5e41fe464b90
   m_configObjects: {}

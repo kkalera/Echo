@@ -14,8 +14,9 @@ public static class AutoPilot
         return Mathf.Clamp(input, -1, 1);
     }
 
-    public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, float maxSpeed, float acceleration)
+    public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, float acceleration)
     {
+
         Vector3 inputs = new Vector3(0, 0, 0);
 
         // Check if we're to far from the target to lower the spreader
@@ -29,15 +30,17 @@ public static class AutoPilot
             targetPosition = new Vector3(0, spreaderPosition.y, targetPosition.z);
         }
 
-
         float distanceToTravelY = Mathf.Abs(targetPosition.y - spreaderPosition.y);
-        float inputY = distanceToTravelY / (maxSpeed / acceleration);
+        float inputY = distanceToTravelY * (Mathf.Abs(currentSpeed.y) / (acceleration)) * Time.deltaTime * Time.timeScale ;
 
         float distanceToTravelZ = Mathf.Abs(targetPosition.z - spreaderPosition.z);
-        float inputZ = distanceToTravelZ / (maxSpeed / acceleration);
+        float inputZ = distanceToTravelZ * (Mathf.Abs(currentSpeed.z) / (acceleration)) *Time.deltaTime*Time.timeScale;
 
         if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
         if (targetPosition.z < spreaderPosition.z) inputZ = -inputZ;
+
+        if (float.IsNaN(inputY)) inputY = 0;
+        if (float.IsNaN(inputZ)) inputZ = 0;
 
         inputs.y = Mathf.Clamp(inputY, -1, 1);
         inputs.z = Mathf.Clamp(inputZ, -1, 1);

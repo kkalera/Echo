@@ -4,11 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - goal
   - dead
   - target
   - trainingArea
   - Environment
+  - crane
+  - targetContainer
+  - targetPosition
   layers:
   - Default
   - TransparentFX

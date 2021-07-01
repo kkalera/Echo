@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8928987382142260594}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: dead
+  m_TagString: crane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 637311178601235861}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 6, z: 8}
+  m_LocalPosition: {x: 0, y: 10, z: 8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5761388903618576802}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 1838465630299441999}
   m_Layer: 0
   m_Name: Wall (1)
-  m_TagString: dead
+  m_TagString: crane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85,7 +85,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7007937527109777965}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 6, z: -8}
+  m_LocalPosition: {x: 0, y: 10, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5761388903618576802}
@@ -2081,7 +2081,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1345114375344245030, guid: 683c5687542c6384cba523a4ac249949, type: 3}
       propertyPath: m_TagString
-      value: dead
+      value: crane
       objectReference: {fileID: 0}
     - target: {fileID: 2053019269535509507, guid: 683c5687542c6384cba523a4ac249949, type: 3}
       propertyPath: m_Convex
@@ -2099,6 +2099,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2318450691720586654, guid: 683c5687542c6384cba523a4ac249949, type: 3}
+      propertyPath: m_TagString
+      value: crane
+      objectReference: {fileID: 0}
     - target: {fileID: 2505854353139701611, guid: 683c5687542c6384cba523a4ac249949, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -2106,6 +2110,10 @@ PrefabInstance:
     - target: {fileID: 2593923938673937976, guid: 683c5687542c6384cba523a4ac249949, type: 3}
       propertyPath: m_Name
       value: GantryCrane_01_Prefab_snaps017
+      objectReference: {fileID: 0}
+    - target: {fileID: 2593923938673937976, guid: 683c5687542c6384cba523a4ac249949, type: 3}
+      propertyPath: m_TagString
+      value: crane
       objectReference: {fileID: 0}
     - target: {fileID: 2646784280102421204, guid: 683c5687542c6384cba523a4ac249949, type: 3}
       propertyPath: m_RootOrder
@@ -2159,6 +2167,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2955808650089679797, guid: 683c5687542c6384cba523a4ac249949, type: 3}
+      propertyPath: m_TagString
+      value: crane
+      objectReference: {fileID: 0}
+    - target: {fileID: 3451152692539774153, guid: 683c5687542c6384cba523a4ac249949, type: 3}
+      propertyPath: m_TagString
+      value: crane
+      objectReference: {fileID: 0}
     - target: {fileID: 3510927932514948092, guid: 683c5687542c6384cba523a4ac249949, type: 3}
       propertyPath: m_Convex
       value: 0
@@ -2166,6 +2182,10 @@ PrefabInstance:
     - target: {fileID: 3510927932514948092, guid: 683c5687542c6384cba523a4ac249949, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4076863674803550661, guid: 683c5687542c6384cba523a4ac249949, type: 3}
+      propertyPath: m_TagString
+      value: crane
       objectReference: {fileID: 0}
     - target: {fileID: 4092308973269690663, guid: 683c5687542c6384cba523a4ac249949, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -2217,7 +2237,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6616866549842121502, guid: 683c5687542c6384cba523a4ac249949, type: 3}
       propertyPath: m_TagString
-      value: dead
+      value: crane
+      objectReference: {fileID: 0}
+    - target: {fileID: 6851008916460690598, guid: 683c5687542c6384cba523a4ac249949, type: 3}
+      propertyPath: m_TagString
+      value: crane
+      objectReference: {fileID: 0}
+    - target: {fileID: 7754507785662204217, guid: 683c5687542c6384cba523a4ac249949, type: 3}
+      propertyPath: m_TagString
+      value: crane
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017701123985785824, guid: 683c5687542c6384cba523a4ac249949, type: 3}
+      propertyPath: m_TagString
+      value: crane
       objectReference: {fileID: 0}
     - target: {fileID: 8022038042017425393, guid: 683c5687542c6384cba523a4ac249949, type: 3}
       propertyPath: m_Convex
@@ -2229,7 +2261,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8083814397832347904, guid: 683c5687542c6384cba523a4ac249949, type: 3}
       propertyPath: m_TagString
-      value: dead
+      value: crane
+      objectReference: {fileID: 0}
+    - target: {fileID: 8732209157763471118, guid: 683c5687542c6384cba523a4ac249949, type: 3}
+      propertyPath: m_TagString
+      value: crane
       objectReference: {fileID: 0}
     - target: {fileID: 8991401853670358286, guid: 683c5687542c6384cba523a4ac249949, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -2239,6 +2275,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 81cf2261dcd5e574b9174f3a89649c23, type: 2}
+    - target: {fileID: 9205808284329644435, guid: 683c5687542c6384cba523a4ac249949, type: 3}
+      propertyPath: m_TagString
+      value: crane
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 683c5687542c6384cba523a4ac249949, type: 3}
 --- !u!4 &4776894958271403235 stripped

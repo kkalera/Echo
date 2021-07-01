@@ -83,14 +83,14 @@ public class CraneAgentV2 : Agent, IAgent
         sensor.AddObservation(Utils.Normalize(levelManager.TargetPosition.z, -25, 50));
         sensor.AddObservation(Utils.Normalize(levelManager.TargetPosition.y, 0, 30));
 
-        sensor.AddObservation(craneValue);
-        sensor.AddObservation(cabinValue);
-        sensor.AddObservation(winchValue);
-
         sensor.AddObservation(crane.ContainerGrabbed);
         sensor.AddObservation(false);
         sensor.AddObservation(false);
         sensor.AddObservation(false);
+        sensor.AddObservation(false);
+        sensor.AddObservation(false);
+        sensor.AddObservation(false);
+
 
         //Debug.Log("Spreader: " + crane.SpreaderVelocity.z + "  ||  cabin: " + crane.CabinVelocity.z);
         //Add observations for:
@@ -119,8 +119,10 @@ public class CraneAgentV2 : Agent, IAgent
             continuousActions[2] = inputLift.ReadValue<float>();
         }
         else
-        {
-            Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.25f);
+        {          
+            Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderWorldPosition, new Vector3(0, crane.SpreaderVelocity.y, crane.CabinVelocity.z), 0.25f);
+            //Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, new Vector3(0, 4f,4f), 0.25f);            
+
             continuousActions[0] = inputs.x;
             continuousActions[1] = inputs.z;
             continuousActions[2] = inputs.y;
@@ -136,17 +138,19 @@ public class CraneAgentV2 : Agent, IAgent
         winchValue = continousActions[2];
 
         RewardData rewardData = levelManager.Step();
-        AddReward(rewardData.reward);
-        
-        
 
+        Vector3 r = GetInputRewards(continousActions);
+        AddReward((r.z +r.y)/2);
+
+        if(rewardData.reward > 0 && rewardData.endEpisode) AddReward(MaxStep - StepCount); 
+        if (rewardData.reward < 0 && rewardData.endEpisode) AddReward(-MaxStep + StepCount);
         if (rewardData.endEpisode) EndEpisode();
     }
 
     private Vector3 GetInputRewards(ActionSegment<float> continousActions)
     {
-        
-        Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, 4f, 0.25f);
+
+        Vector3 inputs = AutoPilot.GetInputs(levelManager.TargetPosition, crane.SpreaderPosition, new Vector3(0, crane.SpreaderVelocity.y, crane.CabinVelocity.z), 0.25f);
         float xVal = Mathf.Clamp(1f - Mathf.Abs(continousActions[0] - inputs.x), -1f, 1f);
         float zVal = Mathf.Clamp(1f - Mathf.Abs(continousActions[1] - inputs.z), -1f, 1f);
         float yVal = Mathf.Clamp(1f - Mathf.Abs(continousActions[2] - inputs.y), -1f, 1f);
