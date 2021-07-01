@@ -19,21 +19,21 @@ public class MovementManager : MonoBehaviour
 
         if (requestedSpeed >= currentSpeed && inputValue != 0)
         {
-            speed = Mathf.Min(currentSpeed + maxSpeed * acceleration * Time.deltaTime * Time.timeScale, maxSpeed);
+            speed = Mathf.Min(currentSpeed + maxSpeed * (acceleration * Time.deltaTime ), maxSpeed);
         }
 
         else if (requestedSpeed <= currentSpeed && inputValue != 0)
         {
-            speed = Mathf.Max(currentSpeed - maxSpeed * acceleration * Time.deltaTime * Time.timeScale, -maxSpeed);
+            speed = Mathf.Max(currentSpeed - maxSpeed * (acceleration * Time.deltaTime ), -maxSpeed);
         }
 
         if (requestedSpeed == 0 && currentSpeed > 0)
         {
-            speed = Mathf.Max(currentSpeed - maxSpeed *acceleration * Time.deltaTime * Time.timeScale, 0);
+            speed = Mathf.Max(currentSpeed - maxSpeed * (acceleration * Time.deltaTime ), 0);
         }
         else if (requestedSpeed == 0 && currentSpeed < 0)
         {
-            speed = Mathf.Min(currentSpeed + maxSpeed* acceleration * Time.deltaTime * Time.timeScale, 0);
+            speed = Mathf.Min(currentSpeed + maxSpeed* (acceleration * Time.deltaTime ), 0);
         }
 
         return speed;

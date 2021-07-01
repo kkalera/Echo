@@ -31,10 +31,14 @@ public static class AutoPilot
         }
 
         float distanceToTravelY = Mathf.Abs(targetPosition.y - spreaderPosition.y);
-        float inputY = distanceToTravelY * (Mathf.Abs(currentSpeed.y) / (acceleration)) * Time.deltaTime * Time.timeScale ;
+        float inputY = distanceToTravelY / (Mathf.Max(currentSpeed.y, 1f) * acceleration) * Time.deltaTime ;
+
 
         float distanceToTravelZ = Mathf.Abs(targetPosition.z - spreaderPosition.z);
-        float inputZ = distanceToTravelZ * (Mathf.Abs(currentSpeed.z) / (acceleration)) *Time.deltaTime*Time.timeScale;
+        float inputZ = distanceToTravelZ / (Mathf.Max(currentSpeed.z,1f) * acceleration)*Time.deltaTime;
+
+        Utils.ClearLogConsole();
+        Debug.Log(inputZ);
 
         if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
         if (targetPosition.z < spreaderPosition.z) inputZ = -inputZ;
