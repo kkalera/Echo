@@ -8,6 +8,8 @@ public class WinchMovementSettings : MonoBehaviour
     [SerializeField] [Range(0.01f, 4f)] public float finalVelocityTarget = 0.05f;
     [SerializeField] [Range(0, 25)] public float spreaderHeight = 25f;
     [SerializeField] [Range(0, 25)] public float finalSpreaderHeight = 17;
+    [SerializeField] [Range(0.5f, 10)] public float goalRange = 10f;
+    [SerializeField] [Range(0.5f, 5)] public float finalGoalRange = 1f;
     [SerializeField] public float discount = 0.1f;
 
     public bool FinalDifficulty => Mathf.Approximately(spreaderHeight, finalSpreaderHeight) && Mathf.Approximately(velocityTarget, finalVelocityTarget);

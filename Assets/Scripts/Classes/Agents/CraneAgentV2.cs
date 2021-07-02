@@ -138,8 +138,12 @@ public class CraneAgentV2 : Agent, IAgent
         winchValue = continousActions[2];
 
         RewardData rewardData = levelManager.Step();
-        rewardData.reward += -1f / MaxStep;
-        AddReward(rewardData.reward);
+        //rewardData.reward += -1f / MaxStep;
+        //AddReward(rewardData.reward);
+        Vector3 ir = GetInputRewards(continousActions);
+        AddReward(ir.x);
+        AddReward(ir.y);
+        AddReward(ir.z);
         if (rewardData.endEpisode) EndEpisode();
     }
 
