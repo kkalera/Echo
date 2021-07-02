@@ -1,7 +1,7 @@
 # Finish configuration for slower but more stable training
 env_settings:
-    env_path: Build/echo
-    num_envs: 4
+    env_path: Build/crane
+    num_envs: 1
 
 engine_settings:
     width: 1920
@@ -18,18 +18,18 @@ behaviors:
         threaded: true
 
         hyperparameters:
-            batch_size: 1024
-            buffer_size: 16384
+            batch_size: 2048
+            buffer_size: 20480
             learning_rate: 0.0003
-            beta: 0.01
+            beta: 1.0e-2
             epsilon: 0.2
             lambd: 0.95
-            num_epoch: 12
+            num_epoch: 3
             learning_rate_schedule: linear
 
         network_settings:
             normalize: false
-            hidden_units: 512
+            hidden_units: 256
             num_layers: 2
             vis_encode_type: simple
 
@@ -45,7 +45,8 @@ behaviors:
                 strength: 0.01
                 gamma: 0.99
                 encoding_size: 128
-                demo_path: Demos/WinchMovement.demo
+                demo_path: Demos/WinchMovement.demo        
+
 
 # Add this section
 environment_parameters:
@@ -57,35 +58,8 @@ environment_parameters:
                   behavior: Crane
                   signal_smoothing: false
                   min_lesson_length: 1000
-                  threshold: 1.25
-              value: 1
-
-            - name: MoveToRandomPoint
-              completion_criteria:
-                  measure: reward
-                  behavior: Crane
-                  signal_smoothing: false
-                  min_lesson_length: 1000
-                  threshold: 1.25
-                  require_reset: true
-              value: 2
-            
-            - name: GrabAndPlace
-              completion_criteria:
-                  measure: reward
-                  behavior: Crane
-                  signal_smoothing: false
-                  min_lesson_length: 10000
-                  threshold: 1.25
-                  require_reset: true
-              value: 2
+                  threshold: 0.8
+              value: 0
 
             - name: End
-              completion_criteria:
-                  measure: reward
-                  behavior: Crane
-                  signal_smoothing: true
-                  min_lesson_length: 100
-                  threshold: 5
-                  require_reset: true
-              value: 3
+              value: 1

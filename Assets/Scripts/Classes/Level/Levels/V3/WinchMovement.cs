@@ -27,6 +27,8 @@ public class WinchMovement : CraneLevel
         _targetReached = false;
         _episodeComplete = false;
 
+        _crane.SetWinchLimits(_settings.spreaderHeight - 2f, 27f);
+
         //_randomHeightChosen = Random.Range(0f, 1f) > 0.5f;
         _randomHeightChosen = true;
 
