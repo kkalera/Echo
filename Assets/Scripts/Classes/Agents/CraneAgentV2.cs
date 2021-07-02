@@ -141,9 +141,9 @@ public class CraneAgentV2 : Agent, IAgent
         //rewardData.reward += -1f / MaxStep;
         //AddReward(rewardData.reward);
         Vector3 ir = GetInputRewards(continousActions);
-        AddReward(Mathf.Max(ir.x,0));
-        AddReward(Mathf.Max(ir.z, 0));
-        AddReward(Mathf.Max(ir.y, 0));
+        AddReward(Mathf.Max(ir.x,0) / MaxStep);
+        AddReward(Mathf.Max(ir.z, 0) / MaxStep);
+        AddReward(Mathf.Max(ir.y, 0) / MaxStep);
 
         if (rewardData.endEpisode) EndEpisode();
     }
