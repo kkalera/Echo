@@ -348,7 +348,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 5000
+  MaxStep: 1000
   testmode: 0
   testlevel: 1
   craneObject: {fileID: 7794852833069052135}

@@ -19,7 +19,7 @@ behaviors:
 
         hyperparameters:
             batch_size: 1024
-            buffer_size: 16384
+            buffer_size: 10240
             learning_rate: 0.0003
             beta: 0.01
             epsilon: 0.2
@@ -29,7 +29,7 @@ behaviors:
 
         network_settings:
             normalize: false
-            hidden_units: 512
+            hidden_units: 128
             num_layers: 2
             vis_encode_type: simple
 
@@ -54,4 +54,6 @@ environment_parameters:
                   signal_smoothing: false
                   min_lesson_length: 1000
                   threshold: 4800
-              value: 0          
+              value: 0
+            - name: end
+              value: 1       
