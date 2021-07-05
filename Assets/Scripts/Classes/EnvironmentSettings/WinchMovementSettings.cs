@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.MLAgents;
 
 public class WinchMovementSettings : MonoBehaviour
 {
+
     [SerializeField] [Range(0.01f,4f)]public float velocityTarget = 4f;
     [SerializeField] [Range(0.01f, 4f)] public float finalVelocityTarget = 0.05f;
     [SerializeField] [Range(0, 25)] public float spreaderHeight = 25f;
@@ -24,5 +26,11 @@ public class WinchMovementSettings : MonoBehaviour
         {
             spreaderHeight = Mathf.Max(spreaderHeight - discount, finalSpreaderHeight);
         }
-    }    
+    }
+
+    public void OnEpisodeBegin()
+    {
+        spreaderHeight = Academy.Instance.EnvironmentParameters.GetWithDefault("spreaderHeight", 17);
+        finalSpreaderHeight = spreaderHeight;
+    }
 }

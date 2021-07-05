@@ -18,6 +18,7 @@ public class WinchMovement : CraneLevel
 
     public override void OnEpisodeBegin()
     {
+        _settings.OnEpisodeBegin();
         Utils.ReportStat(_settings.velocityTarget, "Environment / WinchMovement / _velocityTarget");
         Utils.ReportStat(_settings.spreaderHeight, "Environment / WinchMovement / _spreaderHeight");
 
@@ -29,8 +30,9 @@ public class WinchMovement : CraneLevel
 
         _crane.SetWinchLimits(_settings.spreaderHeight - 2f, 27f);
 
-        //_randomHeightChosen = Random.Range(0f, 1f) > 0.5f;
-        _randomHeightChosen = true;
+        _randomHeightChosen = Random.Range(0f, 1f) > 0.5f;
+        //_randomHeightChosen = true;
+        
 
         float randomZCrane = Random.Range(-25, 35);
         if (randomZCrane > 4 && randomZCrane < 14) randomZCrane = 14;
@@ -64,10 +66,10 @@ public class WinchMovement : CraneLevel
 
         if (_episodeComplete)
         {
-            if (_settings.FinalDifficulty) rd.reward += .25f;
+            //if (_settings.FinalDifficulty) rd.reward += .25f;
 
             rd.endEpisode = true;
-            rd.reward += .75f;
+            rd.reward += 1f;
             _settings.IncreaseDifficulty();
 
         }

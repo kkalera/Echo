@@ -19,26 +19,28 @@ public static class AutoPilot
 
         Vector3 inputs = new Vector3(0, 0, 0);
 
-        // Check if we're to far from the target to lower the spreader
+        // Check if we're to far from the target to lower the spreader        
+        bool hasToCrossLeg = spreaderPosition.z > 10.5f && targetPosition.z < 10.5f;
+        if (!hasToCrossLeg) hasToCrossLeg = spreaderPosition.z > -10.5f && targetPosition.z < -10.5f;
+
         float r = (spreaderPosition.y * 0.2f) + 1;
-        if (spreaderPosition.y < 16 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
+        if (spreaderPosition.y < 19 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg)
         {
-            targetPosition = new Vector3(0, 20f, spreaderPosition.z);
+            targetPosition = new Vector3(0, 25f, spreaderPosition.z);
         }
-        else if (spreaderPosition.y >= 16 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
+        else if (spreaderPosition.y >= 19 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
         {
             targetPosition = new Vector3(0, spreaderPosition.y, targetPosition.z);
         }
 
-        float distanceToTravelY = Mathf.Abs(targetPosition.y - spreaderPosition.y);
-        float inputY = distanceToTravelY / (Mathf.Max(currentSpeed.y, 1f) * acceleration) * Time.deltaTime ;
+     
+        float distanceToTravelY = Mathf.Abs(targetPosition.y - spreaderPosition.y);        
+        float inputY = distanceToTravelY / (Mathf.Max(Mathf.Abs(currentSpeed.y), 0.05f) / acceleration) ;
 
 
-        float distanceToTravelZ = Mathf.Abs(targetPosition.z - spreaderPosition.z);
-        float inputZ = distanceToTravelZ / (Mathf.Max(currentSpeed.z,1f) * acceleration)*Time.deltaTime;
+        float distanceToTravelZ = Mathf.Abs(targetPosition.z - spreaderPosition.z);        
+        float inputZ = distanceToTravelZ / (Mathf.Max(Mathf.Abs(currentSpeed.z), 0.05f) / acceleration) ;
 
-        Utils.ClearLogConsole();
-        Debug.Log(inputZ);
 
         if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
         if (targetPosition.z < spreaderPosition.z) inputZ = -inputZ;

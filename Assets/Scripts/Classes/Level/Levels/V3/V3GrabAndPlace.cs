@@ -43,6 +43,7 @@ public class V3GrabAndPlace : CraneLevel
         _crane.CabinMovementDisabled = false;
         _crane.WinchMovementDisabled = false;
         _crane.SwingDisabled = true;
+        _crane.SetWinchLimits(0, 25);
 
         _targetReached = false;
         _containerGrabbed = false;
@@ -58,7 +59,7 @@ public class V3GrabAndPlace : CraneLevel
         _crane.ReleaseContainer(_environment);
 
         float randomZContainer = Random.Range(-25, 4);
-        if (randomZContainer < -4 && randomZContainer > -13) randomZContainer = -13;
+        if (randomZContainer < -4 && randomZContainer > -13) randomZContainer = -14;
         _container.localPosition = new Vector3(0, 0, randomZContainer);
 
 

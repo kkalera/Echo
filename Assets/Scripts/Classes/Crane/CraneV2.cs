@@ -82,7 +82,10 @@ public class CraneV2 : MonoBehaviour, ICrane
         if (swingDisabled)
         {
             spreader.localPosition = new Vector3(cabin.localPosition.x, spreader.localPosition.y, cabin.localPosition.z + 1);
-            spreaderBody.velocity = cabinBody.velocity;
+            
+            Vector3 vel = spreaderBody.velocity;
+            vel.z = cabinBody.velocity.z;
+            spreaderBody.velocity = vel;
         }
     }
 

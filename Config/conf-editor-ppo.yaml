@@ -5,7 +5,7 @@ behaviors:
         checkpoint_interval: 500000
         max_steps: 1e08
         time_horizon: 128
-        summary_freq: 1000
+        summary_freq: 96000        
         threaded: true
 
         hyperparameters:
@@ -32,3 +32,60 @@ behaviors:
                 strength: 0.01
                 gamma: 0.99
                 encoding_size: 256
+
+environment_parameters:
+  spreaderHeight:
+    curriculum:
+      - name: Lesson0 # The '-' is important as this is a list
+        completion_criteria:
+          measure: reward
+          behavior: Crane
+          signal_smoothing: true
+          min_lesson_length: 1000
+          threshold: 2.5
+        value: 22
+          
+      - name: Lesson1 # This is the start of the second lesson
+        completion_criteria:
+          measure: reward
+          behavior: Crane
+          signal_smoothing: true
+          min_lesson_length: 1000
+          threshold: 2.5
+        value: 17
+
+      - name: Lesson2
+        completion_criteria:
+          measure: reward
+          behavior: Crane
+          signal_smoothing: true
+          min_lesson_length: 1000
+          threshold: 2.5          
+        value: 15
+          
+      - name: Lesson3
+        completion_criteria:
+          measure: reward
+          behavior: Crane
+          signal_smoothing: true
+          min_lesson_length: 1000
+          threshold: 2.5          
+        value: 10
+
+      - name: Lesson3
+        completion_criteria:
+          measure: reward
+          behavior: Crane
+          signal_smoothing: true
+          min_lesson_length: 1000
+          threshold: 2.5          
+        value: 3
+
+      - name: Lesson4
+        completion_criteria:
+          measure: reward
+          behavior: Crane
+          signal_smoothing: true
+          min_lesson_length: 1000
+          threshold: 2.8       
+        value: 3

@@ -1,0 +1,8 @@
+WinchMovement:
+  measure: "reward"
+  thresholds: [2.5, 2.5, 2.5, 2.5, 2.5, 2.8]
+  min_lesson_length: 1000
+  signal_smoothing: true
+  parameters:
+    spreaderHeight: [22, 17, 15, 10, 3, 3]
+    level_parameter: [0, 0, 0, 0, 0, 1]
