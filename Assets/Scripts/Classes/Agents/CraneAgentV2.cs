@@ -137,18 +137,15 @@ public class CraneAgentV2 : Agent, IAgent
         cabinValue = continousActions[1];
         winchValue = continousActions[2];
 
-                
-        //rewardData.reward += -1f / MaxStep;
-        //AddReward(rewardData.reward);
         Vector3 ir = GetInputRewards(continousActions);
         AddReward(Mathf.Max(ir.x,0) / MaxStep);
         AddReward(Mathf.Max(ir.z, 0) / MaxStep);
         AddReward(Mathf.Max(ir.y, 0) / MaxStep);
 
         RewardData rewardData = levelManager.Step();
-        if (rewardData.endEpisode && Mathf.Approximately(rewardData.reward, -1f)) EndEpisode();
-        //if (Mathf.Approximately(rewardData.reward, 1f)) AddReward(1f);
-        //if (rewardData.endEpisode) EndEpisode();
+        //AddReward(-0.5f / MaxStep);
+        //AddReward(rewardData.reward);
+        if (rewardData.endEpisode && Mathf.Approximately(rewardData.reward,-1)) EndEpisode();
     }
 
     private Vector3 GetInputRewards(ActionSegment<float> continousActions)
@@ -164,6 +161,7 @@ public class CraneAgentV2 : Agent, IAgent
 
     public void OnCollisionEnter(Collision col)
     {
+        Debug.Log(col.collider.tag);
         RewardData rewardData = levelManager.Step(col);
         AddReward(rewardData.reward);
         if (rewardData.endEpisode) EndEpisode();

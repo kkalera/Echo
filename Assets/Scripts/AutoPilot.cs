@@ -22,6 +22,7 @@ public static class AutoPilot
         // Check if we're to far from the target to lower the spreader        
         bool hasToCrossLeg = spreaderPosition.z > 10.5f && targetPosition.z < 10.5f;
         if (!hasToCrossLeg) hasToCrossLeg = spreaderPosition.z > -10.5f && targetPosition.z < -10.5f;
+        if (!hasToCrossLeg) hasToCrossLeg = ((spreaderPosition.z > -10.5f && spreaderPosition.z < 10.5f) && (targetPosition.z > 10.5f || targetPosition.z < -10.5f));
 
         float r = (spreaderPosition.y * 0.2f) + 1;
         if (spreaderPosition.y < 19 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg)

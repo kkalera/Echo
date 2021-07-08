@@ -27,6 +27,7 @@ public class WinchMovement : CraneLevel
         _crane.SwingDisabled = true;
         _targetReached = false;
         _episodeComplete = false;
+        //_settings.spreaderHeight = 3;
 
         _crane.SetWinchLimits(_settings.spreaderHeight - 2f, 27f);
 
@@ -63,10 +64,10 @@ public class WinchMovement : CraneLevel
     public override RewardData Step(Collision col = null, Collider other = null)
     {
         RewardData rd = new RewardData();
-
+        rd.reward = -0.0002f;
         if (_episodeComplete)
         {
-            //if (_settings.FinalDifficulty) rd.reward += .25f;
+            if (_settings.FinalDifficulty) rd.reward += .25f;
 
             rd.endEpisode = true;
             rd.reward += 1f;
@@ -87,7 +88,7 @@ public class WinchMovement : CraneLevel
 
     void Update()
     {
-        _targetReached = Vector3.Distance(_crane.SpreaderWorldPosition, _target.position) < 1;
+        _targetReached = Vector3.Distance(_crane.SpreaderWorldPosition, _target.position) < _settings.goalRadius;
         _episodeComplete = (_targetReached && _crane.SpreaderVelocity.magnitude < _settings.velocityTarget);
     }
 

@@ -51,19 +51,23 @@ public class V3GrabAndPlace : CraneLevel
         _episodeComplete = false;
 
 
-        float randomZCrane = Random.Range(-25, 35);
+        /*float randomZCrane = Random.Range(-25, 35);
         if (randomZCrane > 4 && randomZCrane < 14) randomZCrane = 14;
-        if (randomZCrane < -4 && randomZCrane > -13) randomZCrane = -13;
+        if (randomZCrane < -4 && randomZCrane > -13) randomZCrane = -13;*/
 
-        _crane.ResetToPosition(new Vector3(0, Random.Range(15, 25), randomZCrane));
+        //_crane.ResetToPosition(new Vector3(0, Random.Range(15, 25), randomZCrane));
+        _crane.ResetToPosition(new Vector3(0, 25, -20));
         _crane.ReleaseContainer(_environment);
 
-        float randomZContainer = Random.Range(-25, 4);
+        /*float randomZContainer = Random.Range(-25, 4);
         if (randomZContainer < -4 && randomZContainer > -13) randomZContainer = -14;
-        _container.localPosition = new Vector3(0, 0, randomZContainer);
+        _container.localPosition = new Vector3(0, 0, randomZContainer);*/
+        _container.localPosition = new Vector3(0, 0, 0);
+        _container.localRotation = Quaternion.Euler(0, 90, 0);
 
 
-        _targetPlane.localPosition = new Vector3(0, Random.Range(0, 10), Random.Range(14, 40));
+        //_targetPlane.localPosition = new Vector3(0, Random.Range(0, 10), Random.Range(14, 40));
+        _targetPlane.localPosition = new Vector3(0, 0, 25);
 
         _target = _container;
     }
@@ -92,7 +96,7 @@ public class V3GrabAndPlace : CraneLevel
         bool dead = ProcessCollision(col, other);
         if (dead)
         {
-            rd.endEpisode = dead;
+            rd.endEpisode = true;
             rd.reward = -1f;
         }
 
@@ -102,7 +106,8 @@ public class V3GrabAndPlace : CraneLevel
 
     void Update()
     {
-        _targetReached = Vector3.Distance(_crane.SpreaderWorldPosition + new Vector3(0, -3, 0), _target.position) < 0.5;
+        _targetReached = Vector3.Distance(_crane.SpreaderWorldPosition + new Vector3(0, -3, 0), _target.position) < 4;
+
 
         if (_targetReached && _crane.SpreaderVelocity.magnitude < 0.5)
         {
@@ -123,7 +128,9 @@ public class V3GrabAndPlace : CraneLevel
     {
         if (col != null)
         {
-            return col.collider.CompareTag("dead");
+            if (col.collider.CompareTag("dead")) return true;
+            if (col.collider.CompareTag("crane")) return true;
+            return false;
         }
 
         if (other != null)
