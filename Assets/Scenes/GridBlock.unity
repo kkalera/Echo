@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -154,7 +154,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 976855229}
 --- !u!33 &178857010
@@ -501,7 +501,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9508d546c75e1914c8510849d2c10abb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -537,7 +537,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-3916
+  m_Name: pb_Mesh19396
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -804,6 +804,7 @@ GameObject:
   - component: {fileID: 1071568913}
   - component: {fileID: 1071568915}
   - component: {fileID: 1071568914}
+  - component: {fileID: 1071568916}
   m_Layer: 0
   m_Name: Agent
   m_TagString: Untagged
@@ -836,7 +837,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1666419937}
 --- !u!33 &1071568910
@@ -866,7 +867,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 2100000, guid: fb1842dd89ce1a54dba5e70e2e221fe8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1135,9 +1136,73 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
-  _Target: {fileID: 0}
-  _Environment: {fileID: 0}
+  MaxStep: 1000
+  inputUpDown:
+    m_Name: Input Up Down
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 66bd4cc7-bfc8-49a0-abe1-95f093b3a37f
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 1D Axis
+      m_Id: 76d0164d-fafd-412a-9c62-1f89a4a67dcc
+      m_Path: 1DAxis
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Up Down
+      m_Flags: 4
+    - m_Name: positive
+      m_Id: 23f65d42-bbf2-410e-b486-adf784de099f
+      m_Path: <Keyboard>/downArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Up Down
+      m_Flags: 8
+    - m_Name: negative
+      m_Id: 5aa16afb-6d9c-49c2-a49d-cfa1f738cc76
+      m_Path: <Keyboard>/upArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Up Down
+      m_Flags: 8
+  inputLeftRight:
+    m_Name: Input Left Right
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a5a5ded8-6273-44eb-83d1-9e87a5796d3c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 1D Axis
+      m_Id: fd1a4082-6804-4bf0-9e30-abbc92050e97
+      m_Path: 1DAxis
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Left Right
+      m_Flags: 4
+    - m_Name: negative
+      m_Id: 777615fe-83fd-43a2-a40e-e983c733c7f0
+      m_Path: <Keyboard>/leftArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Left Right
+      m_Flags: 8
+    - m_Name: positive
+      m_Id: a4312220-ec95-410c-bc1e-f83077b69720
+      m_Path: <Keyboard>/rightArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Left Right
+      m_Flags: 8
+  _Target: {fileID: 862028612}
+  _Environment: {fileID: 1440465542}
   forceMultiplier: 10
 --- !u!114 &1071568915
 MonoBehaviour:
@@ -1161,14 +1226,28 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 00102de4461f849468f17967891aefda, type: 3}
   m_InferenceDevice: 1
   m_BehaviorType: 0
-  m_BehaviorName: My Behavior
+  m_BehaviorName: Gridblock
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
+--- !u!114 &1071568916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071568907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 5
+  TakeActionsBetweenDecisions: 1
 --- !u!1 &1440465541
 GameObject:
   m_ObjectHideFlags: 0
@@ -1208,7 +1287,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18778
+  m_Name: pb_Mesh17914
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
