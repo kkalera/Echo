@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 20
+    VectorObservationSize: 13
     NumStackedVectorObservations: 4
     m_ActionSpec:
       m_NumContinuousActions: 3
@@ -113,6 +113,102 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   levelManager: {fileID: 0}
+  inputActionX:
+    m_Name: Input Action X
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 44a7f273-ad59-410c-9b0f-74d9515c3e7d
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 1D Axis
+      m_Id: 486eb912-233b-4cd4-a803-6f2b6b7ad06c
+      m_Path: 1DAxis
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Action X
+      m_Flags: 4
+    - m_Name: negative
+      m_Id: 72b9217f-6212-4cdd-a12b-5d535c9baae1
+      m_Path: <Keyboard>/leftArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Action X
+      m_Flags: 8
+    - m_Name: positive
+      m_Id: 9900ea7f-7315-4b74-a180-365250f01515
+      m_Path: <Keyboard>/rightArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Action X
+      m_Flags: 8
+  inputActionY:
+    m_Name: Input Action Y
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 78e82ddf-0d45-49cd-be2d-e689dfeb785c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 1D Axis
+      m_Id: 3996004d-7d68-401e-8fc5-2ff402221a5c
+      m_Path: 1DAxis
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Action Y
+      m_Flags: 4
+    - m_Name: negative
+      m_Id: e99409ed-cb3b-41e5-a0a6-7007dff96967
+      m_Path: <Keyboard>/ctrl
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Action Y
+      m_Flags: 8
+    - m_Name: positive
+      m_Id: e0a01aa1-c4c4-44ed-a6dc-e3a337a473a5
+      m_Path: <Keyboard>/shift
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Action Y
+      m_Flags: 8
+  inputActionZ:
+    m_Name: Input Action Z
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 19abbf2d-371e-4668-9781-4289ac3480d1
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 1D Axis
+      m_Id: b3ea8ad2-c4bc-4aaa-a6eb-ed23ef9496a5
+      m_Path: 1DAxis
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Action Z
+      m_Flags: 4
+    - m_Name: negative
+      m_Id: 8fb210d9-0bd1-42a1-a29d-8866a6151d73
+      m_Path: <Keyboard>/downArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Action Z
+      m_Flags: 8
+    - m_Name: positive
+      m_Id: 74a6b174-510a-4397-9c72-1742bacec01c
+      m_Path: <Keyboard>/upArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Input Action Z
+      m_Flags: 8
 --- !u!1 &7794852833710462489
 GameObject:
   m_ObjectHideFlags: 0

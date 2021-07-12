@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class KatTraining : CraneLevel
 {
+    [SerializeField] private float rewardDistance;
+    [SerializeField] private float rewardSpeed;
     [SerializeField] private GameObject targetPrefab;
     private GameObject target;
 
@@ -12,6 +14,25 @@ public class KatTraining : CraneLevel
     public override void ClearEnvironment(Transform environment)
     {
         Destroy(environment.Find("target"));
+    }
+
+    public override RewardData GetReward(ICrane crane)
+    {
+        float distance = Vector3.Distance(crane.SpreaderPosition, target.transform.localPosition);
+        float speed = crane.SpreaderVelocity.magnitude;
+        Utils.ClearLogConsole();
+        Debug.Log(speed);
+        if(distance <= rewardDistance && speed <= rewardSpeed)
+        {
+            return new RewardData(1f, true);
+        }
+        return new RewardData();
+    }
+
+    public override void IncreaseDifficulty()
+    {
+        rewardDistance = Mathf.Max(rewardDistance - 0.1f, 0.1f);
+        rewardSpeed = Mathf.Max(rewardSpeed - 0.1f, 0.1f);
     }
 
     public override void InitializeEnvironment(Transform environment)
@@ -31,6 +52,7 @@ public class KatTraining : CraneLevel
         crane.CabinMovementDisabled = false;
         crane.CraneMovementDisabled = true;
         crane.WinchMovementDisabled = true;
+        crane.SwingDisabled = true;
         return crane;
     }
 }
