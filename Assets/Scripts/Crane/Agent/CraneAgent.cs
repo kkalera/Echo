@@ -4,20 +4,22 @@ using UnityEngine;
 using Unity.MLAgents;
 
 public class CraneAgent : Agent, IAgent
-{
-    [SerializeField] private ICrane crane;
-    [SerializeField] private ILevelManager levelManager;
-    
+{    
+    [SerializeField] public CraneLevelManager levelManager;
+    private ICrane crane;
 
     private void Start()
     {
+        crane = GetComponentInChildren<ICrane>();
         CheckLevelParameter();
+        levelManager.CurrentLevel.InitializeEnvironment(transform.parent);
     }
 
     public override void OnEpisodeBegin()
     {
         CheckLevelParameter();
         crane = levelManager.CurrentLevel.SetCraneRestrictions(crane);
+        levelManager.CurrentLevel.ResetEnvironment(transform.parent, crane);
     }
 
     private void CheckLevelParameter()

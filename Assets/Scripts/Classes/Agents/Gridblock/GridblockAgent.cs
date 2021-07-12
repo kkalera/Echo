@@ -22,6 +22,12 @@ public class GridblockAgent : Agent
         inputLeftRight.Enable();
         inputUpDown.Enable();
         _agentRB = GetComponent<Rigidbody>();
+        float i = -5f;
+        while (i<5)
+        {
+            Debug.Log(Utils.Normalize(i, -5, 5));
+            i += 0.1f;
+        }
     }
 
     public override void OnEpisodeBegin()
@@ -35,8 +41,20 @@ public class GridblockAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(transform.localPosition);
-        sensor.AddObservation(_Target.localPosition);
+        //sensor.AddObservation(transform.localPosition);
+        //sensor.AddObservation(_Target.localPosition);
+        sensor.AddObservation(transform.localPosition.x);
+        sensor.AddObservation(transform.localPosition.y);
+        sensor.AddObservation(transform.localPosition.z);
+        sensor.AddObservation(_Target.localPosition.x);
+        sensor.AddObservation(_Target.localPosition.y);
+        sensor.AddObservation(_Target.localPosition.z);
+        //sensor.AddObservation(Utils.Normalize(transform.localPosition.x, -7, 7));
+       // sensor.AddObservation(Utils.Normalize(transform.localPosition.z, -7, 7));
+        //sensor.AddObservation(Utils.Normalize(transform.localPosition.y, -5, 5));
+       // sensor.AddObservation(Utils.Normalize(_Target.localPosition.x, -7, 7));
+       // sensor.AddObservation(Utils.Normalize(_Target.localPosition.z, -7, 7));
+       // sensor.AddObservation(Utils.Normalize(_Target.localPosition.y, -5, 5));
         sensor.AddObservation(_agentRB.velocity.x);
         sensor.AddObservation(_agentRB.velocity.z);
     }
@@ -70,8 +88,6 @@ public class GridblockAgent : Agent
         // Reached target
         if (distanceToTarget < 2f)
         {
-            Utils.ClearLogConsole();
-            Debug.Log("Win");
             SetReward(1.0f);
             //AddReward((0.5f /MaxStep)* (MaxStep - StepCount));
             EndEpisode();
