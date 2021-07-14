@@ -64,16 +64,22 @@ public class CraneAgent : Agent, IAgent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(crane.CabinPosition.z);
-        sensor.AddObservation(crane.CabinVelocity.z);
+        sensor.AddObservation(crane.CabinPosition);
+        sensor.AddObservation(crane.CabinVelocity);
 
-        sensor.AddObservation(crane.CranePosition.x);
-        sensor.AddObservation(crane.CraneVelocity.x);
+        sensor.AddObservation(crane.CranePosition);
+        sensor.AddObservation(crane.CraneVelocity);
             
         sensor.AddObservation(crane.SpreaderPosition);
         sensor.AddObservation(crane.SpreaderVelocity);
 
         sensor.AddObservation(levelManager.CurrentLevel.TargetLocation);
+
+        Utils.ClearLogConsole();
+        Debug.Log(crane.CabinPosition);
+        Debug.Log(crane.CranePosition);
+        Debug.Log(crane.SpreaderPosition);
+        Debug.Log(levelManager.CurrentLevel.TargetLocation);
     }
 
     public void OnCollisionEnter(Collision col)

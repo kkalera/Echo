@@ -20,8 +20,7 @@ public class KatTraining : CraneLevel
     {
         float distance = Vector3.Distance(crane.SpreaderPosition, target.transform.localPosition);
         float speed = crane.SpreaderVelocity.magnitude;
-        Utils.ClearLogConsole();
-        Debug.Log(speed);
+
         if(distance <= rewardDistance && speed <= rewardSpeed)
         {
             return new RewardData(1f, true);

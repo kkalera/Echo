@@ -1203,6 +1203,8 @@ MonoBehaviour:
       m_Flags: 8
   _Target: {fileID: 862028612}
   _Environment: {fileID: 1440465542}
+  _Floor: {fileID: 178857013}
+  envScale: 1.25
   forceMultiplier: 10
 --- !u!114 &1071568915
 MonoBehaviour:
@@ -1228,7 +1230,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: 00102de4461f849468f17967891aefda, type: 3}
   m_InferenceDevice: 1
-  m_BehaviorType: 1
+  m_BehaviorType: 0
   m_BehaviorName: Gridblock
   TeamId: 0
   m_UseChildSensors: 1
@@ -1287,7 +1289,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh19234
+  m_Name: pb_Mesh17792
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

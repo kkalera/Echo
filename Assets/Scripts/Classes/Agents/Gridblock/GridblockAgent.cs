@@ -13,6 +13,9 @@ public class GridblockAgent : Agent
     
     [SerializeField] private Transform _Target;
     [SerializeField] private Transform _Environment;
+    [SerializeField] private Transform _Floor;
+
+    [SerializeField] private float envScale = 1;
 
     private Rigidbody _agentRB;
 
@@ -22,12 +25,8 @@ public class GridblockAgent : Agent
         inputLeftRight.Enable();
         inputUpDown.Enable();
         _agentRB = GetComponent<Rigidbody>();
-        float i = -5f;
-        while (i<5)
-        {
-            Debug.Log(Utils.Normalize(i, -5, 5));
-            i += 0.1f;
-        }
+
+        _Floor.localScale = new Vector3(envScale, 1, envScale);
     }
 
     public override void OnEpisodeBegin()
@@ -36,27 +35,15 @@ public class GridblockAgent : Agent
         _agentRB.velocity = Vector3.zero;
         transform.localRotation = Quaternion.Euler(Vector3.zero);
         transform.localPosition = new Vector3(0,0.5f,0);
-        _Target.localPosition = new Vector3(Random.Range(-5, 5), 1.5f, Random.Range(-5, 5));
+        _Target.localPosition = new Vector3(Random.Range(-5*envScale, 5*envScale), 1.5f, Random.Range(-5*envScale, 5*envScale));
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        //sensor.AddObservation(transform.localPosition);
-        //sensor.AddObservation(_Target.localPosition);
-        sensor.AddObservation(transform.localPosition.x);
-        sensor.AddObservation(transform.localPosition.y);
-        sensor.AddObservation(transform.localPosition.z);
-        sensor.AddObservation(_Target.localPosition.x);
-        sensor.AddObservation(_Target.localPosition.y);
-        sensor.AddObservation(_Target.localPosition.z);
-        //sensor.AddObservation(Utils.Normalize(transform.localPosition.x, -7, 7));
-       // sensor.AddObservation(Utils.Normalize(transform.localPosition.z, -7, 7));
-        //sensor.AddObservation(Utils.Normalize(transform.localPosition.y, -5, 5));
-       // sensor.AddObservation(Utils.Normalize(_Target.localPosition.x, -7, 7));
-       // sensor.AddObservation(Utils.Normalize(_Target.localPosition.z, -7, 7));
-       // sensor.AddObservation(Utils.Normalize(_Target.localPosition.y, -5, 5));
-        sensor.AddObservation(_agentRB.velocity.x);
+        sensor.AddObservation(transform.localPosition);
+        sensor.AddObservation(_Target.localPosition);
         sensor.AddObservation(_agentRB.velocity.z);
+        sensor.AddObservation(_agentRB.velocity.x);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)

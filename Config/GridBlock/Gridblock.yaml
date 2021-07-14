@@ -1,3 +1,6 @@
+env_settings:  
+  seed: 5414
+
 behaviors:
   Gridblock:
     trainer_type: ppo
@@ -18,6 +21,6 @@ behaviors:
       extrinsic:
         gamma: 0.99
         strength: 1.0
-    max_steps: 500000
+    max_steps: 250000
     time_horizon: 64
-    summary_freq: 10000
+    summary_freq: 1000
