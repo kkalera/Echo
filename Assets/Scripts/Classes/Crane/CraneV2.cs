@@ -65,7 +65,7 @@ public class CraneV2 : MonoBehaviour, ICrane
     public bool WinchMovementDisabled { get => !winchMovementEnabled; set => winchMovementEnabled = !value; }
     public Transform Transform { get => transform; }
 
-    public bool ContainerGrabbed { get => currentContainer == null; }
+    public bool ContainerGrabbed { get => currentContainer != null; }
 
 
     private void Start()
@@ -79,6 +79,9 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     private void Update()
     {
+        Utils.ClearLogConsole();
+        Debug.Log(currentContainer);
+        Debug.Log(ContainerGrabbed);
         if (swingDisabled)
         {
             spreader.localPosition = new Vector3(cabin.localPosition.x, spreader.localPosition.y, cabin.localPosition.z + 1);
@@ -238,7 +241,7 @@ public class CraneV2 : MonoBehaviour, ICrane
     public void GrabContainer(Transform container)
     {
         // Set the rotation of the container to match the current rotation of the spreader;
-        container.rotation = Quaternion.Euler(new Vector3(spreader.rotation.z, spreader.rotation.y + 90, spreader.rotation.x));
+        container.rotation = Quaternion.Euler(new Vector3(spreader.rotation.z, spreader.rotation.y, spreader.rotation.x));
 
         // Set the parent of the container to be the spreader. Attaching it to the spreader.
         container.parent = spreader;

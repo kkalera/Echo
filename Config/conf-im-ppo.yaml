@@ -1,12 +1,4 @@
 # Finish configuration for slower but more stable training
-env_settings:
-    env_path: Build/crane
-    num_envs: 1
-
-engine_settings:
-    width: 1920
-    height: 1080
-
 behaviors:
     Crane:
         trainer_type: ppo
@@ -45,21 +37,9 @@ behaviors:
                 strength: 0.01
                 gamma: 0.99
                 encoding_size: 128
-                demo_path: Demos/WinchMovement.demo        
+                demo_path: Demos/gp_1.demo
 
-
-# Add this section
-environment_parameters:
-    level_parameter:
-        curriculum:
-            - name: WinchTraining
-              completion_criteria:
-                  measure: reward
-                  behavior: Crane
-                  signal_smoothing: false
-                  min_lesson_length: 1000
-                  threshold: 0.8
-              value: 0
-
-            - name: End
-              value: 1
+        behavioral_cloning:
+            strength: 1
+            num_epoch: 2000000       
+            demo_path: Demos/gp_1.demo

@@ -19,6 +19,10 @@ public static class AutoPilot
 
         Vector3 inputs = new Vector3(0, 0, 0);
 
+        bool behindLegs = spreaderPosition.z < -10.5f;
+        bool betweenLegs = spreaderPosition.z > -10.5f && spreaderPosition.z < 10.5f;
+        bool inFrontOfLegs = spreaderPosition.z > 10.5f;
+
         // Check if we're to far from the target to lower the spreader        
         bool hasToCrossLeg = spreaderPosition.z > 10.5f && targetPosition.z < 10.5f;
         if (!hasToCrossLeg) hasToCrossLeg = spreaderPosition.z > -10.5f && targetPosition.z < -10.5f;

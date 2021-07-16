@@ -5,7 +5,7 @@ behaviors:
         checkpoint_interval: 500000
         max_steps: 1e08
         time_horizon: 128
-        summary_freq: 96000        
+        summary_freq: 1000       
         threaded: true
 
         hyperparameters:
