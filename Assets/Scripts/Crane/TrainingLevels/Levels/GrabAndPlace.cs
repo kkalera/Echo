@@ -61,6 +61,8 @@ public class GrabAndPlace : CraneLevel
 
     public override void ResetEnvironment()
     {
+        _crane.ReleaseContainer(environment);
+        container.transform.rotation = Quaternion.Euler(Vector3.zero);
         container.transform.localPosition = new Vector3(0, 0, Random.Range(-4,4));
         target.transform.localPosition = new Vector3(0, 0, Random.Range(16, 40));
         _crane.ResetToPosition(new Vector3(0, 25, Random.Range(-25,40)));

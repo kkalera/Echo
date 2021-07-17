@@ -28,6 +28,7 @@ public class CraneAgent : Agent, IAgent
 
     public override void OnEpisodeBegin()
     {
+        
         CheckLevelParameter();
         levelManager.CurrentLevel.SetCraneRestrictions();        
         levelManager.CurrentLevel.ResetEnvironment();
@@ -104,22 +105,30 @@ public class CraneAgent : Agent, IAgent
 
 
     public void OnCollisionEnter(Collision col)
-    {
+    {        
+        if (col.collider.CompareTag("dead")) EndEpisode();
+        if (col.collider.CompareTag("crane")) EndEpisode();
     }
 
     public void OnCollisionStay(Collision col)
     {
+        if (col.collider.CompareTag("dead")) EndEpisode();
+        if (col.collider.CompareTag("crane")) EndEpisode();
     }
 
     public void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("dead")) EndEpisode();
+        if (other.CompareTag("crane")) EndEpisode();
     }
 
     public void OnTriggerExit(Collider other)
-    {
+    {        
     }
 
     public void OnTriggerStay(Collider other)
     {
+        if (other.CompareTag("dead")) EndEpisode();
+        if (other.CompareTag("crane")) EndEpisode();
     }
 }

@@ -79,9 +79,6 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     private void Update()
     {
-        Utils.ClearLogConsole();
-        Debug.Log(currentContainer);
-        Debug.Log(ContainerGrabbed);
         if (swingDisabled)
         {
             spreader.localPosition = new Vector3(cabin.localPosition.x, spreader.localPosition.y, cabin.localPosition.z + 1);
@@ -135,7 +132,7 @@ public class CraneV2 : MonoBehaviour, ICrane
         JointMotor motor2 = spoolLandLeft.motor;
 
         float currentVelocity = motor.targetVelocity;
-        float acceleration = 360 * Time.fixedDeltaTime;
+        float acceleration = 360 * Time.deltaTime * Time.timeScale;
 
         if (value != 0 && value > currentVelocity)
         {
