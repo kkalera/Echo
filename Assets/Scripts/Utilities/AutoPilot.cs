@@ -36,13 +36,20 @@ public static class AutoPilot
         else if (spreaderPosition.y >= 19 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
         {
             targetPosition = new Vector3(0, spreaderPosition.y, targetPosition.z);
+
         }
 
-     
+
+        if (spreaderPosition.y - targetPosition.y > 1 &&
+            spreaderPosition.z > 4 &&
+            Mathf.Abs(spreaderPosition.z - targetPosition.z) < r) targetPosition.z -= 0.25f;
+
+
         float distanceToTravelY = Mathf.Abs(targetPosition.y - spreaderPosition.y);        
         float inputY = distanceToTravelY / (Mathf.Max(Mathf.Abs(currentSpeed.y), 0.05f) / acceleration) ;
 
-
+        
+        
         float distanceToTravelZ = Mathf.Abs(targetPosition.z - spreaderPosition.z);        
         float inputZ = distanceToTravelZ / (Mathf.Max(Mathf.Abs(currentSpeed.z), 0.05f) / acceleration) ;
 
