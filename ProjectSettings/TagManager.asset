@@ -11,6 +11,7 @@ TagManager:
   - crane
   - targetContainer
   - targetPosition
+  - container
   layers:
   - Default
   - TransparentFX
