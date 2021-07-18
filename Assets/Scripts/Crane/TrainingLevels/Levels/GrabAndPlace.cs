@@ -6,6 +6,7 @@ public class GrabAndPlace : CraneLevel
 {    
     [SerializeField] private GameObject containerPrefab;
     [SerializeField] private GameObject targetPrefab;
+    public bool enableSwing;
     private Transform container;
     private Transform target;
     private Transform environment;
@@ -74,7 +75,7 @@ public class GrabAndPlace : CraneLevel
         _crane.CraneMovementDisabled = true;
         _crane.CabinMovementDisabled = false;        
         _crane.WinchMovementDisabled = false;
-        _crane.SwingDisabled = true;        
+        _crane.SwingDisabled = !enableSwing;        
         _crane.SetWinchLimits(0, 30);
     }
 }

@@ -64,10 +64,17 @@ public class CraneAgent : Agent, IAgent
 
         if (autoPilot)
         {
-            Vector3 actions = AutoPilot.GetInputs(
+            /*Vector3 actions = AutoPilot.GetInputs(
                 levelManager.CurrentLevel.TargetLocation,
                 levelManager.CurrentLevel.Crane.SpreaderPosition,
                 levelManager.CurrentLevel.Crane.SpreaderVelocity,
+                0.4f);*/
+            Vector3 actions = AutoPilot.GetInputsSwing(
+                levelManager.CurrentLevel.TargetLocation,
+                levelManager.CurrentLevel.Crane.SpreaderPosition,
+                levelManager.CurrentLevel.Crane.CabinPosition,
+                levelManager.CurrentLevel.Crane.SpreaderVelocity,
+                levelManager.CurrentLevel.Crane.CabinVelocity,
                 0.4f);
             continuousActions[0] = actions.x;
             continuousActions[1] = actions.y;
