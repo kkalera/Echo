@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CraneV2 : MonoBehaviour, ICrane
+public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
 {
     [Space(20)]
     [Header("Crane state")]
@@ -63,6 +63,8 @@ public class CraneV2 : MonoBehaviour, ICrane
     public bool CraneMovementDisabled { get => !craneMovementEnabled; set => craneMovementEnabled = !value; }
     public bool CabinMovementDisabled { get => !cabinMovementEnabled; set => cabinMovementEnabled = !value; }
     public bool WinchMovementDisabled { get => !winchMovementEnabled; set => winchMovementEnabled = !value; }
+    
+
     public Transform Transform { get => transform; }
 
     public bool ContainerGrabbed { get => currentContainer != null; }
@@ -86,7 +88,8 @@ public class CraneV2 : MonoBehaviour, ICrane
             Vector3 vel = spreaderBody.velocity;
             vel.z = cabinBody.velocity.z;
             spreaderBody.velocity = vel;
-        }
+        }       
+
     }
 
     public void MoveCabin(float val)
@@ -117,9 +120,12 @@ public class CraneV2 : MonoBehaviour, ICrane
         value *= winchSpeed;
 
         if (!winchMovementEnabled) return;
-        if (value > 0 && spreader.localPosition.y > maxSpreaderHeight) value = 0;
+        if (value > 0 && spreader.localPosition.y > maxSpreaderHeight ) value = 0;
         if (value < 0 && spreader.localPosition.y < minSpreaderHeight) value = 0;
 
+
+        Filo.Cable.Link linkLandLeft = cableLandLeft.links[0];
+        if (linkLandLeft.storedCable < 5 && value < 0) value = 0;        
 
 
         // Adjust the value since the value provided is the speed in m/s
@@ -143,11 +149,11 @@ public class CraneV2 : MonoBehaviour, ICrane
             value = Mathf.Max(currentVelocity - acceleration, value);
         }
 
-        if (value == 0 && currentVelocity > 0)
+        if (Mathf.Approximately(value,0) && currentVelocity > 0)
         {
             value = Mathf.Max(currentVelocity - acceleration, value);
         }
-        else if (value == 0 && currentVelocity < 0)
+        else if (Mathf.Approximately(value, 0) && currentVelocity < 0)
         {
             value = Mathf.Min(currentVelocity + acceleration, value);
         }
@@ -164,12 +170,15 @@ public class CraneV2 : MonoBehaviour, ICrane
 
     public void ResetToRandomPosition()
     {
+        //spreaderBody.isKinematic = true;
         cabin.localPosition = new Vector3(0, 32, Random.Range(-20, 45));
         spreader.localPosition = new Vector3(cabin.localPosition.x, 25, cabin.localPosition.z + 1f);
+
 
         spreaderBody.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
         spreader.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
         spreaderBody.velocity = Vector3.zero;
+        spreaderBody.angularVelocity = Vector3.zero;
         cabinBody.velocity = Vector3.zero;
 
         cableLandLeft.Setup();
@@ -188,6 +197,7 @@ public class CraneV2 : MonoBehaviour, ICrane
         spreaderBody.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
         spreader.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
         spreaderBody.velocity = Vector3.zero;
+        spreaderBody.angularVelocity = Vector3.zero;
         cabinBody.velocity = Vector3.zero;
         spreaderBody.isKinematic = true;
 
@@ -208,22 +218,22 @@ public class CraneV2 : MonoBehaviour, ICrane
 
         Filo.Cable.Link linkLandLeft = cableLandLeft.links[0];
         linkLandLeft.orientation = true;
-        linkLandLeft.storedCable = 50;
+        linkLandLeft.storedCable = 100;
         cableLandLeft.links[0] = linkLandLeft;
 
         Filo.Cable.Link linkLandRight = cableLandRight.links[0];
         linkLandRight.orientation = true;
-        linkLandRight.storedCable = 50;
+        linkLandRight.storedCable = 100;
         cableLandRight.links[0] = linkLandRight;
 
         Filo.Cable.Link linkWaterLeft = cableWaterLeft.links[0];
         linkWaterLeft.orientation = false;
-        linkWaterLeft.storedCable = 50;
+        linkWaterLeft.storedCable = 100;
         cableWaterLeft.links[0] = linkWaterLeft;
 
         Filo.Cable.Link linkWaterRight = cableWaterRight.links[0];
         linkWaterRight.orientation = false;
-        linkWaterRight.storedCable = 50;
+        linkWaterRight.storedCable = 100;
         cableWaterRight.links[0] = linkWaterRight;
 
         spreaderBody.isKinematic = false;
@@ -264,5 +274,27 @@ public class CraneV2 : MonoBehaviour, ICrane
             // Set the current container back to null
             currentContainer = null;
         }
+    }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+    }
+    public void OnCollisionStay(Collision collision)
+    {
+
+    }
+    public void OnCollisionExit(Collision collision)
+    {
+    }
+    public void OnTriggerEnter(Collider other)
+    {
+    }
+
+    public void OnTriggerStay(Collider other)
+    {
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
     }
 }

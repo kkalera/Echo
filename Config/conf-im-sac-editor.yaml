@@ -6,7 +6,7 @@ behaviors:
         checkpoint_interval: 50000
         max_steps: 1e08
         time_horizon: 128
-        summary_freq: 30000
+        summary_freq: 10000
         threaded: true
 
         hyperparameters:
@@ -23,43 +23,16 @@ behaviors:
 
         network_settings:
             normalize: false
-            hidden_units: 512
+            hidden_units: 128
             num_layers: 2
             vis_encode_type: simple
 
         reward_signals:
             extrinsic:
                 gamma: 0.99
-                strength: 10
-            curiosity:
-                strength: 0.01
-                gamma: 0.99
-                encoding_size: 256
+                strength: 1.0
             gail:
-                strength: 0.01
+                strength: 1.0
                 gamma: 0.99
                 encoding_size: 128
-                demo_path: Demos/V3GrabAndPlace.demo
-
-# Add this section
-environment_parameters:
-    level_parameter:
-        curriculum:
-            - name: Swing control
-              completion_criteria:
-                  measure: reward
-                  behavior: Crane
-                  signal_smoothing: true
-                  min_lesson_length: 100000
-                  threshold: 1.95
-              value: 0
-
-            - name: End
-              completion_criteria:
-                  measure: reward
-                  behavior: Crane
-                  signal_smoothing: true
-                  min_lesson_length: 100000
-                  threshold: 1
-                  require_reset: true
-              value: -1
+                demo_path: Demos/gp_4.demo

@@ -50,8 +50,22 @@ public class CraneAgent : Agent, IAgent
         levelManager.CurrentLevel.Crane.MoveWinch(inputY);
         levelManager.CurrentLevel.Crane.MoveCabin(inputZ);
 
+        ///////////////////////////
+        Vector3 ap = AutoPilot.GetInputs(
+                levelManager.CurrentLevel.TargetLocation,
+                levelManager.CurrentLevel.Crane.SpreaderPosition,
+                levelManager.CurrentLevel.Crane.SpreaderVelocity,
+                0.4f);
+
+        float rx = 1f - Mathf.Abs(ap.x - inputX);
+        float rz = 1f - Mathf.Abs(ap.z - inputZ);
+        float ry = 1f - Mathf.Abs(ap.y - inputY);
+
+        AddReward(((rx + rz + ry) / 3) / MaxStep);        
+        ///////////////////////////
+
         RewardData rewardData = levelManager.CurrentLevel.GetReward();
-        SetReward(rewardData.reward);
+        AddReward(rewardData.reward);
         if (rewardData.endEpisode) EndEpisode();
     }
 
@@ -64,19 +78,26 @@ public class CraneAgent : Agent, IAgent
 
         if (autoPilot)
         {
-            Vector3 actions = AutoPilot.GetInputs(
+            Vector3 actions = Vector3.zero;
+            if (levelManager.CurrentLevel.Crane.SwingDisabled)
+            {
+                actions = AutoPilot.GetInputs(
                 levelManager.CurrentLevel.TargetLocation,
                 levelManager.CurrentLevel.Crane.SpreaderPosition,
                 levelManager.CurrentLevel.Crane.SpreaderVelocity,
                 0.4f);
-            /*
-            Vector3 actions = AutoPilot.GetInputsSwing(
+            }
+            else
+            {
+                actions = AutoPilot.GetInputsSwing(
                 levelManager.CurrentLevel.TargetLocation,
                 levelManager.CurrentLevel.Crane.SpreaderPosition,
                 levelManager.CurrentLevel.Crane.CabinPosition,
                 levelManager.CurrentLevel.Crane.SpreaderVelocity,
                 levelManager.CurrentLevel.Crane.CabinVelocity,
-                0.4f);*/
+                0.4f);
+            }
+            
             continuousActions[0] = actions.x;
             continuousActions[1] = actions.y;
             continuousActions[2] = actions.z;

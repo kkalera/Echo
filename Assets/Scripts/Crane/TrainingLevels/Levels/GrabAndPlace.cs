@@ -6,6 +6,7 @@ public class GrabAndPlace : CraneLevel
 {    
     [SerializeField] private GameObject containerPrefab;
     [SerializeField] private GameObject targetPrefab;
+    [SerializeField] private int gravityMultiplier;
     public bool enableSwing;
     private Transform container;
     private Transform target;
@@ -24,8 +25,6 @@ public class GrabAndPlace : CraneLevel
 
     public override RewardData GetReward()
     {
-        
-
         if (_crane.ContainerGrabbed && Vector3.Distance(container.position, target.position) < 1)
         {
             _crane.ReleaseContainer(environment);
@@ -67,7 +66,8 @@ public class GrabAndPlace : CraneLevel
         container.transform.localPosition = new Vector3(0, 0, Random.Range(-4,4));
         target.transform.localPosition = new Vector3(0, 0, Random.Range(16, 40));
         _crane.ResetToPosition(new Vector3(0, 25, Random.Range(-25,40)));
-        currentTarget = container.transform.position;
+        currentTarget = container.transform.position + new Vector3(0,2.85f,0);
+                
     }
 
     public override void SetCraneRestrictions()
