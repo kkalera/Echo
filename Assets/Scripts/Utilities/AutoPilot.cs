@@ -97,10 +97,10 @@ public static class AutoPilot
         //float speedZ = Mathf.Abs(Mathf.Abs(currentKatSpeed.z - currentSpreaderSpeed.z)-currentKatSpeed.z);
         float speedZ = currentKatSpeed.z;
         float speedDif = Mathf.Abs(currentKatSpeed.z - currentSpreaderSpeed.z);
-        /*if (spreaderPosition.z < cabinPosition.z && targetPosition.z < spreaderPosition.z) speedZ += speedDif ;
+        if (spreaderPosition.z < cabinPosition.z && targetPosition.z < spreaderPosition.z) speedZ += speedDif ;
         if (spreaderPosition.z < cabinPosition.z && targetPosition.z > spreaderPosition.z) speedZ -= speedDif ;
-        if (spreaderPosition.z > cabinPosition.z && targetPosition.z < spreaderPosition.z) speedZ -= speedDif ;
-        if (spreaderPosition.z > cabinPosition.z && targetPosition.z > spreaderPosition.z) speedZ += speedDif ;*/
+        if (spreaderPosition.z > cabinPosition.z && targetPosition.z < spreaderPosition.z) speedZ += speedDif ;
+        if (spreaderPosition.z > cabinPosition.z && targetPosition.z > spreaderPosition.z) speedZ -= speedDif ;
         
 
         float distanceToTravelZ = Mathf.Abs(targetPosition.z - spreaderPosition.z);
@@ -110,11 +110,27 @@ public static class AutoPilot
         if (spreaderPosition.z > cabinPosition.z && targetPosition.z > spreaderPosition.z) distanceToTravelZ += zDif;
         if (spreaderPosition.z > cabinPosition.z && targetPosition.z < spreaderPosition.z) distanceToTravelZ -= zDif;
 
+
+        //float inputZ = distanceToTravelZ / ((Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration) + (Mathf.Max(Mathf.Abs(currentSpreaderSpeed.z), 0.05f) / acceleration)) ;
+        Utils.ClearLogConsole();        
+        float inputZ = Mathf.Clamp(distanceToTravelZ / ((Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration)),0,1) ;
+        Debug.Log(inputZ);
+        float inputSwing = 1 - Mathf.Abs(spreaderPosition.z - cabinPosition.z) / ((Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration));
+        Debug.Log(inputSwing);
+        //inputZ -= inputSwing;
         
-        float inputZ = distanceToTravelZ / ((Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration) + (Mathf.Max(Mathf.Abs(currentSpreaderSpeed.z), 0.05f) / acceleration)) ;       
+
 
         if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
-        if (targetPosition.z < spreaderPosition.z) inputZ = -inputZ;
+        //if (targetPosition.z < spreaderPosition.z) inputZ = -inputZ;
+        
+
+        if (targetPosition.z < spreaderPosition.z && cabinPosition.z < spreaderPosition.z) inputZ = Mathf.Clamp(-inputZ - inputSwing, -1f, 1f);
+        if (targetPosition.z < spreaderPosition.z && cabinPosition.z > spreaderPosition.z) inputZ = Mathf.Clamp(-inputZ + inputSwing, -1f, 1f);
+        if (targetPosition.z > spreaderPosition.z && cabinPosition.z < spreaderPosition.z) inputZ = Mathf.Clamp(inputZ + inputSwing, -1f, 1f);
+        if (targetPosition.z > spreaderPosition.z && cabinPosition.z > spreaderPosition.z) inputZ = Mathf.Clamp(inputZ - inputSwing, -1f, 1f);
+
+        Debug.Log(inputZ);
 
         if (float.IsNaN(inputY)) inputY = 0;
         if (float.IsNaN(inputZ)) inputZ = 0;
