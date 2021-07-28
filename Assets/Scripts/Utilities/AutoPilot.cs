@@ -112,25 +112,22 @@ public static class AutoPilot
 
 
         //float inputZ = distanceToTravelZ / ((Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration) + (Mathf.Max(Mathf.Abs(currentSpreaderSpeed.z), 0.05f) / acceleration)) ;
-        Utils.ClearLogConsole();        
-        float inputZ = Mathf.Clamp(distanceToTravelZ / ((Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration)),0,1) ;
-        Debug.Log(inputZ);
-        float inputSwing = Mathf.Clamp(Mathf.Abs(spreaderPosition.z - cabinPosition.z) / ((Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration)),0,1);
-        //float swing = Mathf.Clamp(Utils.Normalize(Mathf.Abs(spreaderPosition.z - 1 - cabinPosition.z), 0, Vector3.Distance(spreaderPosition, cabinPosition)),0,1);
-        //inputSwing = 1 - swing + inputSwing;
-        Debug.Log(inputSwing);
-        //inputZ -= inputSwing;
         
+        float inputZ = Mathf.Clamp(distanceToTravelZ / ((Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration)),0,1) ;        
+        float inputSwing = Mathf.Clamp(Mathf.Abs(spreaderPosition.z - cabinPosition.z) / ((Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration)),0,1);
 
+        Utils.ClearLogConsole();
+        Debug.Log(inputZ);
+        Debug.Log(inputSwing);
 
         if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
         //if (targetPosition.z < spreaderPosition.z) inputZ = -inputZ;
         
-
+        /*
         if (targetPosition.z < spreaderPosition.z && cabinPosition.z < spreaderPosition.z-1) inputZ = Mathf.Clamp(-inputZ - inputSwing, -1f, 1f);
         if (targetPosition.z < spreaderPosition.z && cabinPosition.z > spreaderPosition.z-1) inputZ = Mathf.Clamp(-inputZ + inputSwing, -1f, 1f);
         if (targetPosition.z > spreaderPosition.z && cabinPosition.z < spreaderPosition.z-1) inputZ = Mathf.Clamp(inputZ + inputSwing, -1f, 1f);
-        if (targetPosition.z > spreaderPosition.z && cabinPosition.z > spreaderPosition.z-1) inputZ = Mathf.Clamp(inputZ - inputSwing, -1f, 1f);
+        if (targetPosition.z > spreaderPosition.z && cabinPosition.z > spreaderPosition.z-1) inputZ = Mathf.Clamp(inputZ - inputSwing, -1f, 1f);*/
 
         Debug.Log(inputZ);
 
@@ -144,4 +141,10 @@ public static class AutoPilot
         return inputs;
 
     }
-}
+
+    public static Vector3 GetInputsSwing2(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 cabinPosition, Vector3 currentSpreaderSpeed, Vector3 currentKatSpeed, float acceleration)
+    {
+
+        return Vector3.zero;
+    }
+    }

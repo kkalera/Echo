@@ -34,6 +34,7 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
     [SerializeField] [Range(.1f, 10f)] private float winchSpeed = 4; //Speed in m/s    
     [SerializeField] private float minSpreaderHeight = 0;
     [SerializeField] private float maxSpreaderHeight = 0;
+    [SerializeField] private float swingDampForce = 0;
 
     private MovementManager movementManager;
     private Rigidbody cabinBody;
@@ -88,7 +89,12 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
             Vector3 vel = spreaderBody.velocity;
             vel.z = cabinBody.velocity.z;
             spreaderBody.velocity = vel;
-        }       
+        }else
+        {
+            if (SpreaderPosition.z - 1 > CabinPosition.z) spreaderBody.AddForce(new Vector3(0, 0, -swingDampForce)); 
+            if (SpreaderPosition.z - 1 < CabinPosition.z) spreaderBody.AddForce(new Vector3(0, 0, swingDampForce)); 
+
+        }
 
     }
 

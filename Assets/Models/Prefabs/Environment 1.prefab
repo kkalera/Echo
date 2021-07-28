@@ -138,7 +138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   containerPrefab: {fileID: 8312439962414590250, guid: 7121b9bd7cc648c4f99e9a7107af146c, type: 3}
   targetPrefab: {fileID: 8860511241922275449, guid: c639ef14830c8944f995c1747b0dfdaf, type: 3}
-  gravityMultiplier: 0
+  gravityMultiplier: 1000
   enableSwing: 1
 --- !u!1 &7794852832115429324
 GameObject:
@@ -450,6 +450,10 @@ PrefabInstance:
       propertyPath: restLength
       value: 105.59567
       objectReference: {fileID: 0}
+    - target: {fileID: 7732633182806058508, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
+      propertyPath: loosenessScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7732633182806058510, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -477,6 +481,10 @@ PrefabInstance:
     - target: {fileID: 7732633183085355704, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
       propertyPath: restLength
       value: 105.59567
+      objectReference: {fileID: 0}
+    - target: {fileID: 7732633183085355704, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
+      propertyPath: loosenessScale
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7732633183085355706, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
       propertyPath: m_Mesh
@@ -534,6 +542,10 @@ PrefabInstance:
       propertyPath: restLength
       value: 105.59567
       objectReference: {fileID: 0}
+    - target: {fileID: 7732633183640204572, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
+      propertyPath: loosenessScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7732633183640204574, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -569,6 +581,10 @@ PrefabInstance:
     - target: {fileID: 7732633184229624846, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
       propertyPath: restLength
       value: 105.59567
+      objectReference: {fileID: 0}
+    - target: {fileID: 7732633184229624846, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
+      propertyPath: loosenessScale
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7732633184313419159, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
       propertyPath: m_ConnectedAnchor.x
