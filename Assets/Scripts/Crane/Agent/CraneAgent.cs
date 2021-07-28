@@ -64,8 +64,8 @@ public class CraneAgent : Agent, IAgent
         float ry = 1f - Mathf.Abs(ap.y - inputY);
 
         AddReward(((rx + rz + ry) / 3) / MaxStep);   */
-        ///////////////////////////
-        if (Mathf.Abs(levelManager.CurrentLevel.Crane.SpreaderPosition.z - 1 - levelManager.CurrentLevel.Crane.CabinPosition.z) > 2) AddReward(-3f/MaxStep);
+        /*-------------------------------------------*/
+        
         RewardData rewardData = levelManager.CurrentLevel.GetReward();
         AddReward(rewardData.reward);
         if (rewardData.endEpisode) EndEpisode();
@@ -99,12 +99,7 @@ public class CraneAgent : Agent, IAgent
                 levelManager.CurrentLevel.Crane.CabinVelocity,
                 0.4f);
 
-                //TODO: remove later
-                actions = AutoPilot.GetInputs(
-                levelManager.CurrentLevel.TargetLocation,
-                levelManager.CurrentLevel.Crane.SpreaderPosition,
-                levelManager.CurrentLevel.Crane.SpreaderVelocity,
-                0.4f);
+                
             }
             
             continuousActions[0] = actions.x;

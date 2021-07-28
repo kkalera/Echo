@@ -89,13 +89,7 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
             Vector3 vel = spreaderBody.velocity;
             vel.z = cabinBody.velocity.z;
             spreaderBody.velocity = vel;
-        }else
-        {
-            if (SpreaderPosition.z - 1 > CabinPosition.z) spreaderBody.AddForce(new Vector3(0, 0, -swingDampForce)); 
-            if (SpreaderPosition.z - 1 < CabinPosition.z) spreaderBody.AddForce(new Vector3(0, 0, swingDampForce)); 
-
         }
-
     }
 
     public void MoveCabin(float val)
