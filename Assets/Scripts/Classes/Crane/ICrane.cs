@@ -41,7 +41,5 @@ public interface ICrane
     Vector3 SpreaderPosition { get; }
     Vector3 SpreaderWorldPosition { get; }
     Vector3 SpreaderVelocity { get; }
-    
-    
-    
+    Vector3 SpreaderAngularVelocity { get; }    
 }

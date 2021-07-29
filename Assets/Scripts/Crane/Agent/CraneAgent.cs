@@ -97,7 +97,8 @@ public class CraneAgent : Agent, IAgent
                 levelManager.CurrentLevel.Crane.CabinPosition,
                 levelManager.CurrentLevel.Crane.SpreaderVelocity,
                 levelManager.CurrentLevel.Crane.CabinVelocity,
-                0.4f);
+                levelManager.CurrentLevel.Crane.SpreaderAngularVelocity,
+                0.25f);
 
                 
             }

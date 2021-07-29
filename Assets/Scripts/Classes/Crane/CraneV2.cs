@@ -57,6 +57,7 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
     public Vector3 CabinVelocity => cabinBody.velocity;
 
     public Vector3 SpreaderVelocity => spreaderBody.velocity;
+    public Vector3 SpreaderAngularVelocity => spreaderBody.angularVelocity;
 
     public float MinSpreaderHeight { get => minSpreaderHeight; set => minSpreaderHeight = value; }
 
