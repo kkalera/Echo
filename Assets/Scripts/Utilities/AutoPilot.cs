@@ -100,9 +100,10 @@ public static class AutoPilot
         float length = Vector3.Distance(spreaderPosition, cabinPosition);
         float maxSpreaderVelocity = Mathf.Sqrt(2 * length * 9.81f *(1 - Mathf.Cos(angle)));       
        
-
-        float distanceToTravelZ = Mathf.Min(Mathf.Abs(targetPosition.z - cabinPosition.z + 1), 4/acceleration);
-        float speedZ = currentKatSpeed.z;
+        
+        float distanceToTravelZ = Mathf.Min(Mathf.Abs(targetPosition.z - spreaderPosition.z), 4/acceleration);
+        distanceToTravelZ += spreaderPosition.z - (cabinPosition.z + 1);
+        float speedZ = currentKatSpeed.z + currentSpreaderSpeed.z - maxSpreaderVelocity;
         
 
         if (spreaderPosition.z - 1 < cabinPosition.z && targetPosition.z < spreaderPosition.z) speedZ += maxSpreaderVelocity;
@@ -112,8 +113,8 @@ public static class AutoPilot
 
         float inputZ = distanceToTravelZ / (Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration);
         //float inputZ = distanceToTravelZ / (Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration);
-        if (distanceToTravelZ < 16) inputZ = (distanceToTravelZ / (Mathf.Max(Mathf.Abs(currentKatSpeed.z), 0.01f) / acceleration)) /
-                    ((4 / acceleration)/ (Mathf.Clamp(maxSpreaderVelocity, 4f, (4 / acceleration))));
+        if (distanceToTravelZ < 16) inputZ = distanceToTravelZ / (Mathf.Max(Mathf.Abs(currentKatSpeed.z), 0.01f) / acceleration) /
+                    (4 / acceleration / Mathf.Clamp(maxSpreaderVelocity, 4f, 4 / acceleration));
        
 
         if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
