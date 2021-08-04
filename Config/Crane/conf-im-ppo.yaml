@@ -25,10 +25,10 @@ behaviors:
         network_settings:
           hidden_units: 256
       gail:
-        strength: 0.01
+        strength: 0.5
         gamma: 0.99
-        demo_path: demos/gp.demo
+        demo_path: demos/gp_swing.demo
     behavioral_cloning:
-      demo_path: demos/gp.demo
+      demo_path: demos/gp_swing.demo
       strength: 0.5
-      steps: 150000
+      steps: 2500000

@@ -103,13 +103,30 @@ public static class AutoPilot
         
         float distanceToTravelZ = Mathf.Min(Mathf.Abs(targetPosition.z - spreaderPosition.z), 4/acceleration);
         distanceToTravelZ += spreaderPosition.z - (cabinPosition.z + 1);
-        float speedZ = currentKatSpeed.z + currentSpreaderSpeed.z - maxSpreaderVelocity;
-        
 
-        if (spreaderPosition.z - 1 < cabinPosition.z && targetPosition.z < spreaderPosition.z) speedZ += maxSpreaderVelocity;
-        if (spreaderPosition.z - 1 > cabinPosition.z && targetPosition.z < spreaderPosition.z) speedZ -= maxSpreaderVelocity;
-        if (spreaderPosition.z - 1 < cabinPosition.z && targetPosition.z > spreaderPosition.z) speedZ -= maxSpreaderVelocity;
-        if (spreaderPosition.z - 1 > cabinPosition.z && targetPosition.z > spreaderPosition.z) speedZ += maxSpreaderVelocity;
+        float speedZ = currentKatSpeed.z + currentSpreaderSpeed.z;
+
+
+        if (spreaderPosition.z - 1 < cabinPosition.z && targetPosition.z < spreaderPosition.z)
+        { 
+            speedZ -= maxSpreaderVelocity;
+            distanceToTravelZ -= Mathf.Abs(spreaderPosition.z - 1 - cabinPosition.z);
+        }
+        if (spreaderPosition.z - 1 > cabinPosition.z && targetPosition.z < spreaderPosition.z)
+        {
+            speedZ += maxSpreaderVelocity;
+            distanceToTravelZ += Mathf.Abs(spreaderPosition.z - 1 - cabinPosition.z);
+        }
+        if (spreaderPosition.z - 1 < cabinPosition.z && targetPosition.z > spreaderPosition.z)
+        {
+            speedZ += maxSpreaderVelocity;
+            distanceToTravelZ += Mathf.Abs(spreaderPosition.z - 1 - cabinPosition.z);
+        }
+        if (spreaderPosition.z - 1 > cabinPosition.z && targetPosition.z > spreaderPosition.z)
+        {
+            speedZ -= maxSpreaderVelocity;
+            distanceToTravelZ -= Mathf.Abs(spreaderPosition.z - 1 - cabinPosition.z);
+        }
 
         float inputZ = distanceToTravelZ / (Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration);
         //float inputZ = distanceToTravelZ / (Mathf.Max(Mathf.Abs(speedZ), 0.05f) / acceleration);

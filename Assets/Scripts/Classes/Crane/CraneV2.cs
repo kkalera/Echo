@@ -139,7 +139,8 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
         JointMotor motor2 = spoolLandLeft.motor;
 
         float currentVelocity = motor.targetVelocity;
-        float acceleration = 360 * Time.deltaTime * Time.timeScale;
+        //float acceleration = 360 * Time.deltaTime * Time.timeScale;
+        float acceleration = 360 * Time.deltaTime;
 
         if (value != 0 && value > currentVelocity)
         {

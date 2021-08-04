@@ -92,7 +92,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   containerPrefab: {fileID: 8312439962414590250, guid: 7121b9bd7cc648c4f99e9a7107af146c, type: 3}
   targetPrefab: {fileID: 8860511241922275449, guid: c639ef14830c8944f995c1747b0dfdaf, type: 3}
-  enableSwing: 0
+  enableSwing: 1
 --- !u!1 &1578054669
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,6 +533,10 @@ PrefabInstance:
     - target: {fileID: 7732633183221991368, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7732633183221991369, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
+      propertyPath: swingDampForce
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7732633183221991371, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
       propertyPath: m_Name

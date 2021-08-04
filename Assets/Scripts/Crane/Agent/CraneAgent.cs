@@ -52,18 +52,21 @@ public class CraneAgent : Agent, IAgent
 
         //////////////////////////////
 
-        /*
-        Vector3 ap = AutoPilot.GetInputs(
+        
+        Vector3 ap = AutoPilot.GetInputsSwing(
                 levelManager.CurrentLevel.TargetLocation,
                 levelManager.CurrentLevel.Crane.SpreaderPosition,
+                levelManager.CurrentLevel.Crane.CabinPosition,
                 levelManager.CurrentLevel.Crane.SpreaderVelocity,
-                0.4f);
+                levelManager.CurrentLevel.Crane.CabinVelocity,
+                levelManager.CurrentLevel.Crane.SpreaderAngularVelocity,
+                0.25f);
 
         float rx = 1f - Mathf.Abs(ap.x - inputX);
         float rz = 1f - Mathf.Abs(ap.z - inputZ);
         float ry = 1f - Mathf.Abs(ap.y - inputY);
 
-        AddReward(((rx + rz + ry) / 3) / MaxStep);   */
+        AddReward(((rx + rz + ry) / 3) / MaxStep);   
         /*-------------------------------------------*/
         
         RewardData rewardData = levelManager.CurrentLevel.GetReward();
