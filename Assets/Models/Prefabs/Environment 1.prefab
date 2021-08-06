@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
-  - {fileID: 1578054670}
+  - {fileID: 587225248}
 --- !u!1 &587225246
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,7 +63,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &587225247
 Transform:
   m_ObjectHideFlags: 0
@@ -109,7 +109,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1578054671
 Transform:
   m_ObjectHideFlags: 0
@@ -236,7 +236,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 2500
+  MaxStep: 10000
   levelManager: {fileID: 535532903}
   inputActionX:
     m_Name: Input Action X

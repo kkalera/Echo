@@ -14,7 +14,7 @@ public class ContainerDeck : CraneLevel
     private ICrane _crane;
     public override ICrane Crane { get => _crane; set => _crane = value; }
 
-    public override Vector3 TargetLocation => currentTarget;  
+    public override Vector3 TargetLocation => currentTarget + new Vector3(0,2.85f,0);  
 
     public override void ClearEnvironment()
     {
@@ -59,7 +59,7 @@ public class ContainerDeck : CraneLevel
         if(!_crane.ContainerGrabbed && Vector3.Distance(_crane.SpreaderWorldPosition, container.position + new Vector3(0,2.85f,0)) < 0.3f)
         {
             _crane.GrabContainer(container);
-            currentTarget = target.position + new Vector3(0, 2.85f,0);
+            currentTarget = target.position;
         }
 
         if(_crane.ContainerGrabbed &&
@@ -75,7 +75,7 @@ public class ContainerDeck : CraneLevel
             container = containerobj.transform;
             container.transform.localPosition = new Vector3(0, 0, Random.Range(-4, 4));
 
-            currentTarget = container.position + new Vector3(0, 2.85f, 0);
+            currentTarget = container.position;
 
         }
     }

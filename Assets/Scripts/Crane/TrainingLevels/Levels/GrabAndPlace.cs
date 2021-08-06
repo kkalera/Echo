@@ -25,7 +25,7 @@ public class GrabAndPlace : CraneLevel
 
     public override RewardData GetReward()
     {
-        if (_crane.ContainerGrabbed && Vector3.Distance(container.position, target.position) < 1)
+        if (_crane.ContainerGrabbed && Vector3.Distance(container.position, target.position) < 2.5)
         {
             _crane.ReleaseContainer(environment);
             return new RewardData(1f, true);
@@ -52,7 +52,7 @@ public class GrabAndPlace : CraneLevel
 
     private void Update()
     {
-        if(!_crane.ContainerGrabbed && Vector3.Distance(_crane.SpreaderWorldPosition, container.position + new Vector3(0,2.85f,0)) < 2)
+        if(!_crane.ContainerGrabbed && Vector3.Distance(_crane.SpreaderWorldPosition, container.position + new Vector3(0,2.85f,0)) < 0.2)
         {
             _crane.GrabContainer(container);
             currentTarget = target.position + new Vector3(0, 2.85f,0);
@@ -63,12 +63,13 @@ public class GrabAndPlace : CraneLevel
     {
         _crane.ReleaseContainer(environment);
         container.transform.rotation = Quaternion.Euler(Vector3.zero);
-        container.transform.localPosition = new Vector3(0, 0, Random.Range(-4,4));
-        //container.transform.localPosition = new Vector3(0, 0, -25);
+        //container.transform.localPosition = new Vector3(0, 0, Random.Range(-4,4));
+        container.transform.localPosition = new Vector3(0, 0, -25);
+
         target.transform.localPosition = new Vector3(0, 0, Random.Range(16, 40));
         
-        //_crane.ResetToPosition(new Vector3(0, 25, 40)); /*------------------*/
-        _crane.ResetToPosition(new Vector3(0, 25, -25));
+        _crane.ResetToPosition(new Vector3(0, 25, 40)); /*------------------*/
+        //_crane.ResetToPosition(new Vector3(0, 25, -25));
 
         currentTarget = container.transform.position + new Vector3(0,2.85f,0);
                 

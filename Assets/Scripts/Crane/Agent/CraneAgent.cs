@@ -66,7 +66,7 @@ public class CraneAgent : Agent, IAgent
         float rz = 1f - Mathf.Abs(ap.z - inputZ);
         float ry = 1f - Mathf.Abs(ap.y - inputY);
 
-        AddReward(((rx + rz + ry) / 3) / MaxStep);   
+        AddReward(((rx + rz + ry) / 3) / Mathf.Max(MaxStep,1));   
         /*-------------------------------------------*/
         
         RewardData rewardData = levelManager.CurrentLevel.GetReward();
