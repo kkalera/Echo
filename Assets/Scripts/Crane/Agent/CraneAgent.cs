@@ -90,7 +90,7 @@ public class CraneAgent : Agent, IAgent
                 levelManager.CurrentLevel.TargetLocation,
                 levelManager.CurrentLevel.Crane.SpreaderPosition,
                 levelManager.CurrentLevel.Crane.SpreaderVelocity,
-                0.4f);
+                0.25f);
             }
             else
             {
@@ -102,8 +102,6 @@ public class CraneAgent : Agent, IAgent
                 levelManager.CurrentLevel.Crane.CabinVelocity,
                 levelManager.CurrentLevel.Crane.SpreaderAngularVelocity,
                 0.25f);
-
-                
             }
             
             continuousActions[0] = actions.x;
