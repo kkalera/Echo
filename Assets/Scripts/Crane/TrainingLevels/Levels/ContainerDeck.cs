@@ -13,7 +13,9 @@ public class ContainerDeck : CraneLevel
     private Vector3 currentTarget;
     private ICrane _crane;
     public override ICrane Crane { get => _crane; set => _crane = value; }
-
+    private float timeSinceCloser = 0f;
+    private float closestDistance = 0f;
+    private bool endBecauseTime = false;
     public override Vector3 TargetLocation => currentTarget + new Vector3(0,2.85f,0);  
 
     public override void ClearEnvironment()
@@ -29,6 +31,7 @@ public class ContainerDeck : CraneLevel
 
     public override RewardData GetReward()
     {
+        if (endBecauseTime) return new RewardData(0, true);
         if (!_crane.ContainerGrabbed && target.position.z < 15f)
         {
             _crane.ReleaseContainer(environment);
@@ -76,8 +79,17 @@ public class ContainerDeck : CraneLevel
             container.transform.localPosition = new Vector3(0, 0, Random.Range(-4, 4));
 
             currentTarget = container.position;
-
         }
+
+        float currDistance = Mathf.Abs(_crane.SpreaderPosition.z - currentTarget.z);
+        if (currDistance < closestDistance)
+        {
+            timeSinceCloser = Time.time;
+            closestDistance = currDistance;
+        } else {
+            if (timeSinceCloser + (15 / Time.timeScale) < Time.time) endBecauseTime = true;
+        }
+        
     }
 
     public override void ResetEnvironment()
@@ -91,6 +103,10 @@ public class ContainerDeck : CraneLevel
         target.transform.localPosition = new Vector3(0, 0, 40);
         _crane.ResetToPosition(new Vector3(0, 25, Random.Range(-25,40)));
         currentTarget = container.transform.position;
+
+        endBecauseTime = true;
+        closestDistance = 100;
+        timeSinceCloser = Time.time;
     }
 
     public override void SetCraneRestrictions()

@@ -107,10 +107,9 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
         {
             if(Mathf.Abs((CabinPosition.z + 1) - SpreaderPosition.z) > maxSwingDistance)
             {
-                Vector3 vel = spreaderBody.velocity;
-                vel.z = cabinBody.velocity.z;
-
-                AccelerateTo(spreaderBody, vel, 1000);
+                float zDiff = CabinVelocity.z - SpreaderVelocity.z;
+                Vector3 force = new Vector3(0, 0, zDiff / Time.deltaTime);
+                spreaderBody.AddForce(force, ForceMode.Acceleration);
             }
         }
     }
