@@ -94,6 +94,7 @@ public class CraneAgent : Agent, IAgent
             }
             else
             {
+                /*
                 actions = AutoPilot.GetInputsSwing(
                 levelManager.CurrentLevel.TargetLocation,
                 levelManager.CurrentLevel.Crane.SpreaderPosition,
@@ -101,9 +102,17 @@ public class CraneAgent : Agent, IAgent
                 levelManager.CurrentLevel.Crane.SpreaderVelocity,
                 levelManager.CurrentLevel.Crane.CabinVelocity,
                 levelManager.CurrentLevel.Crane.SpreaderAngularVelocity,
+                0.25f);*/
+
+                actions = AutoPilot.GetInputs(
+                levelManager.CurrentLevel.TargetLocation,
+                levelManager.CurrentLevel.Crane.SpreaderPosition,
+                levelManager.CurrentLevel.Crane.SpreaderVelocity,
                 0.25f);
+
             }
-            
+            Utils.ClearLogConsole();
+            Debug.Log(actions.z);
             continuousActions[0] = actions.x;
             continuousActions[1] = actions.y;
             continuousActions[2] = actions.z;

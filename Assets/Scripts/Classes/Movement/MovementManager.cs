@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementManager : MonoBehaviour
+public class MovementManager:MonoBehaviour
 {
     /// <summary>
     /// Function that calculates the next speed in an acceleration movement
@@ -12,6 +12,9 @@ public class MovementManager : MonoBehaviour
     /// <param name="acceleration"> The amount of acceleration from max speed (value between 0 and 1) </param>
     /// <param name="maxSpeed"> The maximum speed </param>
     /// <returns></returns>
+    /// 
+    
+
     public float GetNextSpeed(float inputValue, float currentSpeed, float acceleration, float maxSpeed)
     {
         float requestedSpeed = inputValue * maxSpeed;
@@ -38,4 +41,5 @@ public class MovementManager : MonoBehaviour
 
         return speed;
     }
+
 }

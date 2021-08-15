@@ -10,6 +10,8 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
     [SerializeField] private bool cabinMovementEnabled = true;
     [SerializeField] private bool winchMovementEnabled = true;
     [SerializeField] private bool swingDisabled = true;
+    [SerializeField] private bool swingLimit = false;
+    [SerializeField] [Range(0.1f, 10f)] private float maxSwingDistance = 1;
 
     [Space(20)]
     [Header("Crane parts")]
@@ -35,12 +37,12 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
     [SerializeField] private float minSpreaderHeight = 0;
     [SerializeField] private float maxSpreaderHeight = 0;
     [SerializeField] private float swingDampForce = 0;
-
-    private MovementManager movementManager;
+    
     private Rigidbody cabinBody;
     private Rigidbody craneBody;
     private Rigidbody spreaderBody;
     private Transform currentContainer;
+    private MovementManager movementManager;
 
     public Vector3 CabinPosition => cabin.position - transform.parent.position;
     public Vector3 CabinWorldPosition => cabin.position;
@@ -71,13 +73,23 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
 
     public bool ContainerGrabbed { get => currentContainer != null; }
 
+    private static void AccelerateTo(Rigidbody body, Vector3 targetVelocity, float maxAccel)
+    {
+        Vector3 deltaV = targetVelocity - body.velocity;
+        Vector3 accel = deltaV / Time.deltaTime;
+
+        if (accel.sqrMagnitude > maxAccel * maxAccel)
+            accel = accel.normalized * maxAccel;
+
+        body.AddForce(accel, ForceMode.Acceleration);
+    }
 
     private void Start()
     {
-        movementManager = GetComponent<MovementManager>();
         cabinBody = cabin.GetComponent<Rigidbody>();
         spreaderBody = spreader.GetComponent<Rigidbody>();
         craneBody = GetComponent<Rigidbody>();
+        movementManager = GetComponent<MovementManager>();
         maxSpreaderHeight = cabin.localPosition.y - 5;
     }
 
@@ -91,6 +103,16 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
             vel.z = cabinBody.velocity.z;
             spreaderBody.velocity = vel;
         }
+        if(!swingDisabled && swingLimit)
+        {
+            if(Mathf.Abs((CabinPosition.z + 1) - SpreaderPosition.z) > maxSwingDistance)
+            {
+                Vector3 vel = spreaderBody.velocity;
+                vel.z = cabinBody.velocity.z;
+
+                AccelerateTo(spreaderBody, vel, 1000);
+            }
+        }
     }
 
     public void MoveCabin(float val)
@@ -98,10 +120,11 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
         if (!cabinMovementEnabled) return;
         if (cabin.localPosition.z > 45 && val > 0) val = 0;
         if (cabin.localPosition.z < -30 && val < 0) val = 0;
-        float targetSpeed = movementManager.GetNextSpeed(val, cabinBody.velocity.z, cabinAcceleration, cabinSpeed);
+        /*float targetSpeed = MovementManager.GetNextSpeed(val, cabinBody.velocity.z, cabinAcceleration, cabinSpeed);
         Vector3 newVelocity = cabinBody.velocity;
         newVelocity.z = targetSpeed;
-        cabinBody.velocity = newVelocity;
+        cabinBody.velocity = newVelocity;*/
+        AccelerateTo(cabinBody, new Vector3(0, 0, 4 * val), 1f);
     }
 
     public void MoveCrane(float val)

@@ -39,8 +39,7 @@ public static class AutoPilot
 
     }
     public static Vector3 GetInputsSwing(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 cabinPosition, Vector3 currentSpreaderSpeed, Vector3 currentKatSpeed,Vector3 spreaderAngularVelocity, float acceleration)
-    {
-        Utils.ClearLogConsole();
+    {        
         Vector3 inputs = new Vector3(0, 0, 0);
 
         // Get the next position in case we can't travel straight towards the provided target
@@ -67,16 +66,15 @@ public static class AutoPilot
         float inputZ = distanceToTravelZKat / 16;
         
         float speedZ = Mathf.Abs(currentKatSpeed.z);
-        if (cabinPosition.z - 1 > spreaderPosition.z) speedZ -= maxSpreaderVelocity;
-        if (cabinPosition.z - 1 < spreaderPosition.z) speedZ += maxSpreaderVelocity;
-        if (Mathf.Approximately(inputZ, 1f)) speedZ = maxSpreaderVelocity;
+        if (cabinPosition.z - 1 > spreaderPosition.z) speedZ += maxSpreaderVelocity;
+        if (cabinPosition.z - 1 < spreaderPosition.z) speedZ -= maxSpreaderVelocity;        
         //if (Mathf.Approximately(inputZ, 1)) speedZ = maxSpreaderVelocity;
 
         //float inputZ = distanceToTravelZKat / (Mathf.Max(speedZ, 0.05f) / acceleration);
 
         float inputSwing =  (Mathf.Abs((cabinPosition.z -1) - spreaderPosition.z) / (Mathf.Max(speedZ, 0.05f) / acceleration));
         //if(inputZ > 0.95f) inputSwing = Mathf.Min((speedZ / (16 * inputZ)), 1);
-        inputSwing = 1 - Mathf.Min((speedZ / 16), 1); // afbouwen
+        inputSwing = Mathf.Min((speedZ / 16), 1); // afbouwen
         //inputSwing = Mathf.Min((Mathf.Min(maxSpreaderVelocity,16) / (16 * inputZ)), 1);
         inputZ -= inputSwing;
         inputZ = Mathf.Clamp(inputZ, 0, 1);

@@ -80,7 +80,7 @@ public class GrabAndPlace : CraneLevel
         _crane.CraneMovementDisabled = true;
         _crane.CabinMovementDisabled = false;        
         _crane.WinchMovementDisabled = false;
-        _crane.SwingDisabled = !enableSwing;        
+        _crane.SwingDisabled = !enableSwing;
         _crane.SetWinchLimits(0, 30);
     }
 }
