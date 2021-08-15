@@ -33,7 +33,6 @@ public static class AutoPilot
         if (float.IsNaN(inputZ)) inputZ = 0;
 
         inputs.y = Mathf.Clamp(inputY, -1, 1);
-        inputs.y = 0;
         inputs.z = Mathf.Clamp(inputZ, -1, 1);
 
         return inputs;
@@ -61,30 +60,31 @@ public static class AutoPilot
         float maxSpreaderVelocity = Mathf.Sqrt(2 * 9.81f * length * (1 - Mathf.Cos(angle)));
         //maxSpreaderVelocity /= 10;
 
-        float distanceToTravelZSpreader = Mathf.Min(Mathf.Abs(targetPosition.z - spreaderPosition.z ), 4 / acceleration);
-        float distanceToTravelZKat = Mathf.Min(16 ,Mathf.Abs(targetPosition.z - (cabinPosition.z-1)));
+        float distanceToTravelZSpreader = Mathf.Min(16, Mathf.Abs(targetPosition.z - spreaderPosition.z ));
+        float distanceToTravelZKat = Mathf.Min(16 ,Mathf.Abs(targetPosition.z - (cabinPosition.z+1)));
         float dDiff = Mathf.Abs((cabinPosition.z - 1) - spreaderPosition.z);
 
         float inputZ = distanceToTravelZKat / 16;
-
-        float speedZ = currentKatSpeed.z;        
-        if (cabinPosition.z - 1 > spreaderPosition.z && inputZ < 0.95f) speedZ += maxSpreaderVelocity;
-        if (cabinPosition.z - 1 < spreaderPosition.z && inputZ < 0.95f) speedZ -= maxSpreaderVelocity;
+        
+        float speedZ = Mathf.Abs(currentKatSpeed.z);
+        if (cabinPosition.z - 1 > spreaderPosition.z) speedZ -= maxSpreaderVelocity;
+        if (cabinPosition.z - 1 < spreaderPosition.z) speedZ += maxSpreaderVelocity;
+        if (Mathf.Approximately(inputZ, 1f)) speedZ = maxSpreaderVelocity;
+        //if (Mathf.Approximately(inputZ, 1)) speedZ = maxSpreaderVelocity;
 
         //float inputZ = distanceToTravelZKat / (Mathf.Max(speedZ, 0.05f) / acceleration);
 
-
-        Debug.Log(inputZ);
         float inputSwing =  (Mathf.Abs((cabinPosition.z -1) - spreaderPosition.z) / (Mathf.Max(speedZ, 0.05f) / acceleration));
         //if(inputZ > 0.95f) inputSwing = Mathf.Min((speedZ / (16 * inputZ)), 1);
-        inputSwing = Mathf.Min((speedZ / 16), 1);
-        //float inputSwing = 1 - Mathf.Min((speedZ / (16 * inputZ)), 1);
+        inputSwing = 1 - Mathf.Min((speedZ / 16), 1); // afbouwen
+        //inputSwing = Mathf.Min((Mathf.Min(maxSpreaderVelocity,16) / (16 * inputZ)), 1);
         inputZ -= inputSwing;
         inputZ = Mathf.Clamp(inputZ, 0, 1);
+        inputY *= inputSwing;
         
 
         if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
-        if (targetPosition.z < cabinPosition.z - 1) inputZ = -inputZ;
+        if (targetPosition.z < spreaderPosition.z) inputZ = -inputZ;
        
         if (float.IsNaN(inputY)) inputY = 0;
         if (float.IsNaN(inputZ)) inputZ = 0;
