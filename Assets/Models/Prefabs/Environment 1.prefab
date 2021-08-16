@@ -138,8 +138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   containerPrefab: {fileID: 8312439962414590250, guid: 7121b9bd7cc648c4f99e9a7107af146c, type: 3}
   targetPrefab: {fileID: 8860511241922275449, guid: c639ef14830c8944f995c1747b0dfdaf, type: 3}
-  gravityMultiplier: 1000
-  enableSwing: 1
+  allowedSwing: 0.01
 --- !u!1 &7794852832115429324
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,6 +458,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7732633182810449333, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7732633182810449333, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
       propertyPath: m_Constraints
       value: 0
       objectReference: {fileID: 0}
@@ -535,8 +538,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7732633183221991369, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
+      propertyPath: swingLimit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7732633183221991369, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
       propertyPath: swingDampForce
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7732633183221991369, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
+      propertyPath: maxSwingDistance
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7732633183221991371, guid: bcfb4c0c0c0695446b8f09c0e615174f, type: 3}
       propertyPath: m_Name

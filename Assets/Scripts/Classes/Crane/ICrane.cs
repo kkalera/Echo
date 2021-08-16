@@ -16,6 +16,7 @@ public interface ICrane
     void MoveCabin(float val);
     void MoveWinch(float value);
     float MinSpreaderHeight { get; set; }
+    float SwingLimit { get; set; }
     bool SwingDisabled { set; get; }
     bool CraneMovementDisabled { set; get; }
     bool CabinMovementDisabled { set; get; }

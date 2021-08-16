@@ -36,7 +36,6 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
     [SerializeField] [Range(.1f, 10f)] private float winchSpeed = 4; //Speed in m/s    
     [SerializeField] private float minSpreaderHeight = 0;
     [SerializeField] private float maxSpreaderHeight = 0;
-    [SerializeField] private float swingDampForce = 0;
     
     private Rigidbody cabinBody;
     private Rigidbody craneBody;
@@ -62,11 +61,14 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
     public Vector3 SpreaderAngularVelocity => spreaderBody.angularVelocity;
 
     public float MinSpreaderHeight { get => minSpreaderHeight; set => minSpreaderHeight = value; }
+    public float SwingLimit { get => maxSwingDistance; set => maxSwingDistance = value; }
 
     public bool SwingDisabled { get => swingDisabled; set => swingDisabled = value; }
     public bool CraneMovementDisabled { get => !craneMovementEnabled; set => craneMovementEnabled = !value; }
     public bool CabinMovementDisabled { get => !cabinMovementEnabled; set => cabinMovementEnabled = !value; }
     public bool WinchMovementDisabled { get => !winchMovementEnabled; set => winchMovementEnabled = !value; }
+
+    
     
 
     public Transform Transform { get => transform; }
@@ -103,15 +105,14 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
             vel.z = cabinBody.velocity.z;
             spreaderBody.velocity = vel;
         }
-        if(!swingDisabled && swingLimit)
+                
+        if(Mathf.Abs((CabinPosition.z + 1) - SpreaderPosition.z) > maxSwingDistance)
         {
-            if(Mathf.Abs((CabinPosition.z + 1) - SpreaderPosition.z) > maxSwingDistance)
-            {
-                float zDiff = CabinVelocity.z - SpreaderVelocity.z;
-                Vector3 force = new Vector3(0, 0, zDiff / Time.deltaTime);
-                spreaderBody.AddForce(force, ForceMode.Acceleration);
-            }
+            float zDiff = CabinVelocity.z - SpreaderVelocity.z;
+            Vector3 force = new Vector3(0, 0, zDiff / (Time.deltaTime/Time.timeScale));
+            spreaderBody.AddForce(force, ForceMode.Acceleration);
         }
+        
     }
 
     public void MoveCabin(float val)

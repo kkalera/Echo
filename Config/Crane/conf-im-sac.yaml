@@ -27,9 +27,9 @@ behaviors:
         learning_rate: 0.0003
         use_actions: false
         use_vail: false
-        demo_path: demos/gp_swing.demo
+        demo_path: demos/gp.demo
     behavioral_cloning:
-      demo_path: demos/gp_swing.demo
+      demo_path: demos/gp.demo
       strength: 1.0
       steps: 50000
     keep_checkpoints: 5
