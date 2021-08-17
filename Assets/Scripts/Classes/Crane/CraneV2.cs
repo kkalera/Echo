@@ -10,7 +10,6 @@ public class CraneV2 : MonoBehaviour, ICrane, ICollisionReceiver
     [SerializeField] private bool cabinMovementEnabled = true;
     [SerializeField] private bool winchMovementEnabled = true;
     [SerializeField] private bool swingDisabled = true;
-    [SerializeField] private bool swingLimit = false;
     [SerializeField] [Range(0.1f, 10f)] private float maxSwingDistance = 1;
 
     [Space(20)]

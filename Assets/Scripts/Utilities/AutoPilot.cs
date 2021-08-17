@@ -67,29 +67,34 @@ public static class AutoPilot
         
         float speedZ = Mathf.Abs(currentKatSpeed.z);
         if (cabinPosition.z - 1 > spreaderPosition.z) speedZ += maxSpreaderVelocity;
-        if (cabinPosition.z - 1 < spreaderPosition.z) speedZ -= maxSpreaderVelocity;        
-        //if (Mathf.Approximately(inputZ, 1)) speedZ = maxSpreaderVelocity;
-
-        //float inputZ = distanceToTravelZKat / (Mathf.Max(speedZ, 0.05f) / acceleration);
-
-        float inputSwing =  (Mathf.Abs((cabinPosition.z -1) - spreaderPosition.z) / (Mathf.Max(speedZ, 0.05f) / acceleration));
-        //if(inputZ > 0.95f) inputSwing = Mathf.Min((speedZ / (16 * inputZ)), 1);
+        if (cabinPosition.z - 1 < spreaderPosition.z) speedZ -= maxSpreaderVelocity;
+     
+        float inputSwing = 0;
         inputSwing = Mathf.Min((speedZ / 16), 1); // afbouwen
-        //inputSwing = Mathf.Min((Mathf.Min(maxSpreaderVelocity,16) / (16 * inputZ)), 1);
-        inputZ -= inputSwing;
-        inputZ = Mathf.Clamp(inputZ, 0, 1);
-        inputY *= inputSwing;
+        inputSwing = Mathf.Min((maxSpreaderVelocity / 16), 1); // opbouwen
+
+        if(inputZ > 0.95f) inputSwing = Mathf.Min((maxSpreaderVelocity / 16), 1); // opbouwen
+        if(inputZ < 1) inputSwing = Mathf.Min((speedZ / 16), 1); // afbouwen
+        inputZ -= inputSwing; // Sorta works...
+
+
         
 
+
+        inputZ = Mathf.Clamp(inputZ, 0, 1);
+        inputY *= Mathf.Abs(inputSwing);
+        Utils.ClearLogConsole();
+        Debug.Log(inputSwing);
+
         if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
-        if (targetPosition.z < spreaderPosition.z) inputZ = -inputZ;
+        if (targetPosition.z < (cabinPosition.z + 1)) inputZ = -inputZ;
        
         if (float.IsNaN(inputY)) inputY = 0;
         if (float.IsNaN(inputZ)) inputZ = 0;
 
         inputs.y = Mathf.Clamp(inputY, -1, 1);
         inputs.z = Mathf.Clamp(inputZ, -1, 1);
-        inputs.y = 0;
+        //inputs.y = 0;
      
         return inputs;
 
