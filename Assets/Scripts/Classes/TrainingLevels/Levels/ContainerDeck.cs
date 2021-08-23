@@ -25,8 +25,12 @@ public class ContainerDeck : CraneLevel
         {
             Destroy(c);
         }
-        
-        Destroy(environment.Find("targetPlane").gameObject);
+
+        GameObject[] targets = GameObject.FindGameObjectsWithTag("targetPlane");
+        foreach (GameObject c in targets)
+        {
+            Destroy(c);
+        }        
     }
 
     public override RewardData GetReward()
@@ -52,6 +56,7 @@ public class ContainerDeck : CraneLevel
 
         GameObject targetobj = Instantiate(targetPrefab, this.environment);
         targetobj.name = "targetPlane";
+        targetobj.tag = "targetPlane";
         target = targetobj.transform;
         
     }
