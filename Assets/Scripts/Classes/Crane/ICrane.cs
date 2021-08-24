@@ -22,6 +22,7 @@ public interface ICrane
     bool WinchMovementDisabled { set; get; }
 
     bool ContainerGrabbed { get; }
+    bool SpreaderGrounded { get; }
 
     Transform Transform { get; }
     void ResetToRandomPosition();

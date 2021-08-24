@@ -31,8 +31,7 @@ behaviors:
     behavioral_cloning:
       demo_path: demos/CD-no-swing.demo
       strength: 1.0
-      samples_per_update: 25000
-      steps: 100000
+      steps: 20000
     keep_checkpoints: 5
     max_steps: 100000000
     time_horizon: 128

@@ -15,6 +15,7 @@ TagManager:
   - ground
   - goal
   - targetPlane
+  - placed-container
   layers:
   - Default
   - TransparentFX

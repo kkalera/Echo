@@ -8,8 +8,7 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
     [Header("Crane state")]
     [SerializeField] private bool craneMovementEnabled = true;
     [SerializeField] private bool cabinMovementEnabled = true;
-    [SerializeField] private bool winchMovementEnabled = true;
-    [SerializeField] private bool swingDisabled = true;
+    [SerializeField] private bool winchMovementEnabled = true;    
     [SerializeField] [Range(0.1f, 10f)] private float maxSwingDistance = 1;
 
     [Space(20)]
@@ -58,6 +57,7 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
     public bool WinchMovementDisabled { get => !winchMovementEnabled; set => winchMovementEnabled = !value; }
     public Transform Transform { get => transform; }
     public bool ContainerGrabbed { get => currentContainer != null; }
+    public bool SpreaderGrounded { get => IsSpreaderGrounded(); }
 
     private static void AccelerateTo(Rigidbody body, Vector3 targetVelocity, float maxAccel)
     {
@@ -80,16 +80,8 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
 
     private void Update()
     {
-        /*
-        if (swingDisabled)
-        {
-            spreader.localPosition = new Vector3(cabin.localPosition.x, spreader.localPosition.y, cabin.localPosition.z + 1);
-            
-            Vector3 vel = spreaderBody.velocity;
-            vel.z = cabinBody.velocity.z;
-            spreaderBody.velocity = vel;
-        }*/
-                
+        Utils.ClearLogConsole();
+        Debug.Log(IsSpreaderGrounded());
         if(Mathf.Abs((CabinPosition.z + 1) - SpreaderPosition.z) > maxSwingDistance)
         {
             float zDiff = CabinVelocity.z - SpreaderVelocity.z;
@@ -280,6 +272,30 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
         }
     }
 
+    private bool IsSpreaderGrounded()
+    {
+                Collider[] hitGroundColliders = new Collider[3];
+                var o = spreader.gameObject;
+                Physics.OverlapBoxNonAlloc(
+                    o.transform.position + new Vector3(0, -0.05f, 0),
+                    new Vector3(0.95f / 2f, 0.5f, 0.95f / 2f),
+                    hitGroundColliders,
+                    o.transform.rotation);
+                var grounded = false;
+                foreach (var col in hitGroundColliders)
+                {
+                    if (col != null && col.transform != transform &&
+                        (col.CompareTag("placed-container") ||
+                         col.CompareTag("ground")
+                         ))
+                    {
+                        grounded = true; //then we're grounded
+                        break;
+                    }
+                }
+                return grounded;
+            
+        }
     public void OnCollisionEnter(Collision collision)
     {
     }
