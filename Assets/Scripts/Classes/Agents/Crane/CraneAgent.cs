@@ -65,7 +65,7 @@ public class CraneAgent : Agent, IAgent
                 levelManager.CurrentLevel.TargetLocation,
                 levelManager.CurrentLevel.Crane.SpreaderPosition,
                 levelManager.CurrentLevel.Crane.SpreaderVelocity,
-                0.25f);
+                0.25f, levelManager.CurrentLevel.Crane.CabinPosition);
 
         float rx = 1f - Mathf.Abs(ap.x - inputX);
         float rz = 1f - Mathf.Abs(ap.z - inputZ);
@@ -94,7 +94,7 @@ public class CraneAgent : Agent, IAgent
                 levelManager.CurrentLevel.TargetLocation,
                 levelManager.CurrentLevel.Crane.SpreaderPosition,
                 levelManager.CurrentLevel.Crane.SpreaderVelocity,
-                0.25f);
+                0.25f, levelManager.CurrentLevel.Crane.CabinPosition);
 
             continuousActions[0] = actions.x;
             continuousActions[1] = actions.y;

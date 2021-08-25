@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class AutoPilot
 {
-    public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, float acceleration)
+    public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, float acceleration, Vector3 cabinPosition)
     {
 
         Vector3 inputs = new Vector3(0, 0, 0);
@@ -18,6 +18,7 @@ public static class AutoPilot
 
         if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
         if (targetPosition.z < spreaderPosition.z) inputZ = -inputZ;
+        if (Mathf.Abs(spreaderPosition.z - (cabinPosition.z + 1)) > 0.25) inputZ = 0;
 
         if (float.IsNaN(inputY)) inputY = 0;
         if (float.IsNaN(inputZ)) inputZ = 0;
@@ -95,7 +96,8 @@ public static class AutoPilot
         }
 
 
-        if (spreaderPosition.y - targetPosition.y > 1 && spreaderPosition.z > 4 && Mathf.Abs(spreaderPosition.z - targetPosition.z) < r) targetPosition.z -= 0.25f;
+        if (Mathf.Abs(spreaderPosition.y - targetPosition.y) > 1 && spreaderPosition.z > 4 && Mathf.Abs(spreaderPosition.z - targetPosition.z) < r) targetPosition.z -= 0.5f;
+      
         return targetPosition;
     }
 
