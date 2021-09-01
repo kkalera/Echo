@@ -32,7 +32,7 @@ public class TestEnvironment : MonoBehaviour
             crane.CabinPosition,
             crane.SpreaderVelocity,
             crane.CabinVelocity,
-            crane.SpreaderAngularVelocity,
+            crane.SpreaderRotation,
             1f
             );
 

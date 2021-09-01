@@ -7,13 +7,13 @@ public class ContainerDeck : CraneLevel
     [SerializeField] private GameObject containerPrefab;
     [SerializeField] private GameObject targetPrefab;
     [SerializeField] private Transform firstContainerOnDeck;
-    public bool enableSwing;
     private Transform container;
     private Transform target;
     private Transform environment;
     private Vector3 currentTarget;
     private ICrane _crane;
-    
+    private bool grabRewarded = false;
+
     public override ICrane Crane { get => _crane; set => _crane = value; }
 
     public override Vector3 TargetLocation => currentTarget + new Vector3(0,2.85f,0);  
@@ -28,9 +28,9 @@ public class ContainerDeck : CraneLevel
 
         GameObject[] targets = GameObject.FindGameObjectsWithTag("targetPlane");
         foreach (GameObject c in targets)
-        {
-            Destroy(c);
-        }        
+        {            
+            Destroy(c);                        
+        }
     }
 
     public override RewardData GetReward()
@@ -39,6 +39,11 @@ public class ContainerDeck : CraneLevel
         {
             _crane.ReleaseContainer(environment);
             return new RewardData(1f, true);
+        }
+        if(_crane.ContainerGrabbed && !grabRewarded)
+        {
+            grabRewarded = true;
+            return new RewardData(1f, false);
         }
         return new RewardData();
     }
@@ -74,6 +79,7 @@ public class ContainerDeck : CraneLevel
             Mathf.Abs(container.position.z - currentTarget.z) < 0.3f)
         {
             _crane.ReleaseContainer(environment);
+            grabRewarded = false;
             target.position = container.position - new Vector3(0, 0, 2.55f);
 
             GameObject containerobj = Instantiate(containerPrefab, this.environment);
@@ -97,6 +103,8 @@ public class ContainerDeck : CraneLevel
         target.transform.position = firstContainerOnDeck.position - new Vector3(0, 0, 2.65f);
         _crane.ResetToPosition(new Vector3(0, 25, Random.Range(-25,40)));
         currentTarget = container.transform.position;
+
+        grabRewarded = false;
     }
 
     public override void SetCraneRestrictions()
@@ -107,4 +115,5 @@ public class ContainerDeck : CraneLevel
         _crane.SwingLimit = 0.01f;
         _crane.SetWinchLimits(0, 30);
     }
+
 }

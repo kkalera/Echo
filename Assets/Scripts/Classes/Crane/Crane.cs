@@ -49,7 +49,7 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
     public Vector3 CraneVelocity => craneBody.velocity;
     public Vector3 CabinVelocity => cabinBody.velocity;
     public Vector3 SpreaderVelocity => spreaderBody.velocity;
-    public Vector3 SpreaderAngularVelocity => spreaderBody.angularVelocity;
+    public Vector3 SpreaderRotation => spreaderBody.rotation.eulerAngles;
     public float MinSpreaderHeight { get => minSpreaderHeight; set => minSpreaderHeight = value; }
     public float SwingLimit { get => maxSwingDistance; set => maxSwingDistance = value; }
     public bool CraneMovementDisabled { get => !craneMovementEnabled; set => craneMovementEnabled = !value; }
@@ -80,8 +80,6 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
 
     private void Update()
     {
-        Utils.ClearLogConsole();
-        Debug.Log(IsSpreaderGrounded());
         if(Mathf.Abs((CabinPosition.z + 1) - SpreaderPosition.z) > maxSwingDistance)
         {
             float zDiff = CabinVelocity.z - SpreaderVelocity.z;
@@ -295,13 +293,16 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
                 }
                 return grounded;
             
-        }
+    }
+    private void FixedUpdate()
+    {
+        
+    }
     public void OnCollisionEnter(Collision collision)
     {
     }
     public void OnCollisionStay(Collision collision)
     {
-
     }
     public void OnCollisionExit(Collision collision)
     {

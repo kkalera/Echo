@@ -129,6 +129,15 @@ public class CraneAgent : Agent, IAgent
     {
         if (col.collider.CompareTag("dead")) EndEpisode();
         if (col.collider.CompareTag("crane")) EndEpisode();
+
+        ContactPoint[] cps = col.contacts;
+        foreach (ContactPoint cp in cps)
+        {            
+            if (cp.point.y > levelManager.CurrentLevel.TargetLocation.y + 3.75f)
+            {
+                EndEpisode();
+            }
+        }
     }
 
     public void OnTriggerEnter(Collider other)
