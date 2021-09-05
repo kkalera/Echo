@@ -81,16 +81,18 @@ public static class AutoPilot
     {
         bool hasToCrossLeg = spreaderPosition.z > 10.5f && targetPosition.z < 10.5f;
         if (!hasToCrossLeg) hasToCrossLeg = spreaderPosition.z > -10.5f && targetPosition.z < -10.5f;
-        if (!hasToCrossLeg) hasToCrossLeg = ((spreaderPosition.z > -10.5f && spreaderPosition.z < 10.5f) && (targetPosition.z > 10.5f || targetPosition.z < -10.5f));
+        if (!hasToCrossLeg) hasToCrossLeg = ((spreaderPosition.z > -10.5f && spreaderPosition.z < 10.5f) &&
+                (targetPosition.z > 10.5f || targetPosition.z < -10.5f));
 
 
         // Check if we're to far from the target to lower the spreader        
         float r = (spreaderPosition.y * 0.2f) + 1;
-        if (spreaderPosition.y < 19 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg)
+        if (spreaderPosition.y < 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg)
         {
-            targetPosition = new Vector3(0, 25f, spreaderPosition.z);
+            //targetPosition = new Vector3(0, 25f, spreaderPosition.z);
+            targetPosition = new Vector3(0, 25f, 4);
         }
-        else if (spreaderPosition.y >= 19 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
+        else if (spreaderPosition.y >= 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
         {
             targetPosition = new Vector3(0, spreaderPosition.y, targetPosition.z);
         }
