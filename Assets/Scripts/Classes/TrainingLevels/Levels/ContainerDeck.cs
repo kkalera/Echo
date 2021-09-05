@@ -74,7 +74,8 @@ public class ContainerDeck : CraneLevel
 
     private void Update()
     {
-        if(!_crane.ContainerGrabbed && Vector3.Distance(_crane.SpreaderWorldPosition, container.position + new Vector3(0,2.85f,0)) < 0.1f)
+        if(!_crane.ContainerGrabbed &&
+            Vector3.Distance(_crane.SpreaderWorldPosition, container.position + new Vector3(0,2.85f,0)) < 0.1f)
         {
             _crane.GrabContainer(container);
             currentTarget = target.position;

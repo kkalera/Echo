@@ -130,13 +130,7 @@ public class CraneAgent : Agent, IAgent
         if (col.collider.CompareTag("dead")) EndEpisode();
         if (col.collider.CompareTag("crane")) EndEpisode();
 
-        ContactPoint[] cps = col.contacts;
-        foreach (ContactPoint cp in cps)
-        {                
-        }
-        Utils.ClearLogConsole();
-        Debug.Log(col.collider.tag);
-        Debug.Log(col.relativeVelocity);     
+     
     }
 
     public void OnTriggerEnter(Collider other)
