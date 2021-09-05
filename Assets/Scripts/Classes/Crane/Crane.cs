@@ -59,7 +59,7 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
     public bool ContainerGrabbed { get => currentContainer != null; }
     public bool SpreaderGrounded { get => IsSpreaderGrounded(); }
 
-    private static void AccelerateTo(Rigidbody body, Vector3 targetVelocity, float maxAccel)
+    private static void AccelerateTo(Rigidbody body, Vector3 targetVelocity, float maxAccel, ForceMode forceMode = ForceMode.Acceleration)
     {
         Vector3 deltaV = targetVelocity - body.velocity;
         Vector3 accel = deltaV / Time.deltaTime;
@@ -67,7 +67,7 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
         if (accel.sqrMagnitude > maxAccel * maxAccel)
             accel = accel.normalized * maxAccel;
 
-        body.AddForce(accel, ForceMode.Acceleration);
+        body.AddForce(accel, forceMode);
     }
 
     private void Start()
@@ -83,9 +83,9 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
         if(Mathf.Abs((CabinPosition.z + 1) - SpreaderPosition.z) > maxSwingDistance)
         {
             float zDiff = (CabinPosition.z + 1) - SpreaderPosition.z;
-            Vector3 vel = cabinBody.velocity;
-            vel.z += zDiff;
-            AccelerateTo(spreaderBody, vel, 8);
+            Vector3 vel = spreaderBody.velocity;
+            vel.z = cabinBody.velocity.z + zDiff;
+            AccelerateTo(spreaderBody, vel, 1000, ForceMode.Acceleration);
             /*
             float zDiff = CabinVelocity.z - SpreaderVelocity.z;
             Vector3 force = new Vector3(0, 0, zDiff / (Time.deltaTime / Time.timeScale));
