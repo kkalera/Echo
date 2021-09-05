@@ -132,12 +132,11 @@ public class CraneAgent : Agent, IAgent
 
         ContactPoint[] cps = col.contacts;
         foreach (ContactPoint cp in cps)
-        {            
-            if (cp.point.y > levelManager.CurrentLevel.TargetLocation.y + 3.75f)
-            {
-                EndEpisode();
-            }
+        {                
         }
+        Utils.ClearLogConsole();
+        Debug.Log(col.collider.tag);
+        Debug.Log(col.relativeVelocity);     
     }
 
     public void OnTriggerEnter(Collider other)

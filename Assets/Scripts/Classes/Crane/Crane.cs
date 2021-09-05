@@ -28,9 +28,9 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
     [Space(20)]
     [Header("Crane specs")]
     [SerializeField] [Range(.1f, 10f)] private float craneSpeed = 0.75f; //Speed in m/s
-    [SerializeField] [Range(.1f, 1f)] private float craneAcceleration = 1f; //Acceleration in m/s²
+    [SerializeField] [Range(.1f, 1f)] private float craneAcceleration = 1f; //Acceleration in m/s?
     [SerializeField] [Range(.1f, 10f)] private float cabinSpeed = 4; //Speed in m/s
-    [SerializeField] [Range(.1f, 1f)] private float cabinAcceleration = 1f; //Acceleration in m/s²
+    [SerializeField] [Range(.1f, 1f)] private float cabinAcceleration = 1f; //Acceleration in m/s?
     [SerializeField] [Range(.1f, 10f)] private float winchSpeed = 4; //Speed in m/s    
     [SerializeField] private float minSpreaderHeight = 0;
     [SerializeField] private float maxSpreaderHeight = 0;
@@ -82,10 +82,15 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
     {
         if(Mathf.Abs((CabinPosition.z + 1) - SpreaderPosition.z) > maxSwingDistance)
         {
+            float zDiff = (CabinPosition.z + 1) - SpreaderPosition.z;
+            Vector3 vel = cabinBody.velocity;
+            vel.z += zDiff;
+            AccelerateTo(spreaderBody, vel, 10);
+            /*
             float zDiff = CabinVelocity.z - SpreaderVelocity.z;
             Vector3 force = new Vector3(0, 0, zDiff / (Time.deltaTime / Time.timeScale));
             Vector3 accel = force.normalized * Time.timeScale;
-            spreaderBody.AddForce(accel, ForceMode.Acceleration);
+            spreaderBody.AddForce(accel, ForceMode.Impulse);*/
         }
         
     }
