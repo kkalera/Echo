@@ -27,7 +27,7 @@ behaviors:
         learning_rate: 0.0003
         use_actions: false
         use_vail: false
-        demo_path: demos/CD-no-swing.demo
+        demo_path: demos/CD-Single-no-swi.demo
     keep_checkpoints: 5
     max_steps: 100000000
     time_horizon: 128
