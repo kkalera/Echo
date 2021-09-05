@@ -78,7 +78,7 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
         maxSpreaderHeight = cabin.localPosition.y - 5;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if(Mathf.Abs((CabinPosition.z + 1) - SpreaderPosition.z) > maxSwingDistance)
         {
@@ -299,10 +299,7 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
                 return grounded;
             
     }
-    private void FixedUpdate()
-    {
-        
-    }
+   
     public void OnCollisionEnter(Collision collision)
     {
     }
