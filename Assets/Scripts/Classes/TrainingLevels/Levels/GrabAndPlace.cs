@@ -16,7 +16,8 @@ public class GrabAndPlace : CraneLevel
     public override ICrane Crane { get => _crane; set => _crane = value; }
     private float grabDistance = 2.5f;
 
-    public override Vector3 TargetLocation => currentTarget;  
+    public override Vector3 TargetLocation => currentTarget;
+    public override bool IsDead { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
     public override void ClearEnvironment()
     {

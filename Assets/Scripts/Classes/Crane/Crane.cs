@@ -85,7 +85,7 @@ public class Crane : MonoBehaviour, ICrane, ICollisionReceiver
             float zDiff = (CabinPosition.z + 1) - SpreaderPosition.z;
             Vector3 vel = cabinBody.velocity;
             vel.z += zDiff;
-            AccelerateTo(spreaderBody, vel, 10);
+            AccelerateTo(spreaderBody, vel, 8);
             /*
             float zDiff = CabinVelocity.z - SpreaderVelocity.z;
             Vector3 force = new Vector3(0, 0, zDiff / (Time.deltaTime / Time.timeScale));

@@ -13,8 +13,11 @@ public class ContainerDeck : CraneLevel
     private Vector3 currentTarget;
     private ICrane _crane;
     private bool grabRewarded = false;
+    private int containersPlaced = 0;
+    private bool dead = false;
 
     public override ICrane Crane { get => _crane; set => _crane = value; }
+    public override bool IsDead { get => dead; set => dead = value; }
 
     public override Vector3 TargetLocation => currentTarget + new Vector3(0,2.85f,0);  
 
@@ -35,7 +38,9 @@ public class ContainerDeck : CraneLevel
 
     public override RewardData GetReward()
     {
-        if (!_crane.ContainerGrabbed && target.position.z < 15f)
+        if (dead) return new RewardData(0, true);
+
+        if (!_crane.ContainerGrabbed && containersPlaced > 0)
         {
             _crane.ReleaseContainer(environment);
             return new RewardData(1f, true);
@@ -54,6 +59,7 @@ public class ContainerDeck : CraneLevel
     {
         _crane = crane;
         this.environment = environment;
+        dead = false;
 
         GameObject containerobj = Instantiate(containerPrefab, this.environment);
         containerobj.tag = "container";
@@ -68,7 +74,7 @@ public class ContainerDeck : CraneLevel
 
     private void Update()
     {
-        if(!_crane.ContainerGrabbed && Vector3.Distance(_crane.SpreaderWorldPosition, container.position + new Vector3(0,2.85f,0)) < 0.3f)
+        if(!_crane.ContainerGrabbed && Vector3.Distance(_crane.SpreaderWorldPosition, container.position + new Vector3(0,2.85f,0)) < 0.1f)
         {
             _crane.GrabContainer(container);
             currentTarget = target.position;
@@ -76,9 +82,10 @@ public class ContainerDeck : CraneLevel
 
         if(_crane.ContainerGrabbed &&
             Mathf.Abs(container.position.y - currentTarget.y) < 0.01f &&
-            Mathf.Abs(container.position.z - currentTarget.z) < 0.3f)
+            Mathf.Abs(container.position.z - currentTarget.z) < 0.1f)
         {
             _crane.ReleaseContainer(environment);
+            containersPlaced += 1;
             grabRewarded = false;
             target.position = container.position - new Vector3(0, 0, 2.55f);
 
@@ -89,6 +96,8 @@ public class ContainerDeck : CraneLevel
 
             currentTarget = container.position;
         }
+
+        dead = Mathf.Abs(_crane.SpreaderPosition.z - (_crane.CabinPosition.z + 1)) > 1 + _crane.SwingLimit;
     }
 
     public override void ResetEnvironment()
@@ -101,10 +110,11 @@ public class ContainerDeck : CraneLevel
         container.transform.localPosition = new Vector3(0, 0, Random.Range(-4,4));
 
         target.transform.position = firstContainerOnDeck.position - new Vector3(0, 0, 2.65f);
-        _crane.ResetToPosition(new Vector3(0, 25, Random.Range(-25,40)));
+        _crane.ResetToPosition(new Vector3(0, 25, -10));
         currentTarget = container.transform.position;
 
         grabRewarded = false;
+        containersPlaced = 0;
     }
 
     public override void SetCraneRestrictions()

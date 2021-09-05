@@ -11,5 +11,6 @@ public abstract class CraneLevel : MonoBehaviour
     public abstract RewardData GetReward();
     public abstract Vector3 TargetLocation { get; }
     public abstract ICrane Crane { get; set; }
-    public abstract void IncreaseDifficulty();    
+    public abstract void IncreaseDifficulty();
+    public abstract bool IsDead { get; set; }
 }
