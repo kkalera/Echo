@@ -2,7 +2,7 @@ env_settings:
   env_path: Build/Echo
   env_args: null
   base_port: 5005
-  num_envs: 12
+  num_envs: 24
   seed: -1
 
 engine_settings:
@@ -36,16 +36,6 @@ behaviors:
         gamma: 0.99
         strength: 1.0
 
-      curiosity:
-        strength: 0.1
-        gamma: 0.99
-        network_settings:
-          normalize: false
-          hidden_units: 128
-          num_layers: 2
-          vis_encode_type: simple
-        learning_rate: 0.0003
-
       gail:
         gamma: 0.99
         strength: 1.0
@@ -57,15 +47,15 @@ behaviors:
         learning_rate: 0.0003
         use_actions: true
         use_vail: false
-        demo_path: demos/CD-no-swing.demo
+        demo_path: demos/CD-Single-no-swi.demo
 
         
-    keep_checkpoints: 5
+    keep_checkpoints: 50000
     max_steps: 1e08
     time_horizon: 64
-    summary_freq: 60000
+    summary_freq: 20000
     behavioral_cloning:
-      demo_path: demos/CD-no-swing.demo
+      demo_path: demos/CD-Single-no-swi.demo
       steps: 2000000
       strength: 1.0
       samples_per_update: 0

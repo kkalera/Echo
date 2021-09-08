@@ -1,3 +1,17 @@
+env_settings:
+  env_path: Build/Echo
+  env_args: null
+  base_port: 5005
+  num_envs: 24
+  seed: -1
+
+engine_settings:
+  width: 256
+  height: 256
+  quality_level: 5
+  time_scale: 20
+  no_graphics: false
+
 behaviors:
   Crane:
     trainer_type: sac
