@@ -16,6 +16,8 @@ TagManager:
   - goal
   - targetPlane
   - placed-container
+  - Fusion
+  - Wall
   layers:
   - Default
   - TransparentFX
