@@ -55,6 +55,10 @@ public class EnvSpawner : MonoBehaviour
             }
             spawnedPrefabs = null;
         }
+        else
+        {
+            if (spawnedPrefabs != null && spawnedPrefabs.Length != numEnvironments) SpawnEnvironments();
+        }
     }
 
     public void SpawnEnvironments()

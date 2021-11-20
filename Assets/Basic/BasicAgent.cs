@@ -8,8 +8,10 @@ using UnityEngine.InputSystem;
 
 public class BasicAgent : Agent
 {
-    [SerializeField] InputAction xMovement;
-    [SerializeField] InputAction zMovement;
+    [SerializeField] InputAction xMovementLeft;
+    [SerializeField] InputAction xMovementRight;
+    [SerializeField] InputAction zMovementForward;
+    [SerializeField] InputAction zMovementBack;
     [SerializeField] Rigidbody agentBody;
     [SerializeField] float maxSpeed = 5f;
     [SerializeField] float acceleration = 5f;
@@ -17,8 +19,10 @@ public class BasicAgent : Agent
 
     private void Start()
     {
-        xMovement.Enable();
-        zMovement.Enable();
+        xMovementLeft.Enable();
+        xMovementRight.Enable();
+        zMovementForward.Enable();
+        zMovementBack.Enable();
     }
 
 
@@ -36,7 +40,7 @@ public class BasicAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        transform.position = new Vector3(Random.Range(-9, 9), 0.1f, 9);
+        transform.position = new Vector3(Random.Range(-4.5f, 4.5f), 0.1f, 0);
         transform.rotation = Quaternion.Euler(Vector3.zero);
         agentBody.velocity = Vector3.zero;
         agentBody.angularVelocity = Vector3.zero;
@@ -51,17 +55,44 @@ public class BasicAgent : Agent
     public override void OnActionReceived(ActionBuffers actions)
     {
         Vector3 a = Vector3.zero;
-        a.z = actions.DiscreteActions[0] * maxSpeed;
-        a.x = actions.DiscreteActions[1] * maxSpeed;
-
+        switch (actions.DiscreteActions[0])
+        {
+            case 1:
+                a.x = 1 * maxSpeed;
+                break;
+            case 2:
+                a.x = -1 * maxSpeed;
+                break;
+            case 3:
+                a.z = 1 * maxSpeed;
+                break;
+            case 4:
+                a.z = -1 * maxSpeed;
+                break;
+        }
         AccelerateTo(agentBody, a, acceleration);
     }
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         ActionSegment<int> discrete = actionsOut.DiscreteActions;
-        discrete[0] = ((int)zMovement.ReadValue<float>());
-        discrete[1] = ((int)xMovement.ReadValue<float>());
-
+        if (xMovementLeft.ReadValue<float>() > 0)
+        {
+            discrete[0] = 1;
+        }
+        else if (xMovementRight.ReadValue<float>() > 0)
+        {
+            discrete[0] = 2;
+        }
+        else if (zMovementBack.ReadValue<float>() > 0)
+        {
+            discrete[0] = 3;
+        }
+        else if (zMovementForward.ReadValue<float>() > 0)
+        {
+            discrete[0] = 4;
+        }
+        //Utils.ClearLogConsole();
+        //Debug.Log(xMovementLeft.ReadValue<int>());
     }
 
     private void OnTriggerStay(Collider other)
