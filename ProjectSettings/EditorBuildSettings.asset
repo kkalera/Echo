@@ -8,7 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Crane AI/Scenes/Crane.unity
     guid: a56628929ba8b3f4faa89cc8d7432d67
-  - enabled: 1
+  - enabled: 0
     path: Assets/Basic/Basic.unity
     guid: dcfec574ffc71b84d8505bdfc0d0ff2c
+  - enabled: 1
+    path: Assets/Grab and Place/Grab and place.unity
+    guid: 33d2f9094f7294da0a6682dede4c8a10
   m_configObjects: {}

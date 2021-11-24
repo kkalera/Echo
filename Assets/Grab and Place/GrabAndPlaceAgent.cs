@@ -51,7 +51,7 @@ namespace GP
             agentBody.velocity = Vector3.zero;
             agentBody.angularVelocity = Vector3.zero;
 
-            objectBody.transform.position = new Vector3(Random.Range(-4.5f, 4.5f), 0.6f, 2);
+            objectBody.transform.localPosition = new Vector3(7.5f, 0.6f, 7.5f);
             objectBody.velocity = Vector3.zero;
             objectBody.angularVelocity = Vector3.zero;
 
@@ -83,25 +83,27 @@ namespace GP
             }
             AccelerateTo(agentBody, a, acceleration);
             if(objectGrabbed) AccelerateTo(objectBody, a, acceleration);
+            Debug.Log(objectGrabbed);
         }
         public override void Heuristic(in ActionBuffers actionsOut)
         {
             ActionSegment<int> discrete = actionsOut.DiscreteActions;
-            if (xMovementLeft.ReadValue<float>() > 0)
+
+            if (xMovementLeft.ReadValueAsObject() != null)
             {
-                discrete[0] = 1;
+                discrete[0] = 4;
             }
-            else if (xMovementRight.ReadValue<float>() > 0)
-            {
-                discrete[0] = 2;
-            }
-            else if (zMovementBack.ReadValue<float>() > 0)
+            else if (xMovementRight.ReadValueAsObject() != null)
             {
                 discrete[0] = 3;
             }
-            else if (zMovementForward.ReadValue<float>() > 0)
+            else if (zMovementBack.ReadValueAsObject() != null)
             {
-                discrete[0] = 4;
+                discrete[0] = 1;
+            }
+            else if (zMovementForward.ReadValueAsObject() != null)
+            {
+                discrete[0] = 2;
             }
             //Utils.ClearLogConsole();
             //Debug.Log(xMovementLeft.ReadValue<int>());
@@ -113,6 +115,14 @@ namespace GP
             {
                 AddReward(1f);
                 EndEpisode();
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.collider.CompareTag("container"))
+            {
+                objectGrabbed = true;
             }
         }
     }
