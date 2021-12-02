@@ -98,7 +98,7 @@ public static class AutoPilot
         }
 
 
-        if (Mathf.Abs(spreaderPosition.y - targetPosition.y) > 1 && spreaderPosition.z > 4 && Mathf.Abs(spreaderPosition.z - targetPosition.z) < r) targetPosition.z -= 0.5f;
+        if (Mathf.Abs(spreaderPosition.y - targetPosition.y) > 1 && spreaderPosition.z > 4 && Mathf.Abs(spreaderPosition.z - targetPosition.z) < r) targetPosition.z -= 0.75f;
         if (Mathf.Abs(spreaderPosition.z - targetPosition.z) > r  &&
             Mathf.Abs(spreaderPosition.y - targetPosition.y) < 2 &&
             spreaderPosition.y < 19) targetPosition.y += 0.5f;

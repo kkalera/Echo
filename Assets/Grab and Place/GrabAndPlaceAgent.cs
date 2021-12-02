@@ -16,9 +16,11 @@ namespace GP
         [SerializeField] InputAction zMovementBack;
         [SerializeField] Rigidbody agentBody;
         [SerializeField] Rigidbody objectBody;
+        [SerializeField] GameObject goalObject;
         [SerializeField] float maxSpeed = 5f;
         [SerializeField] float acceleration = 5f;
         [SerializeField] string goalTag = "goal";
+        [SerializeField] bool autopilot = false;
 
         private bool objectGrabbed;
 
@@ -51,7 +53,7 @@ namespace GP
             agentBody.velocity = Vector3.zero;
             agentBody.angularVelocity = Vector3.zero;
 
-            objectBody.transform.localPosition = new Vector3(7.5f, 0.6f, 7.5f);
+            objectBody.transform.localPosition = new Vector3(12, 0.6f, 7.5f);
             objectBody.velocity = Vector3.zero;
             objectBody.angularVelocity = Vector3.zero;
 
@@ -74,44 +76,59 @@ namespace GP
                 case 2:
                     a.x = -1 * maxSpeed;
                     break;
-                case 3:
+            }
+            switch (actions.DiscreteActions[1])
+            {
+                case 1:
                     a.z = 1 * maxSpeed;
                     break;
-                case 4:
+                case 2:
                     a.z = -1 * maxSpeed;
                     break;
             }
+            
             AccelerateTo(agentBody, a, acceleration);
             if(objectGrabbed) AccelerateTo(objectBody, a, acceleration);
-            Debug.Log(objectGrabbed);
+            GetInput();
+
         }
         public override void Heuristic(in ActionBuffers actionsOut)
         {
             ActionSegment<int> discrete = actionsOut.DiscreteActions;
 
-            if (xMovementLeft.ReadValueAsObject() != null)
+            if (autopilot)
             {
-                discrete[0] = 4;
+                var inputs = GetInput();
+                discrete[0] = (int)inputs.y;
+                discrete[1] = (int)inputs.x;
+
             }
-            else if (xMovementRight.ReadValueAsObject() != null)
+            else
             {
-                discrete[0] = 3;
+                if (zMovementBack.ReadValueAsObject() != null)
+                {
+                    discrete[0] = 1;
+                }
+                else if (zMovementForward.ReadValueAsObject() != null)
+                {
+                    discrete[0] = 2;
+                }
+
+
+                if (xMovementLeft.ReadValueAsObject() != null)
+                {
+                    discrete[1] = 2;
+                }
+                else if (xMovementRight.ReadValueAsObject() != null)
+                {
+                    discrete[1] = 1;
+                }
             }
-            else if (zMovementBack.ReadValueAsObject() != null)
-            {
-                discrete[0] = 1;
-            }
-            else if (zMovementForward.ReadValueAsObject() != null)
-            {
-                discrete[0] = 2;
-            }
-            //Utils.ClearLogConsole();
-            //Debug.Log(xMovementLeft.ReadValue<int>());
         }
 
         private void OnTriggerStay(Collider other)
         {
-            if (other.CompareTag(goalTag))
+            if (other.CompareTag(goalTag) && objectGrabbed)
             {
                 AddReward(1f);
                 EndEpisode();
@@ -124,6 +141,48 @@ namespace GP
             {
                 objectGrabbed = true;
             }
+        }
+
+        private Vector2 GetInput()
+        {
+
+            if (!objectGrabbed)
+            {
+                // Agent left of wall
+                if (transform.localPosition.x > -4 && transform.localPosition.z < -1)
+                {
+                    return new Vector2(1, 0);
+                }
+                else if (transform.localPosition.z < objectBody.transform.localPosition.z)
+                {
+                    return new Vector2(1, 0);
+                }
+                else if (transform.localPosition.z > objectBody.transform.localPosition.z)
+                {
+                    return new Vector2(-1, 0);
+                }
+                else if (transform.localPosition.x > objectBody.transform.localPosition.x)
+                {
+                    return new Vector2(0, -1);
+                }
+            }
+            else 
+            {
+                if (transform.localPosition.x > -4 && transform.localPosition.z > -1)
+                {
+                    return new Vector2(1, 0);
+                }
+                else if(transform.localPosition.z > goalObject.transform.localPosition.z)
+                {
+                    return new Vector2(-1, 0);
+                }
+                else if(transform.localPosition.x < goalObject.transform.localPosition.x)
+                {
+                    return new Vector2(0, -1);
+                }
+            }
+
+            return Vector2.zero;
         }
     }
 }
