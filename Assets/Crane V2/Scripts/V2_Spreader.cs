@@ -5,7 +5,9 @@ using UnityEngine;
 namespace echo
 {
     public class V2_Spreader : MonoBehaviour
-    {        
+    {
+        public V2_Crane Crane { set => _crane = value; }
+        private V2_Crane _crane;
         public Vector3 environmentPosition { set => _environmentPosition = value; }
         public Vector3 Position { get => _Position(); set => transform.position = value; }
         public Rigidbody Rbody => GetComponent<Rigidbody>();
@@ -19,6 +21,10 @@ namespace echo
             }            
 
             return transform.position - _environmentPosition;
+        }
+        private void OnCollisionEnter(Collision collision)
+        {
+            _crane.OnSpreaderCollision(collision);
         }
     }
 }

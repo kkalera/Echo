@@ -12,10 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73b5a9a9f92010144b02d2cc981b72e9, type: 3}
   m_Name: CraneSpecs
   m_EditorClassIdentifier: 
-  craneSpeed: 0.75
-  craneAcceleration: 1
-  cabinSpeed: 4
-  cabinAcceleration: 1
-  winchSpeed: 4
-  minSpreaderHeight: 0
-  maxSpreaderHeight: 27.5
+  _craneSpeed: 0.75
+  _craneAcceleration: 100
+  _cabinSpeed: 4
+  _cabinAcceleration: 100
+  _winchSpeed: 4
+  _winchAcceleration: 10
+  _maxSwing: 0.1
+  _minSpreaderHeight: 0
+  _maxSpreaderHeight: 26
+  _craneMovementEnabled: 0
+  _cabinMovementEnabled: 1
+  _winchMovementEnabled: 1
