@@ -11,6 +11,8 @@ namespace echo
         private V2_Crane _crane;
         private Transform _target;
 
+        public bool Dead => throw new System.NotImplementedException();
+
         public void InitializeEnvironment(Transform environment, V2_Crane crane)
         {
             _environment = environment;
@@ -28,6 +30,22 @@ namespace echo
         public Vector3 TargetPosition(Vector3 environmentPosition)
         {
             return _target.position - environmentPosition;
+        }
+
+        public V2_CollisionResponse OnCollision(Collision col)
+        {
+            var response = new V2_CollisionResponse();
+            if (col.collider.tag.Equals("container") && Mathf.Abs(_crane.Spreader.Position.z - TargetPosition(_environment.position).z) < 0.1f)
+            {
+                response.Reward = 5f;
+                response.EndEpisode = true;
+            }
+            else if (col.collider.tag.Equals("crane"))
+            {
+                response.Reward = -1f;
+                response.EndEpisode = true;
+            }
+            return response;
         }
     }
 }

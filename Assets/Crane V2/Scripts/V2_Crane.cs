@@ -20,14 +20,12 @@ namespace echo
         public V2_Spreader Spreader => _spreader;
         public V2_Cabin Cabin => _cabin;
 
-
-        private void OnEnable()
+        private void Update()
         {
             _spreader.environmentPosition = _environmentPosition.position;
-            _spreader.Crane = this;
+            _spreader.CollisionReceiver = _agent;
             _cabin.environmentPosition = _environmentPosition.position;
         }
-
         private static void AccelerateTo(Rigidbody body, Vector3 targetVelocity, float maxAccel, ForceMode forceMode = ForceMode.Acceleration)
         {
             Vector3 deltaV = targetVelocity - body.velocity;
@@ -62,10 +60,6 @@ namespace echo
             if (val > 0 && _spreader.Position.y > _craneSpecs.maxSpreaderHeight) val = 0;
             if (val < 0 && _spreader.Position.y < _craneSpecs.minSpreaderHeight) val = 0;
             _winchManager.MoveWinch(val);
-        }
-        public void OnSpreaderCollision(Collision col)
-        {
-            _agent.OnSpreaderCollision(col);
         }
         public void ResetToPosition(Vector3 position)
         {

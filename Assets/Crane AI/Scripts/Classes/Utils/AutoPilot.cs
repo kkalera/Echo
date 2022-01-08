@@ -18,7 +18,7 @@ public static class AutoPilot
 
         if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
         if (targetPosition.z < spreaderPosition.z) inputZ = -inputZ;
-        if (Mathf.Abs(spreaderPosition.z - (cabinPosition.z + 1)) > 0.25) inputZ = 0;
+        //if (Mathf.Abs(spreaderPosition.z - (cabinPosition.z + 1)) > 0.25) inputZ = 0;
 
         if (float.IsNaN(inputY)) inputY = 0;
         if (float.IsNaN(inputZ)) inputZ = 0;

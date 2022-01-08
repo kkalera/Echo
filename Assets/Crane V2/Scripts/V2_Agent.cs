@@ -8,7 +8,7 @@ using Unity.MLAgents.Sensors;
 
 namespace echo
 {
-    public class V2_Agent : Agent
+    public class V2_Agent : Agent, V2_I_CollisionReceiver
     {
         [SerializeField] V2_Crane crane;
         [SerializeField] public GameObject levelObject;
@@ -31,7 +31,7 @@ namespace echo
             inputWinch.Enable();
             crane.Agent = this;
             level = levelObject.GetComponent<V2_ILevel>();
-            level.InitializeEnvironment(transform, crane);
+            level.InitializeEnvironment(transform, crane);            
         }
 
         private void Update()
@@ -43,6 +43,7 @@ namespace echo
         public override void OnEpisodeBegin()
         {
             level.ResetEnvironment();
+
         }
         public override void CollectObservations(VectorSensor sensor)
         {
@@ -64,7 +65,9 @@ namespace echo
 
             if (autoPilot)
             {
-                Vector3 input = AutoPilot.GetInputs(level.TargetPosition(transform.position), crane.Spreader.Position, crane.Cabin.Rbody.velocity,1,crane.Cabin.Position);
+                Utils.ClearLogConsole();
+                
+                Vector3 input = AutoPilot.GetInputs(level.TargetPosition(transform.position), crane.Spreader.Position, crane.Cabin.Rbody.velocity, 0.5f, crane.Cabin.Position);
                 _inputCabin = (int)input.z;
                 _inputWinch = (int)input.y;
 
@@ -85,18 +88,13 @@ namespace echo
             crane.MoveCabin( 1 - dActions[0]);
             crane.MoveWinch( 1 - dActions[1]);
         }
-        public void OnSpreaderCollision(Collision col)
-        {
-            if (col.collider.tag.Equals("container") && Mathf.Abs(crane.Spreader.Position.z - level.TargetPosition(transform.position).z) < 0.1f )
-            {
-                AddReward(5);
-                EndEpisode();
-            }else if (col.collider.tag.Equals("crane"))
-            {
-                AddReward(-1);
-                EndEpisode();
-            }
+
+        public void OnCollision(Collision col)
+        {            
+            var response = level.OnCollision(col);
+            AddReward(response.Reward);
+            if (response.EndEpisode) EndEpisode();
 
         }
     }
-} 
+}

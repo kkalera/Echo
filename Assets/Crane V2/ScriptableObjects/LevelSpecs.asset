@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: LevelSpecs
   m_EditorClassIdentifier: Assembly-CSharp:echo:V2_LevelSpecs
   _containerPrefab: {fileID: 7147289847634774878, guid: 4acab53924acc7846adb3d6da74092a2, type: 3}
+  _targetPrefab: {fileID: 5176385746181079184, guid: ccfb910f1c302f840a7235d76a96c628, type: 3}

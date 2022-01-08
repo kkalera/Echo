@@ -10,7 +10,7 @@ namespace echo
         {
             if (transform.parent.TryGetComponent<V2_Spreader>(out V2_Spreader spreader))
             {
-                Debug.Log("working");
+                spreader.CollisionReceiver.OnCollision(collision);
             }
         }
     }

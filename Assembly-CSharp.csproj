@@ -56,6 +56,7 @@
     <Compile Include="Assets\Crane AI\Scripts\Classes\Spreader\Spreader.cs" />
     <Compile Include="Assets\Crane AI\Scripts\Classes\Container\Container.cs" />
     <Compile Include="Assets\Crane AI\Scripts\Classes\EnvironmentSettings\BasicTestingEnvironmentSettings.cs" />
+    <Compile Include="Assets\Crane V2\Levels\GrabPlace.cs" />
     <Compile Include="Assets\Crane AI\FiloCables\Scripts\Utils.cs" />
     <Compile Include="Assets\Crane AI\FiloCables\Scripts\Bodies\CableDisc.cs" />
     <Compile Include="Assets\Crane AI\FiloCables\Scripts\Bodies\CableBody.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Assets\Crane AI\Scripts\Classes\EnvironmentSettings\MoveAboveContainerSettings.cs" />
     <Compile Include="Assets\Crane AI\Scripts\Classes\TestEnvironment.cs" />
     <Compile Include="Assets\Crane V2\Scripts\V2_Agent.cs" />
+    <Compile Include="Assets\Crane V2\Scripts\V2_CollisionResponse.cs" />
     <Compile Include="Assets\Crane AI\Scripts\Classes\Collisions\ICollisionReceiver.cs" />
     <Compile Include="Assets\Crane AI\Scripts\Classes\TargetPlane.cs" />
     <Compile Include="Assets\Crane AI\Scripts\Classes\Utils\Utils.cs" />
@@ -85,6 +87,7 @@
     <Compile Include="Assets\Grab and Place\GrabAndPlaceAgent.cs" />
     <Compile Include="Assets\Crane V2\Scripts\V2_WinchManager.cs" />
     <Compile Include="Assets\Crane AI\Scripts\Classes\Agents\IAgent.cs" />
+    <Compile Include="Assets\Crane V2\Scripts\V2_I_CollisionReporter.cs" />
     <Compile Include="Assets\Crane V2\Scripts\V2_SO_LevelSpecs.cs" />
     <Compile Include="Assets\Crane AI\Scripts\Classes\Environments\Environment.cs" />
     <Compile Include="Assets\Crane AI\FiloCables\Scripts\CableSolver.cs" />
@@ -99,6 +102,7 @@
     <Compile Include="Assets\Crane AI\Scripts\Classes\Utils\EnvSpawner.cs" />
     <Compile Include="Assets\Crane AI\Scripts\Classes\TrainingLevels\ILevelManager.cs" />
     <Compile Include="Assets\Crane AI\FiloCables\SampleScenes\Scripts\RuntimeCableGenerator.cs" />
+    <Compile Include="Assets\Crane V2\Scripts\V2_I_CollisionReceiver.cs" />
     <Compile Include="Assets\Crane AI\FiloCables\Scripts\Bodies\ConvexHull2D.cs" />
     <Compile Include="Assets\Crane AI\FiloCables\SampleScenes\Scripts\TensionProbe.cs" />
     <Compile Include="Assets\Crane AI\FiloCables\Scripts\Bodies\CableShape.cs" />
@@ -111,7 +115,6 @@
     <Compile Include="Assets\Crane V2\Scripts\V2_Spreader.cs" />
     <Compile Include="Assets\Crane AI\Scripts\Classes\Utils\DataLogger.cs" />
     <Compile Include="Assets\Crane AI\Scripts\Classes\TrainingLevels\CraneLevelManager.cs" />
-    <Compile Include="Assets\Crane V2\Levels\GrabPlace.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Crane AI\TextMesh Pro\Shaders\TMPro.cginc" />

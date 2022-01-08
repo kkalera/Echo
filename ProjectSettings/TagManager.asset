@@ -18,6 +18,7 @@ TagManager:
   - placed-container
   - Fusion
   - Wall
+  - shipFloor
   layers:
   - Default
   - TransparentFX
