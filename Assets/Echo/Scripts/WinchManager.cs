@@ -6,16 +6,16 @@ public class WinchManager : MonoBehaviour
 {
     [SerializeField] public HingeJoint spoolLeft;
     [SerializeField] public HingeJoint spoolRight;
-    
+    [SerializeField] public Filo.Cable cableLeft;
+    [SerializeField] public Filo.Cable cableRight;
+
     void Update()
     {
         MoveWinch(0);
         if (Input.GetKey(KeyCode.DownArrow)) MoveWinch(-1);
         if (Input.GetKey(KeyCode.UpArrow)) MoveWinch(1);
         
-    }
-
-    public void MoveWinch(float value)
+    }public void MoveWinch(float value)
     {
         // Adjust the value since the value provided is the speed in m/s
         // The motor target velocity is in degree/s
