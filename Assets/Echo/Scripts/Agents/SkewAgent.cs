@@ -11,6 +11,8 @@ public class SkewAgent : Agent
     [SerializeField] Transform spreader;
     [SerializeField] GameObject projectilePrefab;
     private GameObject projectile = null;
+    private bool readyToShoot = true;
+    private float timeStraight;
 
     public override void OnEpisodeBegin()
     {
@@ -20,8 +22,8 @@ public class SkewAgent : Agent
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var disActions = actionsOut.DiscreteActions;
-        if (Input.GetKey(KeyCode.RightArrow)) disActions[2] = 1;
-        if (Input.GetKey(KeyCode.LeftArrow)) disActions[1] = 1;
+        if (Input.GetKey(KeyCode.RightArrow)) disActions[0] = 2;
+        if (Input.GetKey(KeyCode.LeftArrow)) disActions[0] = 1;
     }
     public override void OnActionReceived(ActionBuffers actions)
     {
@@ -37,11 +39,27 @@ public class SkewAgent : Agent
                 break;
         }
 
-        if (Random.value < 0.01f && projectile == null)
+        if (projectile == null && readyToShoot)
         {
+            readyToShoot = false;
+            timeStraight = 0;
             ShootRandomProjectile();
         }
 
+    }
+    void Update()
+    {
+        var spreaderAngle = spreader.eulerAngles.y;
+        if (spreaderAngle >= 300) spreaderAngle = -360 + spreaderAngle;
+        if (Mathf.Abs(spreaderAngle) < 0.5f)
+        {
+            timeStraight += Time.deltaTime;
+        }
+        else
+        {
+            timeStraight = 0;
+        }
+        if (timeStraight > 2) readyToShoot = true;
     }
 
     public override void CollectObservations(VectorSensor sensor)
