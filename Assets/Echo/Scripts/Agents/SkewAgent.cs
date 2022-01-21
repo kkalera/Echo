@@ -25,6 +25,7 @@ public class SkewAgent : Agent
         if (Input.GetKey(KeyCode.RightArrow)) disActions[0] = 2;
         if (Input.GetKey(KeyCode.LeftArrow)) disActions[0] = 1;
     }
+
     public override void OnActionReceived(ActionBuffers actions)
     {
         var action = actions.DiscreteActions[0];
@@ -46,7 +47,7 @@ public class SkewAgent : Agent
             ShootRandomProjectile();
         }
 
-    }
+    }    
     void Update()
     {
         var spreaderAngle = spreader.eulerAngles.y;

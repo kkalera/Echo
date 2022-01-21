@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Echo/Skew training.unity
+    path: Assets/Echo/Scenes/Skew training.unity
     guid: 76416f5d64bec4305ab44be48281889d
   m_configObjects: {}
