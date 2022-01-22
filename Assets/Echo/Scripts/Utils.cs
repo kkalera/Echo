@@ -30,5 +30,15 @@ namespace Echo
         {
             clearConsoleMethod.Invoke(new object(), null);
         }
+        public static void AccelerateRigidbody(Rigidbody body, Vector3 targetVelocity, float maxAccel, ForceMode forceMode = ForceMode.Acceleration)
+        {
+            Vector3 deltaV = targetVelocity - body.velocity;
+            Vector3 accel = deltaV / Time.deltaTime;
+
+            if (accel.sqrMagnitude > maxAccel * maxAccel)
+                accel = accel.normalized * maxAccel;
+
+            body.AddForce(accel, forceMode);
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace Echo {
     [RequireComponent(typeof(HingeJoint))]
     public class WinchManager : MonoBehaviour
     {
-        [SerializeField]SoWinchSpeed winchSpeed;
+        [SerializeField] SoCraneSpecs _craneSpecs;
         HingeJoint joint;
 
         private void Start()
@@ -16,20 +16,20 @@ namespace Echo {
 
         void Update()
         {
-            MoveWinch(winchSpeed.winchSpeed);
+            MoveWinch(_craneSpecs.winchSpeed);
 
         } public void MoveWinch(float value)
         {
             // Adjust the value since the value provided is the speed in m/s
             // The motor target velocity is in degree/s
             // Since our pulleys have a diameter of 1m we want 1 rotation/pi per m/s requested.
-            if (value != 0) value *= 360 / Mathf.PI;
+            if (value != 0) value *= 360 / Mathf.PI * _craneSpecs.winchMaxSpeed;
 
             // Get 2 motors (one side turns clockwise while the other side turns counter-clockwise
             JointMotor motor = joint.motor;
 
             float currentVelocity = motor.targetVelocity;
-            float acceleration = 360 * Time.deltaTime * winchSpeed.maxSpeed;
+            float acceleration = 360 * Time.deltaTime;
 
 
             if (value != 0 && value > currentVelocity)
