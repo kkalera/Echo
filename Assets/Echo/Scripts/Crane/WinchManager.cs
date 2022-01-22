@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Echo {
+    [RequireComponent(typeof(HingeJoint))]
     public class WinchManager : MonoBehaviour
     {
         [SerializeField]SoWinchSpeed winchSpeed;
         HingeJoint joint;
 
+        private void Start()
+        {
+            joint = GetComponent<HingeJoint>();
+        }
+
         void Update()
         {
-            MoveWinch(winchSpeed.winchSpeed);            
+            MoveWinch(winchSpeed.winchSpeed);
 
         } public void MoveWinch(float value)
         {
