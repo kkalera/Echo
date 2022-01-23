@@ -9,16 +9,49 @@ namespace Echo
     public class Spreader : MonoBehaviour
     {
         [SerializeField] private SoCraneSpecs craneSpecs;
+        [SerializeField] private SoCollision collisionManager;
+
         void Start()
         {
             craneSpecs.spreaderWorldPosition = transform.position;
             craneSpecs.spreaderBody = GetComponent<Rigidbody>();
         }
 
-        // Update is called once per frame
         void Update()
         {
             craneSpecs.spreaderWorldPosition = transform.position;
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            collisionManager.collided = true;
+            collisionManager.collision = collision;
+        }
+
+        private void OnCollisionStay(Collision collision)
+        {
+            collisionManager.collided = true;
+            collisionManager.collision = collision;
+        }
+        private void OnCollisionExit(Collision collision)
+        {
+            collisionManager.collided = false;
+            collisionManager.collision = null;
+        }
+        private void OnTriggerEnter(Collider other)
+        {
+            collisionManager.triggered = true;
+            collisionManager.triggered_collider = other;
+        }
+        private void OnTriggerStay(Collider other)
+        {
+            collisionManager.triggered = true;
+            collisionManager.triggered_collider = other;
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            collisionManager.triggered = false;
+            collisionManager.triggered_collider = null;
         }
     }
 }

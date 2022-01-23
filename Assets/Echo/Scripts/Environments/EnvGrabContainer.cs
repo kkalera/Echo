@@ -6,13 +6,15 @@ namespace Echo
 {
     public class EnvGrabContainer : Environment
     {
+        [SerializeField] SoCollision collisionManager;
+
         public override void InitializeEnvironment()
         {
 
         }
         public override void OnEpisodeBegin()
         {
-
+            collisionManager.Reset();
         }
         public override State Step()
         {

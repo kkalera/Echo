@@ -10,7 +10,7 @@ namespace Echo
     public class CraneAgent : Agent
     {
         [SerializeField] Environment env;
-        [SerializeField] Crane crane;
+        [SerializeField] Crane crane;        
 
         private static readonly int katIndex = 0;
         private static readonly int katForwardValue = 1;
