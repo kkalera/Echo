@@ -9,10 +9,19 @@ namespace Echo
     {
         public float winchSpeed = 0;
         public float winchMaxSpeed = 1;
+        public float winchAcceleration = 1;
+
         public float katSpeed = 0;
         public float katMaxSpeed = 1;
         public float katAcceleration = 1;
+
         public float skewSpeed = 0;
         public float skewMaxSpeed = 1;
+
+        public Vector3 spreaderWorldPosition = Vector3.zero;
+        public Rigidbody spreaderBody;
+
+        public Vector3 katWorldPosition = Vector3.zero;        
+        public Rigidbody katBody;
     }
 }

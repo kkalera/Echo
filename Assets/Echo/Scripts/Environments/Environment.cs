@@ -2,9 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Environment : MonoBehaviour
+namespace Echo
 {
-    public virtual void Step() { }
-    public virtual void InitializeEnvironment() { }
-    public virtual void OnEpisodeBegin() { }
+    public class Environment : MonoBehaviour
+    {
+        public virtual State Step() { return new State(); }
+        public virtual void InitializeEnvironment() { }
+        public virtual void OnEpisodeBegin() { }
+        public virtual void UpdateTargetWorldPosition(Vector3 position)
+        {
+            TargetWorldPosition = position;
+        }
+        public Vector3 TargetWorldPosition { get; private set; }
+    }
 }

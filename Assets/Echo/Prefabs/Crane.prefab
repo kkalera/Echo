@@ -223,6 +223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4859665624998380455}
   - component: {fileID: 1918590212833480033}
+  - component: {fileID: 1407112159}
   m_Layer: 0
   m_Name: Spreader
   m_TagString: Untagged
@@ -266,6 +267,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1407112159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836196119176425403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91380d177aa054b4f9708a02a4ebb3ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  craneSpecs: {fileID: 11400000, guid: 485be651551ea7f4697769337b4f4501, type: 2}
 --- !u!1 &879983741951193776
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,7 +380,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -409,7 +423,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 0
-    force: 1000
+    force: 3.4028233e+38
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -941,7 +955,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1229778883464505012}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -1131,7 +1145,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -1174,7 +1188,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 0
-    force: 1000
+    force: 3.4028233e+38
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -1695,7 +1709,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -1738,7 +1752,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 0
-    force: 1000
+    force: 3.4028233e+38
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -2032,7 +2046,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -2075,7 +2089,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 0
-    force: 1000
+    force: 3.4028233e+38
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -2294,6 +2308,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2810394888188734790}
   - component: {fileID: 4639861527186858122}
+  - component: {fileID: 7979483566269728109}
+  - component: {fileID: 4639861527186858123}
+  - component: {fileID: 4639861527186858126}
   m_Layer: 0
   m_Name: Crane
   m_TagString: Untagged
@@ -2341,7 +2358,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c8221645c5e8904ba82baf79534c58b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _craneSpecs: {fileID: 11400000, guid: 485be651551ea7f4697769337b4f4501, type: 2}
+  craneSpecs: {fileID: 11400000, guid: 485be651551ea7f4697769337b4f4501, type: 2}
+  _swingLimit: 0
+--- !u!114 &7979483566269728109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2325188989495878058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c8d85f592bae4defaff0dd6268d769c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  env: {fileID: 0}
+  crane: {fileID: 4639861527186858122}
+--- !u!114 &4639861527186858123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2325188989495878058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 9
+    NumStackedVectorObservations: 4
+    m_ActionSpec:
+      m_NumContinuousActions: 0
+      BranchSizes: 0300000003000000
+    VectorActionSize: 0300000003000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 1
+  m_BehaviorName: Crane
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_ObservableAttributeHandling: 0
+--- !u!114 &4639861527186858126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2325188989495878058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 4
+  TakeActionsBetweenDecisions: 1
 --- !u!1 &2386812556177103893
 GameObject:
   m_ObjectHideFlags: 0
@@ -2531,7 +2611,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2564529077973436940}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -2648,8 +2728,10 @@ GameObject:
   - component: {fileID: 6023841390763604131}
   - component: {fileID: 6023841390764702307}
   - component: {fileID: 5818105718885243077}
+  - component: {fileID: 7699746005321144465}
+  - component: {fileID: 7699746005321144464}
   m_Layer: 0
-  m_Name: GantryCrane_01_Cabin_01_Prefab
+  m_Name: Kat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2731,11 +2813,40 @@ MeshCollider:
   m_GameObject: {fileID: 3080153507514852391}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: b88cd8d1db38d8648b3fb93c6de2ad22, type: 2}
+--- !u!54 &7699746005321144465
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3080153507514852391}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 0
+--- !u!114 &7699746005321144464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3080153507514852391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67cdb6cfb037397419e41b22092e4e8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _craneSpecs: {fileID: 11400000, guid: 485be651551ea7f4697769337b4f4501, type: 2}
 --- !u!1 &3197333719747705691
 GameObject:
   m_ObjectHideFlags: 0
@@ -2827,7 +2938,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3197333719747705691}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -3161,7 +3272,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4262708639793157719}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -3857,7 +3968,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -3900,7 +4011,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 0
-    force: 1000
+    force: 3.4028233e+38
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -4473,7 +4584,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -4516,7 +4627,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 0
-    force: 1000
+    force: 3.4028233e+38
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -4733,7 +4844,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6370365952164822156}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -5078,7 +5189,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6676708813395702580}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -5777,7 +5888,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -5820,7 +5931,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 0
-    force: 1000
+    force: 3.4028233e+38
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -6203,7 +6314,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7504765800375543467}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -6491,7 +6602,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -6534,7 +6645,7 @@ HingeJoint:
   m_UseMotor: 1
   m_Motor:
     targetVelocity: 0
-    force: 1000
+    force: 3.4028233e+38
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -6948,11 +7059,11 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7854097105486064754}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: a393f48005708f047bf27b6707f70464, type: 2}
 --- !u!1 &8117257709875871943
@@ -7144,11 +7255,11 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8328485400091537042}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: d9f36a73362137d4ab77dcf144294653, type: 2}
 --- !u!1 &8832907916511049884
@@ -7243,7 +7354,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8832907916511049884}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
@@ -7341,7 +7452,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8969581495921868289}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4

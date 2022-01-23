@@ -17,8 +17,9 @@ namespace Echo {
         void Update()
         {
             MoveWinch(_craneSpecs.winchSpeed);
-
-        } public void MoveWinch(float value)
+            ManageWinchLimit();
+        } 
+        public void MoveWinch(float value)
         {
             // Adjust the value since the value provided is the speed in m/s
             // The motor target velocity is in degree/s
@@ -29,7 +30,7 @@ namespace Echo {
             JointMotor motor = joint.motor;
 
             float currentVelocity = motor.targetVelocity;
-            float acceleration = 360 * Time.deltaTime;
+            float acceleration = 360 * Time.deltaTime * _craneSpecs.winchAcceleration;
 
 
             if (value != 0 && value > currentVelocity)
@@ -52,6 +53,15 @@ namespace Echo {
 
             motor.targetVelocity = value;
             joint.motor = motor;
+        }
+        private void ManageWinchLimit()
+        {
+            if((_craneSpecs.spreaderWorldPosition.y > 25 && _craneSpecs.winchSpeed > 0) || (_craneSpecs.spreaderWorldPosition.y < 0 && _craneSpecs.winchSpeed < 0))
+            {
+                var motor = joint.motor;
+                motor.targetVelocity = 0;
+                joint.motor = motor;
+            }
         }
     }
 }
