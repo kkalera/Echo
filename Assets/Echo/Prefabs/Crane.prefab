@@ -280,6 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   craneSpecs: {fileID: 11400000, guid: 485be651551ea7f4697769337b4f4501, type: 2}
+  collisionManager: {fileID: 11400000, guid: 1460c495a99097d4e949c0a6fc8cf445, type: 2}
 --- !u!1 &879983741951193776
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,7 +763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5067795d3200d4efdb939697d55d67dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dynamicSplitMerge: 0
+  dynamicSplitMerge: 1
   loosenessScale: 0
   maxLooseCable: 1
   verticalThreshold: 0.25
@@ -957,7 +958,7 @@ MeshCollider:
   m_GameObject: {fileID: 1229778883464505012}
   m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -2360,6 +2361,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   craneSpecs: {fileID: 11400000, guid: 485be651551ea7f4697769337b4f4501, type: 2}
   _swingLimit: 0
+  cables:
+  - {fileID: 1250958244873204871}
+  - {fileID: 5152683980657810906}
+  - {fileID: 2067511246954712593}
+  - {fileID: 2860845056471743512}
 --- !u!114 &7979483566269728109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2846,7 +2852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67cdb6cfb037397419e41b22092e4e8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _craneSpecs: {fileID: 11400000, guid: 485be651551ea7f4697769337b4f4501, type: 2}
+  craneSpecs: {fileID: 11400000, guid: 485be651551ea7f4697769337b4f4501, type: 2}
 --- !u!1 &3197333719747705691
 GameObject:
   m_ObjectHideFlags: 0
@@ -2940,7 +2946,7 @@ MeshCollider:
   m_GameObject: {fileID: 3197333719747705691}
   m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -4846,7 +4852,7 @@ MeshCollider:
   m_GameObject: {fileID: 6370365952164822156}
   m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -4898,7 +4904,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5067795d3200d4efdb939697d55d67dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dynamicSplitMerge: 0
+  dynamicSplitMerge: 1
   loosenessScale: 0
   maxLooseCable: 1
   verticalThreshold: 0.25
@@ -5341,7 +5347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5067795d3200d4efdb939697d55d67dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dynamicSplitMerge: 0
+  dynamicSplitMerge: 1
   loosenessScale: 0
   maxLooseCable: 1
   verticalThreshold: 0.25
@@ -5588,7 +5594,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5067795d3200d4efdb939697d55d67dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dynamicSplitMerge: 0
+  dynamicSplitMerge: 1
   loosenessScale: 0
   maxLooseCable: 1
   verticalThreshold: 0.25
@@ -6316,7 +6322,7 @@ MeshCollider:
   m_GameObject: {fileID: 7504765800375543467}
   m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -7061,7 +7067,7 @@ MeshCollider:
   m_GameObject: {fileID: 7854097105486064754}
   m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -7356,7 +7362,7 @@ MeshCollider:
   m_GameObject: {fileID: 8832907916511049884}
   m_Material: {fileID: 13400000, guid: 5589d6a5b85aa7a479c5a02460a24e39, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30

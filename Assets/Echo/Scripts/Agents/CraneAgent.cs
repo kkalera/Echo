@@ -10,7 +10,7 @@ namespace Echo
     public class CraneAgent : Agent
     {
         [SerializeField] Environment env;
-        [SerializeField] Crane crane;        
+        [SerializeField] Crane crane;
 
         private static readonly int katIndex = 0;
         private static readonly int katForwardValue = 1;
@@ -26,6 +26,7 @@ namespace Echo
         public override void OnEpisodeBegin()
         {
             env.OnEpisodeBegin();
+            crane.ResetPosition();
         }
         public override void Heuristic(in ActionBuffers actionsOut)
         {

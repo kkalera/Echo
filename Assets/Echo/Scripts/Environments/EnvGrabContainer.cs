@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.MLAgents;
 
 namespace Echo
 {
@@ -15,9 +16,11 @@ namespace Echo
         public override void OnEpisodeBegin()
         {
             collisionManager.Reset();
+            
         }
         public override State Step()
         {
+            if (collisionManager.collided) return new State(-1f, true);
             return new State();
         }
         public override void UpdateTargetWorldPosition(Vector3 position)
