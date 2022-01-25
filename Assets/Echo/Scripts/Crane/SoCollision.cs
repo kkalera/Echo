@@ -7,13 +7,13 @@ namespace Echo
     [CreateAssetMenu(fileName = "Collision", menuName = "ScriptableObjects/Collision", order = 1)]
     public class SoCollision : ScriptableObject
     {
-        public Collision collision;
+        public Collision _collision;
         public bool collided;
         public Collider triggered_collider;
         public bool triggered;
         public void Reset()
         {
-            collision = null;
+            _collision = null;
             triggered_collider = null;
             collided = false;
             triggered = false;

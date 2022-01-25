@@ -13,7 +13,6 @@ namespace Echo
         private void Start()
         {
             _rigidBody = GetComponent<Rigidbody>();
-            craneSpecs.katBody = _rigidBody;
             craneSpecs.katWorldPosition = transform.position;            
         }
 
@@ -31,9 +30,9 @@ namespace Echo
         }
         private void ManageKatLimit()
         {
-            if ((craneSpecs.katWorldPosition.z > 50 && craneSpecs.katBody.velocity.z > 0) || (craneSpecs.katWorldPosition.z < -25 && craneSpecs.katBody.velocity.z < 0))
+            if ((craneSpecs.katWorldPosition.z > 50 && _rigidBody.velocity.z > 0) || (craneSpecs.katWorldPosition.z < -25 && _rigidBody.velocity.z < 0))
             {
-                craneSpecs.katBody.AddForce(new Vector3(0, 0, -craneSpecs.katBody.velocity.z), ForceMode.VelocityChange);
+                _rigidBody.AddForce(new Vector3(0, 0, -_rigidBody.velocity.z), ForceMode.VelocityChange);
             }            
         }
     }

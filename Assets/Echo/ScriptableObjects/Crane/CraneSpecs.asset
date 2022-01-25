@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: CraneSpecs
   m_EditorClassIdentifier: Assembly-CSharp:Echo:SoWinchSpeed
   winchSpeed: 0
-  winchMaxSpeed: 10
-  winchAcceleration: 10
+  winchMaxSpeed: 5
+  winchAcceleration: 1
   katSpeed: 0
-  katMaxSpeed: 10
-  katAcceleration: 2
+  katMaxSpeed: 4
+  katAcceleration: 1
   skewSpeed: 0
   skewMaxSpeed: 1
-  spreaderWorldPosition: {x: 0, y: 0, z: 0}
+  spreaderWorldPosition: {x: 0.00030494793, y: 19.36876, z: 14.677885}
   spreaderBody: {fileID: 0}
-  katWorldPosition: {x: 0, y: 0, z: 0}
+  katWorldPosition: {x: 0, y: 32, z: 14.648}
   katBody: {fileID: 0}

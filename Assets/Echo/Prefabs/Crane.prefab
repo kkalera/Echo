@@ -879,7 +879,7 @@ GameObject:
   - component: {fileID: 5415453118229396042}
   m_Layer: 0
   m_Name: GantryCrane_01_StructureCenter_01_Prefab
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -2314,7 +2314,7 @@ GameObject:
   - component: {fileID: 4639861527186858126}
   m_Layer: 0
   m_Name: Crane
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2366,6 +2366,8 @@ MonoBehaviour:
   - {fileID: 5152683980657810906}
   - {fileID: 2067511246954712593}
   - {fileID: 2860845056471743512}
+  spreaderBody: {fileID: 1918590212833480033}
+  katBody: {fileID: 7699746005321144465}
 --- !u!114 &7979483566269728109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2384,6 +2386,7 @@ MonoBehaviour:
   MaxStep: 0
   env: {fileID: 0}
   crane: {fileID: 4639861527186858122}
+  autoPilot: 1
 --- !u!114 &4639861527186858123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2400,11 +2403,11 @@ MonoBehaviour:
     VectorObservationSize: 9
     NumStackedVectorObservations: 4
     m_ActionSpec:
-      m_NumContinuousActions: 0
-      BranchSizes: 0300000003000000
-    VectorActionSize: 0300000003000000
+      m_NumContinuousActions: 2
+      BranchSizes: 
+    VectorActionSize: 02000000
     VectorActionDescriptions: []
-    VectorActionSpaceType: 0
+    VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
@@ -2540,7 +2543,7 @@ GameObject:
   - component: {fileID: 3675660084841233518}
   m_Layer: 0
   m_Name: GantryCrane_01_Traction_01_Prefab (2)
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -2738,7 +2741,7 @@ GameObject:
   - component: {fileID: 7699746005321144464}
   m_Layer: 0
   m_Name: Kat
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -2867,7 +2870,7 @@ GameObject:
   - component: {fileID: 964232429340849137}
   m_Layer: 0
   m_Name: GantryCrane_01_Office_01_Prefab
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -3201,7 +3204,7 @@ GameObject:
   - component: {fileID: 3151875600416989237}
   m_Layer: 0
   m_Name: GantryCrane_01_Traction_01_Prefab (1)
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -4773,7 +4776,7 @@ GameObject:
   - component: {fileID: 2252164305516493163}
   m_Layer: 0
   m_Name: GantryCrane_01_StructureFront_01_Prefab
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -5118,7 +5121,7 @@ GameObject:
   - component: {fileID: 5493819309985940822}
   m_Layer: 0
   m_Name: GantryCrane_01_Traction_01_Prefab (3)
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -6243,7 +6246,7 @@ GameObject:
   - component: {fileID: 2289527496899937169}
   m_Layer: 0
   m_Name: GantryCrane_01_StructureBack_01_Prefab
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -6988,7 +6991,7 @@ GameObject:
   - component: {fileID: 4716693905420602507}
   m_Layer: 0
   m_Name: GantryCrane_01_HingeCablesFront_01_Prefab
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -7184,7 +7187,7 @@ GameObject:
   - component: {fileID: 626301193082748909}
   m_Layer: 0
   m_Name: GantryCrane_01_StructureBottom_01_Prefab
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -7282,7 +7285,7 @@ GameObject:
   - component: {fileID: 1270364011485216947}
   m_Layer: 0
   m_Name: GantryCrane_01_StructureTop_01_Prefab
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
@@ -7381,7 +7384,7 @@ GameObject:
   - component: {fileID: 7849706107698776163}
   m_Layer: 0
   m_Name: GantryCrane_01_Traction_01_Prefab
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8

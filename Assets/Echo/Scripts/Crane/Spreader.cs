@@ -14,29 +14,29 @@ namespace Echo
         void Start()
         {
             craneSpecs.spreaderWorldPosition = transform.position;
-            craneSpecs.spreaderBody = GetComponent<Rigidbody>();
+            //craneSpecs.spreaderBody = GetComponent<Rigidbody>();
         }
 
         void Update()
         {
-            craneSpecs.spreaderWorldPosition = transform.position;
+            craneSpecs.spreaderWorldPosition = transform.position;            
         }
 
         private void OnCollisionEnter(Collision collision)
         {
             collisionManager.collided = true;
-            collisionManager.collision = collision;
+            collisionManager._collision = collision;
         }
 
         private void OnCollisionStay(Collision collision)
         {
             collisionManager.collided = true;
-            collisionManager.collision = collision;
+            collisionManager._collision = collision;
         }
         private void OnCollisionExit(Collision collision)
         {
             collisionManager.collided = false;
-            collisionManager.collision = null;
+            collisionManager._collision = null;
         }
         private void OnTriggerEnter(Collider other)
         {

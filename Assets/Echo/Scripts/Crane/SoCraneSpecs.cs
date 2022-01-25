@@ -19,9 +19,9 @@ namespace Echo
         public float skewMaxSpeed = 1;
 
         public Vector3 spreaderWorldPosition = Vector3.zero;
-        public Rigidbody spreaderBody;
+        //public Rigidbody spreaderBody;
 
         public Vector3 katWorldPosition = Vector3.zero;        
-        public Rigidbody katBody;
+        //public Rigidbody katBody;
     }
 }

@@ -9,6 +9,8 @@ namespace Echo
         [SerializeField] public SoCraneSpecs craneSpecs;
         [SerializeField][Range(0,10)] private float _swingLimit;
         [SerializeField] private List<Filo.Cable> cables;
+        [SerializeField] public Rigidbody spreaderBody;
+        [SerializeField] public Rigidbody katBody;
 
         public void MoveWinch(float value)
         {
@@ -27,27 +29,27 @@ namespace Echo
         {
             if (Mathf.Abs(craneSpecs.spreaderWorldPosition.z - craneSpecs.katWorldPosition.z) > _swingLimit)
             {
-                var spreaderVelocity = craneSpecs.spreaderBody.velocity;
-                var katVelocity = craneSpecs.katBody.velocity;
+                var spreaderVelocity = spreaderBody.velocity;
+                var katVelocity = katBody.velocity;
                 var delta = Mathf.Abs(spreaderVelocity.z - katVelocity.z);
 
                 if (craneSpecs.spreaderWorldPosition.z > craneSpecs.katWorldPosition.z)
                 {                    
-                    craneSpecs.spreaderBody.AddForce(new Vector3(0, 0, -delta), ForceMode.VelocityChange);
+                    spreaderBody.AddForce(new Vector3(0, 0, -delta), ForceMode.VelocityChange);
                 }
                 else
                 {
-                    craneSpecs.spreaderBody.AddForce(new Vector3(0, 0, delta), ForceMode.VelocityChange);
+                    spreaderBody.AddForce(new Vector3(0, 0, delta), ForceMode.VelocityChange);
                 }
             }
         }
         public void ResetPosition()
         {
-            craneSpecs.spreaderBody.isKinematic = true;
-            craneSpecs.katBody.isKinematic = true;
+            spreaderBody.isKinematic = true;
+            katBody.isKinematic = true;
 
-            craneSpecs.katBody.transform.position = new Vector3(0, 32, 15);
-            craneSpecs.spreaderBody.transform.position = new Vector3(0, 20, 15);
+            katBody.transform.position = new Vector3(0, 32, 15);
+            spreaderBody.transform.position = new Vector3(0, 20, 15);
             for(int i = 0; i < cables.Count; i++)
             {
                 cables[i].Setup();
@@ -63,8 +65,8 @@ namespace Echo
                 }
             }
 
-            craneSpecs.spreaderBody.isKinematic = false;
-            craneSpecs.katBody.isKinematic = false;
+            spreaderBody.isKinematic = false;
+            katBody.isKinematic = false;
         }
         
     }

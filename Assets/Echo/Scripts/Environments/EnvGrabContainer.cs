@@ -8,19 +8,32 @@ namespace Echo
     public class EnvGrabContainer : Environment
     {
         [SerializeField] SoCollision collisionManager;
-
+        [SerializeField] SoCraneSpecs craneSpecs;
+        [SerializeField] GameObject containerPrefab;
+        [TagsAndLayers.TagDropdown] public string tagDead;
+        [TagsAndLayers.TagDropdown] public string tagContainer;
+        private GameObject container;
+        
         public override void InitializeEnvironment()
         {
-
+            container = Instantiate(containerPrefab, new Vector3(0, 0, 0), Quaternion.Euler(Vector3.zero), transform);
         }
         public override void OnEpisodeBegin()
         {
             collisionManager.Reset();
-            
+            container.transform.parent = transform;
+            container.transform.position = Vector3.zero;
         }
         public override State Step()
         {
-            if (collisionManager.collided) return new State(-1f, true);
+            if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagDead)) return new State(-1f, true);
+            if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagContainer))
+            {                
+                if(Mathf.Abs(craneSpecs.spreaderWorldPosition.z - TargetWorldPosition.z) < 0.1f)
+                {
+                    return new State(1f, true);
+                }
+            }
             return new State();
         }
         public override void UpdateTargetWorldPosition(Vector3 position)
