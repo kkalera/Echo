@@ -47,7 +47,7 @@ namespace Echo
 
             if (autoPilot)
             {
-                var inputs = GetInputs(env.TargetWorldPosition, crane.craneSpecs.spreaderWorldPosition, crane.katBody.velocity, crane.craneSpecs.katAcceleration / crane.craneSpecs.katMaxSpeed);
+                var inputs = GetInputs(env.TargetWorldPosition, crane.craneSpecs.spreaderWorldPosition, crane.katBody.velocity, crane.craneSpecs.katAcceleration / crane.craneSpecs.katMaxSpeed);                
                 conActions[katIndex] = inputs.z;
                 conActions[winchIndex] = inputs.y;
             }
