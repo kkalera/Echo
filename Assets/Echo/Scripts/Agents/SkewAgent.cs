@@ -10,14 +10,19 @@ public class SkewAgent : Agent
     [SerializeField] SkewManager skewManager;
     [SerializeField] Transform spreader;
     [SerializeField] GameObject projectilePrefab;
+    [SerializeField] float maxAngle = 0.15f;
     private GameObject projectile = null;
     private bool readyToShoot = true;
     private float timeStraight;
+    private float startTime;
+    bool straightened = false;
 
     public override void OnEpisodeBegin()
     {
         skewManager.transform.rotation = Quaternion.Euler(Vector3.zero);
         spreader.transform.rotation = Quaternion.Euler(new Vector3(0,0,0));
+        startTime = Time.time;
+        straightened = false;
     }
     public override void Heuristic(in ActionBuffers actionsOut)
     {
@@ -52,7 +57,7 @@ public class SkewAgent : Agent
     {
         var spreaderAngle = spreader.eulerAngles.y;
         if (spreaderAngle >= 300) spreaderAngle = -360 + spreaderAngle;
-        if (Mathf.Abs(spreaderAngle) < 0.5f)
+        if (Mathf.Abs(spreaderAngle) < maxAngle)
         {
             timeStraight += Time.deltaTime;
         }
@@ -60,7 +65,13 @@ public class SkewAgent : Agent
         {
             timeStraight = 0;
         }
-        if (timeStraight > 2) readyToShoot = true;
+        if (timeStraight > 5) readyToShoot = true;
+        /*if (timeStraight > 10 && !straightened)
+        {
+            straightened = true;
+            var tts = Time.time -startTime;
+            Debug.Log("Straighten time: " + tts);
+        } */           
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -74,8 +85,8 @@ public class SkewAgent : Agent
         sensor.AddObservation(skewAngle);
         sensor.AddObservation(spreaderAngle);
 
-        var reward = -1 / MaxStep;
-        if (Mathf.Abs(spreaderAngle) < 0.5f) reward = 1;
+        var reward = -1 / (MaxStep < 1 ? 1000 : MaxStep);
+        if (Mathf.Abs(spreaderAngle) < maxAngle) reward = 1;
         AddReward(reward);
     }
 
@@ -84,6 +95,8 @@ public class SkewAgent : Agent
         var rval = Random.value;
         var spawnLocation = Vector3.zero;
         var direction = Vector3.zero;
+        var rotation = Vector3.zero;
+
         if(rval < 0.25)
         {
             spawnLocation = new Vector3(-4.5f, -0.5f, -10f);
@@ -108,7 +121,5 @@ public class SkewAgent : Agent
         projectile = Instantiate(projectilePrefab, spawnLocation, Quaternion.Euler(Vector3.zero), transform);
         var rb = projectile.GetComponent<Rigidbody>();
         rb.AddForce(direction, ForceMode.Acceleration);
-        
-
     }
 }
