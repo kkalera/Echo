@@ -86,10 +86,7 @@ public class SkewAgent : Agent
         sensor.AddObservation(spreaderAngle);
 
         float reward = -1 / (MaxStep < 1 ? 1000 : MaxStep);
-        if (Mathf.Abs(spreaderAngle) < maxAngle) 
-        { 
-            reward = 1 - (maxAngle / Mathf.Max(Mathf.Abs(spreaderAngle),0.001f)); 
-        }
+        if (Mathf.Abs(spreaderAngle) < maxAngle) reward = 1;
         AddReward(reward);
     }
 

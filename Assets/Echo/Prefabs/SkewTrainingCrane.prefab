@@ -679,7 +679,7 @@ MonoBehaviour:
   skewManager: {fileID: 1232415174368780913}
   spreader: {fileID: 6472010770565989749}
   projectilePrefab: {fileID: 7568659084728638485, guid: 778b62316f1e3144d95f900ede92fc8f, type: 3}
-  maxAngle: 0.25
+  maxAngle: 0.15
 --- !u!114 &1749400405
 MonoBehaviour:
   m_ObjectHideFlags: 0
