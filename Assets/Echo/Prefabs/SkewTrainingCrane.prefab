@@ -675,7 +675,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 1000
+  MaxStep: 10000
   skewManager: {fileID: 1232415174368780913}
   spreader: {fileID: 6472010770565989749}
   projectilePrefab: {fileID: 7568659084728638485, guid: 778b62316f1e3144d95f900ede92fc8f, type: 3}
