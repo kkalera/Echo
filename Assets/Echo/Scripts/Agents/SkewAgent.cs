@@ -88,7 +88,7 @@ public class SkewAgent : Agent
         float reward = -1 / (MaxStep < 1 ? 1000 : MaxStep);
         if (Mathf.Abs(spreaderAngle) < maxAngle) 
         { 
-            reward = 1 - (maxAngle - Mathf.Abs(spreaderAngle)); 
+            reward = 1 - (maxAngle / Mathf.Max(Mathf.Abs(spreaderAngle),0.001f)); 
         }
         AddReward(reward);
     }
