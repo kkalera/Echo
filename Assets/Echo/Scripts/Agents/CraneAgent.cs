@@ -47,7 +47,7 @@ namespace Echo
 
             if (autoPilot)
             {
-                var inputs = GetInputs(env.TargetWorldPosition, crane.craneSpecs.spreaderWorldPosition, crane.katBody.velocity, crane.craneSpecs.katAcceleration / crane.craneSpecs.katMaxSpeed);                
+                var inputs = GetInputs(env.TargetWorldPosition, crane.craneSpecs.spreaderWorldPosition, crane.katBody.velocity, crane.craneSpecs.katAcceleration);
                 conActions[katIndex] = inputs.z;
                 conActions[winchIndex] = inputs.y;
             }
@@ -116,7 +116,7 @@ namespace Echo
             float inputY = distanceToTravelY / (Mathf.Max(Mathf.Abs(currentSpeed.y), 0.05f) / acceleration);
 
             float distanceToTravelZ = Mathf.Abs(targetPosition.z - spreaderPosition.z);
-            float inputZ = distanceToTravelZ / (Mathf.Max(Mathf.Abs(currentSpeed.z), 0.05f) / acceleration);
+            float inputZ = distanceToTravelZ / (Mathf.Max(Mathf.Abs(currentSpeed.z), 0.05f) * acceleration);
 
             if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
             if (targetPosition.z < spreaderPosition.z) inputZ = -inputZ;

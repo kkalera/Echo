@@ -25,6 +25,10 @@ namespace Echo
         {
             ManageSwingLimit();
         }
+        void FixedUpdate()
+        {
+            
+        }
         private void ManageSwingLimit()
         {
             if (Mathf.Abs(craneSpecs.spreaderWorldPosition.z - craneSpecs.katWorldPosition.z) > _swingLimit)
@@ -50,6 +54,8 @@ namespace Echo
 
             katBody.transform.position = new Vector3(0, 32, 15);
             spreaderBody.transform.position = new Vector3(0, 20, 15);
+            spreaderBody.transform.rotation = Quaternion.Euler(Vector3.zero);
+
             for(int i = 0; i < cables.Count; i++)
             {
                 cables[i].Setup();
