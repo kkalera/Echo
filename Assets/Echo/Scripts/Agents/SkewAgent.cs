@@ -14,15 +14,11 @@ public class SkewAgent : Agent
     private GameObject projectile = null;
     private bool readyToShoot = true;
     private float timeStraight;
-    private float startTime;
-    bool straightened = false;
 
     public override void OnEpisodeBegin()
     {
         skewManager.transform.rotation = Quaternion.Euler(Vector3.zero);
-        spreader.transform.rotation = Quaternion.Euler(new Vector3(0,0,0));
-        startTime = Time.time;
-        straightened = false;
+        spreader.transform.rotation = Quaternion.Euler(new Vector3(0,0,0));        
     }
     public override void Heuristic(in ActionBuffers actionsOut)
     {
@@ -50,6 +46,7 @@ public class SkewAgent : Agent
             readyToShoot = false;
             timeStraight = 0;
             ShootRandomProjectile();
+            GetComponent<Timer>().StartTimer();
         }
 
     }    
@@ -65,7 +62,11 @@ public class SkewAgent : Agent
         {
             timeStraight = 0;
         }
-        if (timeStraight > 5) readyToShoot = true;
+        if (timeStraight > 5)
+        {
+            readyToShoot = true;
+            GetComponent<Timer>().EndTimer();
+        }
         /*if (timeStraight > 10 && !straightened)
         {
             straightened = true;
@@ -84,6 +85,7 @@ public class SkewAgent : Agent
 
         sensor.AddObservation(skewAngle);
         sensor.AddObservation(spreaderAngle);
+        sensor.AddObservation(spreader.GetComponent<Rigidbody>().angularVelocity);
 
         float reward = -1 / (MaxStep < 1 ? 1000 : MaxStep);
         if (Mathf.Abs(spreaderAngle) < maxAngle) reward = 1;
