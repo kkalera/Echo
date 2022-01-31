@@ -33,8 +33,8 @@ namespace Echo
         public static void AccelerateRigidbody(Rigidbody body, Vector3 targetVelocity, float maxAccel, ForceMode forceMode = ForceMode.Acceleration)
         {
             Vector3 deltaV = targetVelocity - body.velocity;
-            Vector3 accel = (deltaV / Time.deltaTime) * Time.timeScale;
-
+            Vector3 accel = deltaV / Time.fixedDeltaTime;
+            
             if (accel.sqrMagnitude > maxAccel * maxAccel)
                 accel = accel.normalized * maxAccel;
 
