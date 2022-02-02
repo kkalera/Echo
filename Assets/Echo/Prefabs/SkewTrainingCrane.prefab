@@ -121,7 +121,7 @@ MonoBehaviour:
     orientation: 1
     slack: 0
     hybridRolling: 0
-    storedCable: 1.4450288
+    storedCable: 1.4450305
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 2.6, y: 1.5, z: 1}
@@ -379,7 +379,7 @@ MonoBehaviour:
     orientation: 1
     slack: 0
     hybridRolling: 0
-    storedCable: 1.4450288
+    storedCable: 1.4450303
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: -2.6, y: 1.5, z: -1}
@@ -528,7 +528,7 @@ MonoBehaviour:
     orientation: 1
     slack: 0
     hybridRolling: 0
-    storedCable: 1.4450288
+    storedCable: 1.4450303
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 2.6, y: 1.5, z: -1}
@@ -621,6 +621,7 @@ GameObject:
   - component: {fileID: 1749400403}
   - component: {fileID: 1749400404}
   - component: {fileID: 1749400405}
+  - component: {fileID: 1749400401}
   m_Layer: 0
   m_Name: SkewTrainingCrane
   m_TagString: Untagged
@@ -679,7 +680,7 @@ MonoBehaviour:
   skewManager: {fileID: 1232415174368780913}
   spreader: {fileID: 6472010770565989749}
   projectilePrefab: {fileID: 7568659084728638485, guid: 778b62316f1e3144d95f900ede92fc8f, type: 3}
-  maxAngle: 0.15
+  maxAngle: 0.5
 --- !u!114 &1749400405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -693,7 +694,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 2
+    VectorObservationSize: 5
     NumStackedVectorObservations: 4
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -710,6 +711,18 @@ MonoBehaviour:
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
+--- !u!114 &1749400401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7559978732753887748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 979fdf1634fdedc49a6b820fe326afb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8908517954933412312
 GameObject:
   m_ObjectHideFlags: 0
@@ -778,7 +791,7 @@ MonoBehaviour:
     orientation: 1
     slack: 0
     hybridRolling: 0
-    storedCable: 1.4450288
+    storedCable: 1.4450305
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: -2.6, y: 1.5, z: 1}
