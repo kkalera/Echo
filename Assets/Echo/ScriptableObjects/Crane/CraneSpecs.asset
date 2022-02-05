@@ -17,7 +17,7 @@ MonoBehaviour:
   winchAcceleration: 1
   katSpeed: 0
   katMaxSpeed: 4
-  katAcceleration: 4
+  katAcceleration: 1
   skewSpeed: 0
   skewMaxSpeed: 1
   spreaderWorldPosition: {x: -0.000017050423, y: 19.974003, z: 4.787147}
