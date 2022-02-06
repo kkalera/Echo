@@ -12,30 +12,35 @@ public class MovementTest : MonoBehaviour
     private Rigidbody rbody;
     bool startMovement;
     bool resetEnvironment;
+    bool autopilot;
+    [SerializeField]Vector3 target;
 
     private void Start()
     { 
         rbody = GetComponent<Rigidbody>();
-        ResetEnvironment();
+        ResetEnvironment();        
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow) || started) 
         {
-            startMovement = true;
+            //startMovement = true;
+            autopilot = true;
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow) && !started)
         {
             resetEnvironment = true;
         }
+        
     }
 
     private void FixedUpdate()
     {
         if (startMovement) StartMovementTest();
         if (resetEnvironment) ResetEnvironment();
+        MoveTowardsGoal();
     }
 
     void ResetEnvironment()
@@ -45,6 +50,7 @@ public class MovementTest : MonoBehaviour
         startTime = 0;        
         rbody.velocity = Vector3.zero;
         transform.position = Vector3.zero;
+        autopilot = false;
     }
     void StartMovementTest()
     {
@@ -56,13 +62,13 @@ public class MovementTest : MonoBehaviour
 
         if(!slowdown && !Mathf.Approximately(rbody.velocity.z, craneSpecs.katMaxSpeed))
         {
-            Echo.Utils.AccelerateRigidbody_Z_Axis(rbody, craneSpecs.katMaxSpeed, craneSpecs.katAcceleration, Time.fixedDeltaTime);
+            Echo.Utils.AccelerateRigidbody_Z_Axis(rbody, craneSpecs.katMaxSpeed, craneSpecs.katMaxSpeed, craneSpecs.katAcceleration, Time.fixedDeltaTime);
         }        
 
         if(slowdown || Mathf.Approximately(rbody.velocity.z, craneSpecs.katMaxSpeed) && !Mathf.Approximately(rbody.velocity.z, 0f))
         {
             slowdown = true;
-            Echo.Utils.AccelerateRigidbody_Z_Axis(rbody, -4, craneSpecs.katAcceleration, Time.fixedDeltaTime);
+            Echo.Utils.AccelerateRigidbody_Z_Axis(rbody, -4, craneSpecs.katMaxSpeed, craneSpecs.katAcceleration, Time.fixedDeltaTime);
         }
         
         if(slowdown && Mathf.Approximately(rbody.velocity.z, -4f))
@@ -71,5 +77,21 @@ public class MovementTest : MonoBehaviour
             started = false;
             slowdown = false;
         }
+    }
+    void MoveTowardsGoal()
+    {
+        if (autopilot)
+        {
+            float distance = Mathf.Abs(transform.position.z - target.z);
+            //float input = distance - (Mathf.Max(Mathf.Abs(rbody.velocity.z), 0.05f) / (craneSpecs.katMaxSpeed / craneSpecs.katAcceleration));
+            float input = distance - (Mathf.Max(Mathf.Abs(rbody.velocity.z), 0.05f) / (craneSpecs.katMaxSpeed / craneSpecs.katAcceleration));
+            if (target.z < transform.position.z) input = -input;
+            //input = Mathf.Clamp(input, -1, 1);
+            MoveBlock(input);
+        }
+    }
+    void MoveBlock(float val)
+    {
+        Echo.Utils.AccelerateRigidbody_Z_Axis(rbody, val * craneSpecs.katMaxSpeed, craneSpecs.katMaxSpeed, craneSpecs.katAcceleration, Time.fixedDeltaTime);
     }
 }

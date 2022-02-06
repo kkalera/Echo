@@ -705,6 +705,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   craneSpecs: {fileID: 11400000, guid: 485be651551ea7f4697769337b4f4501, type: 2}
+  target: {x: 0, y: 0, z: 20}
 --- !u!54 &1319696537
 Rigidbody:
   m_ObjectHideFlags: 0

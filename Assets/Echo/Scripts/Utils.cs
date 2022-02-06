@@ -66,16 +66,17 @@ namespace Echo
             vel += accel;
             body.velocity = vel;
         }
-        public static void AccelerateRigidbody_Z_Axis(Rigidbody body, float targetVelocity, float maxAccel, float timeDelta)
+        public static void AccelerateRigidbody_Z_Axis(Rigidbody body, float targetVelocity, float maxSpeed, float maxAccel, float timeDelta)
         {
+            
             float accel = maxAccel * timeDelta;
-            float delta = targetVelocity - body.velocity.z;
-            if (delta < 0) accel *= -1;
-
-            if (accel > delta) accel = delta;
+            float delta = Mathf.Abs(targetVelocity - body.velocity.z);
+            if (accel > delta) accel = delta;            
 
             Vector3 vel = body.velocity;
-            vel.z += accel;
+            if (targetVelocity < vel.z) vel.z -= accel;
+            if (targetVelocity > vel.z) vel.z += accel;
+            vel.z = Mathf.Clamp(vel.z, -maxSpeed, maxSpeed);
             body.velocity = vel;
         }
         public static void AccelerateRigidbody_X_Axis(Rigidbody body, float targetVelocity, float maxAccel, float timeDelta)

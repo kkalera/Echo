@@ -28,7 +28,7 @@ namespace Echo
 
         public void MoveKat(float value)
         {            
-            Utils.AccelerateRigidbody_Z_Axis(_rigidBody, value * craneSpecs.katMaxSpeed, craneSpecs.katAcceleration, Time.fixedDeltaTime);
+            Utils.AccelerateRigidbody_Z_Axis(_rigidBody, value * craneSpecs.katMaxSpeed, craneSpecs.katMaxSpeed, craneSpecs.katAcceleration, Time.fixedDeltaTime);
         }
         private void ManageKatLimit()
         {
