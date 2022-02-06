@@ -67,11 +67,10 @@ namespace Echo
             body.velocity = vel;
         }
         public static void AccelerateRigidbody_Z_Axis(Rigidbody body, float targetVelocity, float maxSpeed, float maxAccel, float timeDelta)
-        {
-            
+        {            
             float accel = maxAccel * timeDelta;
             float delta = Mathf.Abs(targetVelocity - body.velocity.z);
-            if (accel > delta) accel = delta;            
+            if (accel > delta) accel = delta;
 
             Vector3 vel = body.velocity;
             if (targetVelocity < vel.z) vel.z -= accel;
