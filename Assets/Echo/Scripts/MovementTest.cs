@@ -7,8 +7,11 @@ public class MovementTest : MonoBehaviour
 {
     [SerializeField] Echo.SoCraneSpecs craneSpecs;
     private bool started;
+    private bool slowdown;
     private float startTime;
     private Rigidbody rbody;
+    bool startMovement;
+    bool resetEnvironment;
 
     private void Start()
     { 
@@ -18,24 +21,21 @@ public class MovementTest : MonoBehaviour
 
     void Update()
     {
+        startMovement = (Input.GetKeyDown(KeyCode.UpArrow) || started) ? true : false;
+        resetEnvironment = (Input.GetKeyDown(KeyCode.DownArrow) && !started) ? true: false ;
         
     }
 
     private void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) || started)
-        {
-            StartMovementTest();
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow) && !started)
-        {
-            ResetEnvironment();
-        }
+        if (startMovement) StartMovementTest();
+        if (resetEnvironment) ResetEnvironment();
     }
 
     void ResetEnvironment()
     {
         started = false;
+        slowdown = false;
         startTime = 0;        
         rbody.velocity = Vector3.zero;
         transform.position = Vector3.zero;
@@ -46,17 +46,25 @@ public class MovementTest : MonoBehaviour
 
         started = true;
 
-        Echo.Utils.ClearLogConsole();        
+        Echo.Utils.ClearLogConsole();
 
-        if(!Mathf.Approximately(rbody.velocity.z, craneSpecs.katMaxSpeed))
+        if(!slowdown && !Mathf.Approximately(rbody.velocity.z, craneSpecs.katMaxSpeed))
         {
             Echo.Utils.AccelerateRigidbodyT(rbody, new Vector3(0,0,craneSpecs.katMaxSpeed), new Vector3(0,0,craneSpecs.katAcceleration), Time.fixedDeltaTime);
+            //Echo.Utils.AccelerateRigidbodyT(rbody, new Vector3(0, 0, 1), new Vector3(0, 0, craneSpecs.katAcceleration), Time.fixedDeltaTime);
+        }        
+
+        if(slowdown || Mathf.Approximately(rbody.velocity.z, craneSpecs.katMaxSpeed) && !Mathf.Approximately(rbody.velocity.z, 0f))
+        {
+            slowdown = true;
+            Echo.Utils.AccelerateRigidbodyT(rbody, new Vector3(0, 0, -4), new Vector3(0, 0, craneSpecs.katAcceleration), Time.fixedDeltaTime);
         }
-        else
+        
+        if(slowdown && Mathf.Approximately(rbody.velocity.z, -4f))
         {
             Debug.Log("Time to accelerate: " + (Time.time - startTime));
             started = false;
+            slowdown = false;
         }
-        
     }
 }
