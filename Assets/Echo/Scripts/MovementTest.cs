@@ -21,9 +21,15 @@ public class MovementTest : MonoBehaviour
 
     void Update()
     {
-        startMovement = (Input.GetKeyDown(KeyCode.UpArrow) || started) ? true : false;
-        resetEnvironment = (Input.GetKeyDown(KeyCode.DownArrow) && !started) ? true: false ;
-        
+        if (Input.GetKeyDown(KeyCode.UpArrow) || started) 
+        {
+            startMovement = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow) && !started)
+        {
+            resetEnvironment = true;
+        }
     }
 
     private void FixedUpdate()
@@ -50,14 +56,13 @@ public class MovementTest : MonoBehaviour
 
         if(!slowdown && !Mathf.Approximately(rbody.velocity.z, craneSpecs.katMaxSpeed))
         {
-            Echo.Utils.AccelerateRigidbodyT(rbody, new Vector3(0,0,craneSpecs.katMaxSpeed), new Vector3(0,0,craneSpecs.katAcceleration), Time.fixedDeltaTime);
-            //Echo.Utils.AccelerateRigidbodyT(rbody, new Vector3(0, 0, 1), new Vector3(0, 0, craneSpecs.katAcceleration), Time.fixedDeltaTime);
+            Echo.Utils.AccelerateRigidbody_Z_Axis(rbody, craneSpecs.katMaxSpeed, craneSpecs.katAcceleration, Time.fixedDeltaTime);
         }        
 
         if(slowdown || Mathf.Approximately(rbody.velocity.z, craneSpecs.katMaxSpeed) && !Mathf.Approximately(rbody.velocity.z, 0f))
         {
             slowdown = true;
-            Echo.Utils.AccelerateRigidbodyT(rbody, new Vector3(0, 0, -4), new Vector3(0, 0, craneSpecs.katAcceleration), Time.fixedDeltaTime);
+            Echo.Utils.AccelerateRigidbody_Z_Axis(rbody, -4, craneSpecs.katAcceleration, Time.fixedDeltaTime);
         }
         
         if(slowdown && Mathf.Approximately(rbody.velocity.z, -4f))

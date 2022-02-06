@@ -17,16 +17,18 @@ namespace Echo
         }
 
         void Update()
+        {            
+            craneSpecs.katWorldPosition = transform.position;            
+        }
+        private void FixedUpdate()
         {
             ManageKatLimit();
-            craneSpecs.katWorldPosition = transform.position;
             MoveKat(craneSpecs.katSpeed);
         }
 
         public void MoveKat(float value)
-        {
-            Vector3 targetVelocity = new Vector3(0, 0, value * craneSpecs.katMaxSpeed);
-            Utils.AccelerateRigidbody(_rigidBody, targetVelocity, craneSpecs.katAcceleration);
+        {            
+            Utils.AccelerateRigidbody_Z_Axis(_rigidBody, value * craneSpecs.katMaxSpeed, craneSpecs.katAcceleration, Time.fixedDeltaTime);
         }
         private void ManageKatLimit()
         {
