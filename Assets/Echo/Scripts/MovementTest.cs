@@ -83,27 +83,16 @@ public class MovementTest : MonoBehaviour
     void MoveTowardsGoal()
     {
         if (autopilot)
-        {
-            /*
+        {            
             float distance = Mathf.Abs(transform.position.z - target.z);
             if (Mathf.Approximately(distance, 0)) return;
 
-            //float input = distance - (Mathf.Max(Mathf.Abs(rbody.velocity.z), 0.05f) / (craneSpecs.katMaxSpeed / craneSpecs.katAcceleration));
-            float accelDistance = Mathf.Max(Mathf.Abs(rbody.velocity.z), 0.05f) / craneSpecs.katAcceleration;
+            float vel = Mathf.Abs(rbody.velocity.z);
+            float d = Mathf.Pow(vel, 2) / (2 * craneSpecs.katAcceleration);
+            float input = distance - d;
 
-            float input = distance / accelDistance;
             if (target.z < transform.position.z) input = -input;
-            input = Mathf.Clamp(input, -1, 1);
-            MoveBlock(input);
-            */
 
-            // Distance = velocity * time + 1/2 * acceleration * time^2
-            // velocity = distance / time + 1/2 * acceleration * time^2
-            float distance = Mathf.Abs(transform.position.z - target.z);
-            if (Mathf.Approximately(distance, 0)) return;
-
-            float input = distance / 0.5f * craneSpecs.katAcceleration * Mathf.Pow(Time.fixedDeltaTime, 2);
-            Debug.Log("input:" + input);
             MoveBlock(input);
 
             if (Mathf.Approximately(transform.position.z, target.z)) 
