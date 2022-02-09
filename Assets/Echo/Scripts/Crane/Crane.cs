@@ -24,11 +24,11 @@ namespace Echo
         private void Update()
         {
             craneSpecs.environmentWorldPosition = transform.position;
-            ManageSwingLimit();
+            
         }
         void FixedUpdate()
         {
-            
+            ManageSwingLimit();
         }
         private void ManageSwingLimit()
         {
