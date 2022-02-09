@@ -18,8 +18,8 @@ namespace Echo
         }
 
         void Update()
-        {
-            craneSpecs.spreaderWorldPosition = transform.position;            
+        {            
+            craneSpecs.spreaderWorldPosition = transform.position - craneSpecs.environmentWorldPosition; 
         }
 
         private void OnCollisionEnter(Collision collision)

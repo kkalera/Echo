@@ -16,7 +16,7 @@ namespace Echo
         
         public override void InitializeEnvironment()
         {
-            container = Instantiate(containerPrefab, new Vector3(0, 0, 0), Quaternion.Euler(Vector3.zero), transform);
+            container = Instantiate(containerPrefab, Vector3.zero, Quaternion.Euler(Vector3.zero), transform);
         }
         public override void OnEpisodeBegin()
         {

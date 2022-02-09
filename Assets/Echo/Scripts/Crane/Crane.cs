@@ -23,6 +23,7 @@ namespace Echo
         }
         private void Update()
         {
+            craneSpecs.environmentWorldPosition = transform.position;
             ManageSwingLimit();
         }
         void FixedUpdate()
@@ -52,8 +53,8 @@ namespace Echo
             spreaderBody.isKinematic = true;
             katBody.isKinematic = true;
 
-            katBody.transform.position = new Vector3(0, 32, 15);
-            spreaderBody.transform.position = new Vector3(0, 20, 15);
+            katBody.transform.position = new Vector3(0, 32, 25);
+            spreaderBody.transform.position = new Vector3(0, 20, 25);
             spreaderBody.transform.rotation = Quaternion.Euler(Vector3.zero);
 
             for(int i = 0; i < cables.Count; i++)

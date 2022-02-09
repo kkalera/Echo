@@ -14,28 +14,21 @@ namespace Echo
         [SerializeField] private bool autoPilot;
 
         private static readonly int katIndex = 0;
-        private static readonly int katForwardValue = 1;
-        private static readonly int katBackwardsValue = 2;
         private static readonly int winchIndex = 1;
-        private static readonly int winchUpValue = 1;
-        private static readonly int winchDownValue = 2;
+        private float lastActionTime;
 
         private void Start()
         {
-            env.InitializeEnvironment();
+            env.InitializeEnvironment();            
         }
         public override void OnEpisodeBegin()
         {
+            lastActionTime = Time.time;
             env.OnEpisodeBegin();
             crane.ResetPosition();
-        }
+        }        
         public override void Heuristic(in ActionBuffers actionsOut)
-        {
-            /*var disActions = actionsOut.DiscreteActions;
-            if (Input.GetKey(KeyCode.Z)) disActions[katIndex] = katForwardValue;
-            if (Input.GetKey(KeyCode.S)) disActions[katIndex] = katBackwardsValue;
-            if (Input.GetKey(KeyCode.UpArrow)) disActions[winchIndex] = winchUpValue;
-            if (Input.GetKey(KeyCode.DownArrow)) disActions[winchIndex] = winchDownValue;*/
+        {            
             var conActions = actionsOut.ContinuousActions;
             if (Input.GetKey(KeyCode.Z)) conActions[katIndex] = 1;
             if (Input.GetKey(KeyCode.S)) conActions[katIndex] = -1;
@@ -46,8 +39,14 @@ namespace Echo
             if (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow)) conActions[winchIndex] = 0;
 
             if (autoPilot)
-            {
-                var inputs = GetInputs(env.TargetWorldPosition, crane.craneSpecs.spreaderWorldPosition, crane.katBody.velocity, crane.craneSpecs.katAcceleration);
+            {                
+                /*float distanceCausedByLatency = crane.katBody.velocity.z * (Time.time - lastActionTime);
+                Utils.ClearLogConsole();
+                Debug.Log("Distance because of latency: " + distanceCausedByLatency);
+
+                Vector3 katPos = crane.craneSpecs.katWorldPosition - new Vector3(0, 0, distanceCausedByLatency);*/
+
+                var inputs = GetInputs(env.TargetWorldPosition, crane.craneSpecs.katWorldPosition, crane.katBody.velocity, new Vector3(0, crane.craneSpecs.winchAcceleration, crane.craneSpecs.katAcceleration));
                 conActions[katIndex] = inputs.z;
                 conActions[winchIndex] = inputs.y;
             }
@@ -55,38 +54,9 @@ namespace Echo
 
         public override void OnActionReceived(ActionBuffers actions)
         {
-            /*
-            // Kat movement
-            int katAction = actions.DiscreteActions[katIndex];
-            switch (katAction)
-            {
-                case 1:
-                    crane.MoveKat(1);
-                    break;
-                case 2:
-                    crane.MoveKat(-1);
-                    break;
-                default:
-                    crane.MoveKat(0);
-                    break;
-            }
-
-            // Winch Movement
-            int winchAction = actions.DiscreteActions[winchIndex];
-            switch (winchAction)
-            {
-                case 1:
-                    crane.MoveWinch(1);
-                    break;
-                case 2:
-                    crane.MoveWinch(-1);
-                    break;
-                default:
-                    crane.MoveWinch(0);
-                    break;
-            }
-            */
-
+            Utils.ClearLogConsole();
+            Debug.Log("Time between actions: " + (Time.time - lastActionTime));
+            lastActionTime = Time.time;
             float katAction = actions.ContinuousActions[katIndex];
             crane.MoveKat(katAction);
 
@@ -106,26 +76,35 @@ namespace Echo
             sensor.AddObservation(env.TargetWorldPosition);
         }
 
-        public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, float acceleration)
+        public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, Vector3 acceleration)
         {
 
             Vector3 inputs = new Vector3(0, 0, 0);
             targetPosition = GetNextPosition(spreaderPosition, targetPosition);
 
-            float distanceToTravelY = Mathf.Abs(targetPosition.y - spreaderPosition.y);
-            float inputY = distanceToTravelY / (Mathf.Max(Mathf.Abs(currentSpeed.y), 0.05f) / acceleration);
+            ///// Z movement
+            float distanceZ = Mathf.Abs(spreaderPosition.z - targetPosition.z);
+            if (!Mathf.Approximately(distanceZ, 0))
+            {
+                float vel = Mathf.Abs(currentSpeed.z);
+                float d = Mathf.Pow(vel, 2) / (2 * acceleration.z);
+                inputs.z = distanceZ - d;
 
-            float distanceToTravelZ = Mathf.Abs(targetPosition.z - spreaderPosition.z);
-            float inputZ = distanceToTravelZ / (Mathf.Max(Mathf.Abs(currentSpeed.z), 0.05f) * acceleration);
+                if (targetPosition.z < spreaderPosition.z) inputs.z = -inputs.z;
+                inputs.z = Mathf.Clamp(inputs.z, -1, 1);
+            }
+            /////
+
+            ///// Y movement
+            float distanceToTravelY = Mathf.Abs(targetPosition.y - spreaderPosition.y);
+            float inputY = distanceToTravelY / (Mathf.Max(Mathf.Abs(currentSpeed.y), 0.05f) / acceleration.y);
 
             if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
-            if (targetPosition.z < spreaderPosition.z) inputZ = -inputZ;
 
             if (float.IsNaN(inputY)) inputY = 0;
-            if (float.IsNaN(inputZ)) inputZ = 0;
 
             inputs.y = Mathf.Clamp(inputY, -1, 1);
-            inputs.z = Mathf.Clamp(inputZ, -1, 1);
+            /////
 
             return inputs;
 

@@ -21,7 +21,8 @@ namespace Echo
         public Vector3 spreaderWorldPosition = Vector3.zero;
         //public Rigidbody spreaderBody;
 
-        public Vector3 katWorldPosition = Vector3.zero;        
+        public Vector3 katWorldPosition = Vector3.zero;
         //public Rigidbody katBody;
+        public Vector3 environmentWorldPosition = Vector3.zero;
     }
 }

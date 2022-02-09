@@ -13,12 +13,13 @@ namespace Echo
         private void Start()
         {
             _rigidBody = GetComponent<Rigidbody>();
-            craneSpecs.katWorldPosition = transform.position;            
+            craneSpecs.katWorldPosition = transform.position - craneSpecs.environmentWorldPosition;        
         }
 
         void Update()
         {            
-            craneSpecs.katWorldPosition = transform.position;            
+            craneSpecs.katWorldPosition = transform.position - craneSpecs.environmentWorldPosition;
+
         }
         private void FixedUpdate()
         {
@@ -28,7 +29,7 @@ namespace Echo
 
         public void MoveKat(float value)
         {            
-            Utils.AccelerateRigidbody_Z_Axis(_rigidBody, value * craneSpecs.katMaxSpeed, craneSpecs.katMaxSpeed, craneSpecs.katAcceleration, Time.fixedDeltaTime);
+            Utils.AccelerateRigidbody_Z_Axis(_rigidBody, value * craneSpecs.katMaxSpeed, craneSpecs.katMaxSpeed, craneSpecs.katAcceleration, Time.fixedDeltaTime+0.02f);
         }
         private void ManageKatLimit()
         {
