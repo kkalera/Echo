@@ -11,7 +11,12 @@ namespace Echo
         [SerializeField] private List<Filo.Cable> cables;
         [SerializeField] public Rigidbody spreaderBody;
         [SerializeField] public Rigidbody katBody;
+        private bool manageSwing;
 
+        private void Start()
+        {
+            manageSwing = false;
+        }
         public void MoveWinch(float value)
         {
             craneSpecs.winchSpeed = value;
@@ -50,6 +55,7 @@ namespace Echo
         }
         public void ResetPosition()
         {
+            manageSwing = false;
             spreaderBody.isKinematic = true;
             katBody.isKinematic = true;
 
@@ -74,6 +80,7 @@ namespace Echo
 
             spreaderBody.isKinematic = false;
             katBody.isKinematic = false;
+            manageSwing = true;
         }
         
     }
