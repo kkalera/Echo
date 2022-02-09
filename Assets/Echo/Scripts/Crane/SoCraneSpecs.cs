@@ -10,6 +10,7 @@ namespace Echo
         public float winchSpeed = 0;
         public float winchMaxSpeed = 1;
         public float winchAcceleration = 1;
+        public float winchCableAmount = 50;
 
         public float katSpeed = 0;
         public float katMaxSpeed = 1;
