@@ -49,13 +49,13 @@ namespace Echo
                 var inputs = GetInputs(env.TargetWorldPosition, crane.craneSpecs.katWorldPosition, crane.katBody.velocity, new Vector3(0, crane.craneSpecs.winchAcceleration, crane.craneSpecs.katAcceleration));
                 conActions[katIndex] = inputs.z;
                 conActions[winchIndex] = inputs.y;
+                //var cs = crane.craneSpecs;
+                //GetInputsSwing(env.TargetWorldPosition, cs.spreaderVelocity, cs.spreaderWorldPosition, cs.katVelocity, cs.katWorldPosition, new Vector3(0, crane.craneSpecs.winchAcceleration, crane.craneSpecs.katAcceleration));
             }
         }
 
         public override void OnActionReceived(ActionBuffers actions)
         {
-            Utils.ClearLogConsole();
-            Debug.Log("Time between actions: " + (Time.time - lastActionTime));
             lastActionTime = Time.time;
             float katAction = actions.ContinuousActions[katIndex];
             crane.MoveKat(katAction);
@@ -104,6 +104,43 @@ namespace Echo
             if (float.IsNaN(inputY)) inputY = 0;
 
             inputs.y = Mathf.Clamp(inputY, -1, 1);
+            /////
+
+            return inputs;
+
+        }
+        public static Vector3 GetInputsSwing(Vector3 targetPosition,Vector3 spreaderVelocity,
+            Vector3 spreaderPosition, Vector3 katVelocity, Vector3 katPosition, Vector3 acceleration)
+        {
+
+            Vector3 inputs = new Vector3(0, 0, 0);
+            targetPosition = GetNextPosition(spreaderPosition, targetPosition);
+
+            ///// Z movement
+            float distanceZ = Mathf.Abs(spreaderPosition.z - targetPosition.z);
+            if (!Mathf.Approximately(distanceZ, 0))
+            {
+                // Swing management
+                // Acceleration: limit the acceleration so that the swing created does not exceed the
+                // distance the kat can travel in the same time
+
+                // Calculate the distance that the pendulum (spreader) will swing based on current speed and position
+                // Formula for the height a pendulum will reach: h = L - L * cos(a)
+                // h: height
+                // L: length of the pendulum
+                // a: angle from vertical
+                float sa = Mathf.Abs(spreaderPosition.y - katPosition.y);
+                float sb = Mathf.Abs(spreaderPosition.z - katPosition.z);
+                float a = Mathf.Atan(sb / sa) * Mathf.Rad2Deg;
+                float l = Vector3.Distance(katPosition, spreaderPosition);
+                float h = l - l * Mathf.Cos(a);
+                
+                
+            }
+            /////
+
+            ///// Y movement
+            
             /////
 
             return inputs;
