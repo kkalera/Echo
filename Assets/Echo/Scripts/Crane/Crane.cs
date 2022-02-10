@@ -24,24 +24,35 @@ namespace Echo
         private void Update()
         {
             craneSpecs.environmentWorldPosition = transform.position;
+            
+        }
+        private void FixedUpdate()
+        {
             ManageSwingLimit();
         }
         private void ManageSwingLimit()
         {
+            if (spreaderBody.isKinematic || Time.timeScale == 0) return;
+
             if (Mathf.Abs(craneSpecs.spreaderWorldPosition.z - craneSpecs.katWorldPosition.z) > _swingLimit)
             {
                 var spreaderVelocity = spreaderBody.velocity;
                 var katVelocity = katBody.velocity;
-                var delta = Mathf.Abs(spreaderVelocity.z - katVelocity.z);
+                //var delta = Mathf.Abs(spreaderVelocity.z - katVelocity.z);
 
                 if (craneSpecs.spreaderWorldPosition.z > craneSpecs.katWorldPosition.z)
-                {                    
-                    spreaderBody.AddForce(new Vector3(0, 0, -delta), ForceMode.VelocityChange);
+                {
+                    //spreaderBody.velocity += new Vector3(0, 0, -delta);
+                    spreaderVelocity.z = katVelocity.z * 1.1f;
+                    
                 }
                 else
                 {
-                    spreaderBody.AddForce(new Vector3(0, 0, delta), ForceMode.VelocityChange);
+                    //spreaderBody.velocity += new Vector3(0, 0, delta);
+                    spreaderVelocity.z = katVelocity.z * 0.9f;
                 }
+                spreaderBody.velocity = spreaderVelocity;
+                
             }
         }
         public void ResetPosition()

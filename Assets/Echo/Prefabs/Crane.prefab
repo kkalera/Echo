@@ -729,6 +729,7 @@ GameObject:
   - component: {fileID: 1524425164877427212}
   - component: {fileID: 4502246106973665438}
   - component: {fileID: 5251219838359966972}
+  - component: {fileID: 8895723041365013473}
   m_Layer: 0
   m_Name: Cable LL
   m_TagString: Untagged
@@ -865,6 +866,19 @@ MonoBehaviour:
   section: {fileID: 11400000, guid: f5860ebf9a0c54ffb898feaf0a3ea546, type: 2}
   uvScale: {x: 1, y: 1}
   thickness: 0.025
+--- !u!114 &8895723041365013473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880615512579178159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f7f2036843aa90459ef81405a80a1cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  craneSpecs: {fileID: 11400000, guid: 485be651551ea7f4697769337b4f4501, type: 2}
 --- !u!1 &1229778883464505012
 GameObject:
   m_ObjectHideFlags: 0
