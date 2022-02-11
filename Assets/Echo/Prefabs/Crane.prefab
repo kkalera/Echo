@@ -2401,7 +2401,7 @@ MonoBehaviour:
   MaxStep: 0
   env: {fileID: 0}
   crane: {fileID: 4639861527186858122}
-  autoPilot: 1
+  autoPilot: 0
 --- !u!114 &4639861527186858123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2459,7 +2459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Record: 0
-  NumStepsToRecord: 10000
+  NumStepsToRecord: 5000
   DemonstrationName: Grab
   DemonstrationDirectory: C:\Users\Kalera\Documents\GitHub\Echo-build\Demonstrations
 --- !u!1 &2386812556177103893

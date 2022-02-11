@@ -22,14 +22,16 @@ namespace Echo
         {
             collisionManager.Reset();
             container.transform.parent = transform;
+            container.transform.rotation = Quaternion.Euler(Vector3.zero);
             container.transform.position = Vector3.zero;
+            
         }
         public override State Step()
         {
             if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagDead)) return new State(-1f, true);
             if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagContainer))
             {                
-                if(Mathf.Abs(craneSpecs.spreaderWorldPosition.z - TargetWorldPosition.z) < 0.1f)
+                if(Mathf.Abs(craneSpecs.spreaderWorldPosition.z - TargetWorldPosition.z) < 0.3f)
                 {
                     return new State(1f, true);
                 }
