@@ -25,7 +25,7 @@ namespace Echo
         {
             lastActionTime = Time.time;
             env.OnEpisodeBegin();
-            crane.ResetPosition();
+            crane.ResetPosition(env.CraneStartLocation());
         }        
         public override void Heuristic(in ActionBuffers actionsOut)
         {            

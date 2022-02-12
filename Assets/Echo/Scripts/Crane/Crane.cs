@@ -56,7 +56,7 @@ namespace Echo
                 
             }
         }
-        public void ResetPosition()
+        public void ResetPosition(Vector3 position)
         {
             craneSpecs.winchSpeed = 0;
             craneSpecs.katSpeed = 0;
@@ -65,8 +65,8 @@ namespace Echo
             spreaderBody.isKinematic = true;
             katBody.isKinematic = true;
 
-            katBody.transform.position = new Vector3(0, 32, 25);
-            spreaderBody.transform.position = new Vector3(0, 20, 25);
+            katBody.transform.position = new Vector3(0, 32, position.z);
+            spreaderBody.transform.position = new Vector3(0, position.y, position.z);
             spreaderBody.transform.rotation = Quaternion.Euler(Vector3.zero);
 
             for(int i = 0; i < cables.Count; i++)

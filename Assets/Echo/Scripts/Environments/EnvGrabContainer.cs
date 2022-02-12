@@ -44,5 +44,12 @@ namespace Echo
         {
             base.UpdateTargetWorldPosition(position);
         }
+        public override Vector3 CraneStartLocation()
+        {
+            Vector3 loc = Vector3.zero;
+            loc.y = Random.Range(5, 25);
+            loc.z = Random.Range(10, 25);
+            return loc;
+        }
     }
 }
