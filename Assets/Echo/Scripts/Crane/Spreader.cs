@@ -39,8 +39,7 @@ namespace Echo
             collisionManager._collision = null;
         }
         private void OnTriggerEnter(Collider other)
-        {
-            Utils.ClearLogConsole(); Debug.Log(other.tag);
+        {          
             collisionManager.triggered = true;
             collisionManager.triggered_collider = other;
         }

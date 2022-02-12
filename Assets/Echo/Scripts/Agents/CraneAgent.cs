@@ -39,18 +39,10 @@ namespace Echo
             if (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow)) conActions[winchIndex] = 0;
 
             if (autoPilot)
-            {                
-                /*float distanceCausedByLatency = crane.katBody.velocity.z * (Time.time - lastActionTime);
-                Utils.ClearLogConsole();
-                Debug.Log("Distance because of latency: " + distanceCausedByLatency);
-
-                Vector3 katPos = crane.craneSpecs.katWorldPosition - new Vector3(0, 0, distanceCausedByLatency);*/
-
-                var inputs = GetInputs(env.TargetWorldPosition, crane.craneSpecs.katWorldPosition, crane.katBody.velocity, new Vector3(0, crane.craneSpecs.winchAcceleration, crane.craneSpecs.katAcceleration));
+            {
+                var inputs = GetInputs(env.TargetWorldPosition, crane.craneSpecs.spreaderWorldPosition, crane.katBody.velocity, new Vector3(0, crane.craneSpecs.winchAcceleration, crane.craneSpecs.katAcceleration));
                 conActions[katIndex] = inputs.z;
                 conActions[winchIndex] = inputs.y;
-                //var cs = crane.craneSpecs;
-                //GetInputsSwing(env.TargetWorldPosition, cs.spreaderVelocity, cs.spreaderWorldPosition, cs.katVelocity, cs.katWorldPosition, new Vector3(0, crane.craneSpecs.winchAcceleration, crane.craneSpecs.katAcceleration));
             }
         }
 
@@ -148,18 +140,21 @@ namespace Echo
         }
         private static Vector3 GetNextPosition(Vector3 spreaderPosition, Vector3 targetPosition)
         {
-            bool hasToCrossLeg = spreaderPosition.z > 10.5f && targetPosition.z < 10.5f;
-            if (!hasToCrossLeg) hasToCrossLeg = spreaderPosition.z > -10.5f && targetPosition.z < -10.5f;
-            if (!hasToCrossLeg) hasToCrossLeg = ((spreaderPosition.z > -10.5f && spreaderPosition.z < 10.5f) &&
-                    (targetPosition.z > 10.5f || targetPosition.z < -10.5f));
-
-
+            bool hasToCrossLeg = spreaderPosition.z > 11 && targetPosition.z < 11;
+            if (!hasToCrossLeg) hasToCrossLeg = spreaderPosition.z > -11 && targetPosition.z < -11;
+            if (!hasToCrossLeg) hasToCrossLeg = ((spreaderPosition.z > -11 && spreaderPosition.z < 11) &&
+                    (targetPosition.z > 11 || targetPosition.z < -11));
+            
             // Check if we're to far from the target to lower the spreader        
             float r = (spreaderPosition.y * 0.2f) + 1;
-            if (spreaderPosition.y < 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg)
+
+            if (spreaderPosition.y < 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg && spreaderPosition.z > 11)
             {
-                //targetPosition = new Vector3(0, 25f, spreaderPosition.z);
-                targetPosition = new Vector3(0, 25f, 4);
+                targetPosition = new Vector3(0, 25f, 11);
+            }
+            else if (spreaderPosition.y < 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg && spreaderPosition.z < -11)
+            {
+                targetPosition = new Vector3(0, 25f, -11);
             }
             else if (spreaderPosition.y >= 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
             {
