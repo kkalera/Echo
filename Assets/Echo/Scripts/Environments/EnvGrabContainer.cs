@@ -12,6 +12,7 @@ namespace Echo
         [SerializeField] GameObject containerPrefab;
         [TagsAndLayers.TagDropdown] public string tagDead;
         [TagsAndLayers.TagDropdown] public string tagContainer;
+        [SerializeField][Range(0.01f,1)] public float accuracy = 0.2f;
         private GameObject container;
         
         public override void InitializeEnvironment()
@@ -33,7 +34,7 @@ namespace Echo
 
             if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagContainer))
             {                
-                if(Mathf.Abs(craneSpecs.spreaderWorldPosition.z - TargetWorldPosition.z) < 0.3f)
+                if(Mathf.Abs(craneSpecs.spreaderWorldPosition.z - TargetWorldPosition.z) <= accuracy)
                 {
                     return new State(1f, true);
                 }
