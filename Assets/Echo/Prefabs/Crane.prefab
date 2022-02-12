@@ -7216,6 +7216,8 @@ GameObject:
   - component: {fileID: 9048825720295687207}
   - component: {fileID: 9048825720296818407}
   - component: {fileID: 626301193082748909}
+  - component: {fileID: 6828101334783566317}
+  - component: {fileID: 3088509497362227913}
   m_Layer: 0
   m_Name: GantryCrane_01_StructureBottom_01_Prefab
   m_TagString: Respawn
@@ -7302,6 +7304,32 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: d9f36a73362137d4ab77dcf144294653, type: 2}
+--- !u!65 &6828101334783566317
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8328485400091537042}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 17.569141, y: 16.884022, z: 2}
+  m_Center: {x: -0.28457022, y: 9.767477, z: 8}
+--- !u!65 &3088509497362227913
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8328485400091537042}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 17.569141, y: 16.884022, z: 2}
+  m_Center: {x: -0.28457022, y: 9.767477, z: -8}
 --- !u!1 &8832907916511049884
 GameObject:
   m_ObjectHideFlags: 0

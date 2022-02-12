@@ -28,7 +28,9 @@ namespace Echo
         }
         public override State Step()
         {
-            if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagDead)) return new State(-1f, true);
+            if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagDead) ||
+                collisionManager.triggered && collisionManager.triggered_collider.CompareTag(tagDead)) return new State(-1f, true);
+
             if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagContainer))
             {                
                 if(Mathf.Abs(craneSpecs.spreaderWorldPosition.z - TargetWorldPosition.z) < 0.3f)
@@ -36,7 +38,7 @@ namespace Echo
                     return new State(1f, true);
                 }
             }
-            return new State();
+            return new State(-0.0001f,false);
         }
         public override void UpdateTargetWorldPosition(Vector3 position)
         {

@@ -11,6 +11,7 @@ namespace Echo
         [SerializeField] private List<Filo.Cable> cables;
         [SerializeField] public Rigidbody spreaderBody;
         [SerializeField] public Rigidbody katBody;
+        [SerializeField] private List<HingeJoint> winches;
 
         public void MoveWinch(float value)
         {
@@ -57,6 +58,10 @@ namespace Echo
         }
         public void ResetPosition()
         {
+            craneSpecs.winchSpeed = 0;
+            craneSpecs.katSpeed = 0;
+            
+            
             spreaderBody.isKinematic = true;
             katBody.isKinematic = true;
 
@@ -78,9 +83,15 @@ namespace Echo
                     cables[i].links[ii] = link;
                 }
             }
+            for (int w = 0; w < winches.Count; w++)
+            {
+                var m = winches[w].motor;
+                m.targetVelocity = 0;
+                winches[w].motor = m;
+            }
 
             spreaderBody.isKinematic = false;
-            katBody.isKinematic = false;
+            katBody.isKinematic = false;            
         }
         
     }

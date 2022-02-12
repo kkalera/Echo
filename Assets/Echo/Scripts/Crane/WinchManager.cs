@@ -15,7 +15,7 @@ namespace Echo {
         }
 
         void Update()
-        {            
+        {  
             MoveWinch(_craneSpecs.winchSpeed);
             ManageWinchLimit();
         } 

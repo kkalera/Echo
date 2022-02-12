@@ -66,14 +66,14 @@ namespace Echo
             // Get the state after interaction
             State state = env.Step();
             AddReward(state.reward);
-            if (state.dead) EndEpisode();
+            if (state.dead) EndEpisode();            
         }
 
         public override void CollectObservations(VectorSensor sensor)
         {
             sensor.AddObservation(crane.craneSpecs.katWorldPosition);
             sensor.AddObservation(crane.craneSpecs.spreaderWorldPosition);
-            sensor.AddObservation(env.TargetWorldPosition);
+            sensor.AddObservation(env.TargetWorldPosition);            
         }
 
         public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, Vector3 acceleration)
