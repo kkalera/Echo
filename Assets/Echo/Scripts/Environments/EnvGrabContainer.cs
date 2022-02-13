@@ -13,6 +13,7 @@ namespace Echo
         [TagsAndLayers.TagDropdown] public string tagDead;
         [TagsAndLayers.TagDropdown] public string tagContainer;
         [SerializeField][Range(0.01f,1)] public float accuracy = 0.2f;
+        [SerializeField] private bool useSwingReward = false;
         private GameObject container;
         
         public override void InitializeEnvironment()
@@ -39,6 +40,12 @@ namespace Echo
                 {
                     return new State(1f, true);
                 }
+            }
+            if (useSwingReward)
+            {
+                float swing = Mathf.Abs(craneSpecs.katWorldPosition.z - craneSpecs.spreaderWorldPosition.z);
+                float swingReward = (1 - (swing/2)) / MaxStep;
+                return new State(swingReward, false);
             }
             return new State(-0.0001f,false);
         }

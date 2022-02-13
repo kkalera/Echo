@@ -14,16 +14,15 @@ namespace Echo
         [SerializeField] private bool autoPilot;
 
         private static readonly int katIndex = 0;
-        private static readonly int winchIndex = 1;
-        private float lastActionTime;
+        private static readonly int winchIndex = 1;        
 
         private void Start()
         {
-            env.InitializeEnvironment();            
+            env.InitializeEnvironment();
+            env.MaxStep = MaxStep;
         }
         public override void OnEpisodeBegin()
         {
-            lastActionTime = Time.time;
             env.OnEpisodeBegin();
             crane.ResetPosition(env.CraneStartLocation());
         }        
@@ -48,7 +47,6 @@ namespace Echo
 
         public override void OnActionReceived(ActionBuffers actions)
         {
-            lastActionTime = Time.time;
             float katAction = actions.ContinuousActions[katIndex];
             crane.MoveKat(katAction);
 

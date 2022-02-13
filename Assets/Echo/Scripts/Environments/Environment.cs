@@ -14,6 +14,7 @@ namespace Echo
             TargetWorldPosition = position;
         }
         public Vector3 TargetWorldPosition { get; private set; }
+        public int MaxStep { get; set; }
         public virtual Vector3 CraneStartLocation () { return Vector3.zero; }
     }
 }
