@@ -30,7 +30,8 @@ namespace Echo
         public override State Step()
         {
             if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagDead) ||
-                collisionManager.triggered && collisionManager.triggered_collider.CompareTag(tagDead)) return new State(-1f, true);
+                collisionManager.triggered && collisionManager.triggered_collider.CompareTag(tagDead) ||
+                (craneSpecs.spreaderRotation.x > 45 && craneSpecs.spreaderRotation.x < 315)) return new State(-1f, true);
 
             if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagContainer))
             {                

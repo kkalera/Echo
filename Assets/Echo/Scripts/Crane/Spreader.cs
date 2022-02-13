@@ -11,15 +11,20 @@ namespace Echo
         [SerializeField] private SoCraneSpecs craneSpecs;
         [SerializeField] private SoCollision collisionManager;
 
+
+        public void EditSpreaderPosition(Vector3 pos)
+        {
+            transform.position = pos;
+        }
         void Start()
         {
             craneSpecs.spreaderWorldPosition = transform.position;
-            //craneSpecs.spreaderBody = GetComponent<Rigidbody>();
+            craneSpecs.spreaderRotation = transform.rotation.eulerAngles;
         }
-
         void Update()
         {            
-            craneSpecs.spreaderWorldPosition = transform.position - craneSpecs.environmentWorldPosition; 
+            craneSpecs.spreaderWorldPosition = transform.position - craneSpecs.environmentWorldPosition;
+            craneSpecs.spreaderRotation = transform.rotation.eulerAngles;
         }
 
         private void OnCollisionEnter(Collision collision)

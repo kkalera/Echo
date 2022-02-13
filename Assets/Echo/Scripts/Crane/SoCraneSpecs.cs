@@ -20,6 +20,7 @@ namespace Echo
         public float skewMaxSpeed = 1;
 
         public Vector3 spreaderWorldPosition = Vector3.zero;
+        public Vector3 spreaderRotation = Vector3.zero;
         public Vector3 spreaderVelocity = Vector3.zero;
 
         public Vector3 katWorldPosition = Vector3.zero;

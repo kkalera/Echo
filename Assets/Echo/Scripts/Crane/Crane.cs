@@ -12,6 +12,7 @@ namespace Echo
         [SerializeField] public Rigidbody spreaderBody;
         [SerializeField] public Rigidbody katBody;
         [SerializeField] private List<HingeJoint> winches;
+        [SerializeField] private Transform spreaderTransform;
 
         public void MoveWinch(float value)
         {
@@ -25,35 +26,33 @@ namespace Echo
         private void Update()
         {
             craneSpecs.environmentWorldPosition = transform.position;
-            
+            //ManageSwingLimit();
         }
         private void FixedUpdate()
         {
-            ManageSwingLimit();
+            
         }
         private void ManageSwingLimit()
         {
-            if (spreaderBody.isKinematic || Time.timeScale == 0) return;
+            if (spreaderBody.isKinematic || Time.timeScale == 0 || Mathf.Approximately(craneSpecs.spreaderVelocity.z,0)) return;
 
-            if (Mathf.Abs(craneSpecs.spreaderWorldPosition.z - craneSpecs.katWorldPosition.z) > _swingLimit)
+            var delta = Mathf.Abs(craneSpecs.spreaderWorldPosition.z - craneSpecs.katWorldPosition.z);
+            if (delta > _swingLimit)
             {
-                var spreaderVelocity = spreaderBody.velocity;
-                var katVelocity = katBody.velocity;
-                //var delta = Mathf.Abs(spreaderVelocity.z - katVelocity.z);
+                var t = spreaderTransform.position;
 
                 if (craneSpecs.spreaderWorldPosition.z > craneSpecs.katWorldPosition.z)
                 {
-                    //spreaderBody.velocity += new Vector3(0, 0, -delta);
-                    spreaderVelocity.z = katVelocity.z * 1.1f;
-                    
+                    t.z -= delta - _swingLimit - 0.001f;
+                    //spreaderVelocity.z = katVelocity.z * 1.1f;
                 }
                 else
                 {
-                    //spreaderBody.velocity += new Vector3(0, 0, delta);
-                    spreaderVelocity.z = katVelocity.z * 0.9f;
+                    t.z += delta - _swingLimit - 0.001f;
+                    //spreaderVelocity.z = katVelocity.z * .9f;
                 }
-                spreaderBody.velocity = spreaderVelocity;
-                
+                spreaderTransform.position = t;
+                //spreaderBody.velocity = spreaderVelocity;
             }
         }
         public void ResetPosition(Vector3 position)
