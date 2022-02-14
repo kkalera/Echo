@@ -19,7 +19,7 @@ namespace Echo
         private void Start()
         {
             env.InitializeEnvironment();
-            env.MaxStep = MaxStep;
+            env.MaxStep = Mathf.Max(1,MaxStep);
         }
         public override void OnEpisodeBegin()
         {
@@ -35,11 +35,15 @@ namespace Echo
 
             if (Input.GetKey(KeyCode.UpArrow)) conActions[winchIndex] = 1;
             if (Input.GetKey(KeyCode.DownArrow)) conActions[winchIndex] = -1;
-            if (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow)) conActions[winchIndex] = 0;
+            if (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow)) conActions[winchIndex] = 0;            
 
             if (autoPilot)
             {
-                var inputs = GetInputs(env.TargetWorldPosition, crane.craneSpecs.spreaderWorldPosition, crane.katBody.velocity, new Vector3(0, crane.craneSpecs.winchAcceleration, crane.craneSpecs.katAcceleration));
+                var inputs = GetInputs(env.TargetWorldPosition + new Vector3(0,2.75f), 
+                    crane.craneSpecs.spreaderWorldPosition,
+                    new Vector3(0,crane.spreaderBody.velocity.y,crane.katBody.velocity.z),
+                    new Vector3(0, crane.craneSpecs.winchAcceleration,
+                    crane.craneSpecs.katAcceleration));
                 conActions[katIndex] = inputs.z;
                 conActions[winchIndex] = inputs.y;
             }
@@ -56,7 +60,7 @@ namespace Echo
             // Get the state after interaction
             State state = env.Step();
             AddReward(state.reward);
-            if (state.dead) EndEpisode();            
+            if (state.dead) EndEpisode();
         }
 
         public override void CollectObservations(VectorSensor sensor)
@@ -86,14 +90,16 @@ namespace Echo
             /////
 
             ///// Y movement
-            float distanceToTravelY = Mathf.Abs(targetPosition.y - spreaderPosition.y);
-            float inputY = distanceToTravelY / (Mathf.Max(Mathf.Abs(currentSpeed.y), 0.05f) / acceleration.y);
-
-            if (targetPosition.y < spreaderPosition.y) inputY = -inputY;
-
-            if (float.IsNaN(inputY)) inputY = 0;
-
-            inputs.y = Mathf.Clamp(inputY, -1, 1);
+            float distanceY = Mathf.Abs(spreaderPosition.y - targetPosition.y);
+            if (!Mathf.Approximately(distanceY, 0))
+            {
+                float vel = Mathf.Abs(currentSpeed.y);
+                float d = Mathf.Pow(vel, 2) / (2 * acceleration.y);
+                inputs.y = distanceY - d;
+                
+                if (targetPosition.y < spreaderPosition.y) inputs.y = -inputs.y;
+                inputs.y = Mathf.Clamp(inputs.y, -1, 1);
+            }
             /////
 
             return inputs;
@@ -138,21 +144,23 @@ namespace Echo
         }
         private static Vector3 GetNextPosition(Vector3 spreaderPosition, Vector3 targetPosition)
         {
-            bool hasToCrossLeg = spreaderPosition.z > 11 && targetPosition.z < 11;
-            if (!hasToCrossLeg) hasToCrossLeg = spreaderPosition.z > -11 && targetPosition.z < -11;
-            if (!hasToCrossLeg) hasToCrossLeg = ((spreaderPosition.z > -11 && spreaderPosition.z < 11) &&
-                    (targetPosition.z > 11 || targetPosition.z < -11));
+            float craneZLegs = 12;
+            bool hasToCrossLeg = spreaderPosition.z > craneZLegs && targetPosition.z < craneZLegs;
+
+            if (!hasToCrossLeg) hasToCrossLeg = spreaderPosition.z > -craneZLegs && targetPosition.z < -craneZLegs;
+            if (!hasToCrossLeg) hasToCrossLeg = ((spreaderPosition.z > -craneZLegs && spreaderPosition.z < craneZLegs) &&
+                    (targetPosition.z > craneZLegs || targetPosition.z < -craneZLegs));
             
             // Check if we're to far from the target to lower the spreader        
             float r = (spreaderPosition.y * 0.2f) + 1;
 
-            if (spreaderPosition.y < 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg && spreaderPosition.z > 11)
+            if (spreaderPosition.y < 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg && spreaderPosition.z > craneZLegs)
             {
-                targetPosition = new Vector3(0, 25f, 11);
+                targetPosition = new Vector3(0, 25f, 12);
             }
-            else if (spreaderPosition.y < 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg && spreaderPosition.z < -11)
+            else if (spreaderPosition.y < 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg && spreaderPosition.z < -craneZLegs)
             {
-                targetPosition = new Vector3(0, 25f, -11);
+                targetPosition = new Vector3(0, 25f, -12);
             }
             else if (spreaderPosition.y >= 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
             {

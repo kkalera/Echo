@@ -14,6 +14,7 @@ namespace Echo
         [SerializeField] public Rigidbody katBody;
         [SerializeField] private List<HingeJoint> winches;
         [SerializeField] private Transform spreaderTransform;
+        [SerializeField] public Spreader spreader;
 
         public void MoveWinch(float value)
         {
@@ -35,13 +36,11 @@ namespace Echo
         }
         private void ManageSwingLimit()
         {
-            //if (spreaderBody.isKinematic || Time.timeScale == 0 || Mathf.Approximately(craneSpecs.spreaderVelocity.z,0)) return;
+            if (spreaderBody.isKinematic || Mathf.Approximately(Time.timeScale, 0)) return;
 
             var delta = Mathf.Abs(craneSpecs.spreaderWorldPosition.z - craneSpecs.katWorldPosition.z);
             if (delta > _swingLimit)
-            {
-                var t = spreaderTransform.position;
-                float deltaV = Mathf.Abs(craneSpecs.spreaderVelocity.z - craneSpecs.katVelocity.z);
+            {                                
                 var spreaderVelocity = spreaderBody.velocity;
 
                 if (craneSpecs.spreaderWorldPosition.z > craneSpecs.katWorldPosition.z)
@@ -51,9 +50,7 @@ namespace Echo
                 else
                 {
                     spreaderVelocity.z = katBody.velocity.z < 0 ? -spreaderVelocity.z*_limitBounce : katBody.velocity.z * 1.1f;
-                    //spreaderVelocity.z = katVelocity.z * .9f;
                 }
-                //spreaderTransform.position = t;
                 spreaderBody.velocity = spreaderVelocity;
             }
         }

@@ -44,10 +44,10 @@ namespace Echo
             if (useSwingReward)
             {
                 float swing = Mathf.Abs(craneSpecs.katWorldPosition.z - craneSpecs.spreaderWorldPosition.z);
-                float swingReward = (1 - (swing/2)) / MaxStep;
+                float swingReward = (1 - (swing *2)) / MaxStep;
                 return new State(swingReward, false);
             }
-            return new State(-0.0001f,false);
+            return new State(-1/MaxStep,false);
         }
         public override void UpdateTargetWorldPosition(Vector3 position)
         {

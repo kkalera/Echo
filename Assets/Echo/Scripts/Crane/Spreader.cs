@@ -10,12 +10,17 @@ namespace Echo
     {
         [SerializeField] private SoCraneSpecs craneSpecs;
         [SerializeField] private SoCollision collisionManager;
-
-
-        public void EditSpreaderPosition(Vector3 pos)
+        
+        public void GrabContainer(Transform container)
         {
-            transform.position = pos;
+            if(container.TryGetComponent<Rigidbody>(out Rigidbody rb)){
+                rb.isKinematic = true;
+            }
+            container.parent = transform;
+            collisionManager.collided = false;
+            collisionManager._collision = null;
         }
+
         void Start()
         {
             craneSpecs.spreaderWorldPosition = transform.position;
