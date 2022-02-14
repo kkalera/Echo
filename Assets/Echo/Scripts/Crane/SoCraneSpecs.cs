@@ -18,14 +18,5 @@ namespace Echo
 
         public float skewSpeed = 0;
         public float skewMaxSpeed = 1;
-
-        public Vector3 spreaderWorldPosition = Vector3.zero;
-        public Vector3 spreaderRotation = Vector3.zero;
-        public Vector3 spreaderVelocity = Vector3.zero;
-
-        public Vector3 katWorldPosition = Vector3.zero;
-        public Vector3 katVelocity = Vector3.zero;
-
-        public Vector3 environmentWorldPosition = Vector3.zero;
     }
 }

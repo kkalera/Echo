@@ -10,6 +10,10 @@ namespace Echo
     {
         [SerializeField] private SoCraneSpecs craneSpecs;
         [SerializeField] private SoCollision collisionManager;
+
+        public Vector3 Position { get => transform.position; }
+        public Quaternion Rotation { get => transform.rotation; }
+        public Rigidbody Rbody { get => GetComponent<Rigidbody>(); }
         
         public void GrabContainer(Transform container)
         {
@@ -20,18 +24,6 @@ namespace Echo
             collisionManager.collided = false;
             collisionManager._collision = null;
         }
-
-        void Start()
-        {
-            craneSpecs.spreaderWorldPosition = transform.position;
-            craneSpecs.spreaderRotation = transform.rotation.eulerAngles;
-        }
-        void Update()
-        {            
-            craneSpecs.spreaderWorldPosition = transform.position - craneSpecs.environmentWorldPosition;
-            craneSpecs.spreaderRotation = transform.rotation.eulerAngles;
-        }
-
         private void OnCollisionEnter(Collision collision)
         {
             collisionManager.collided = true;

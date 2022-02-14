@@ -8,19 +8,10 @@ namespace Echo
     public class Kat : MonoBehaviour
     {
         [SerializeField] private SoCraneSpecs craneSpecs;
-        private Rigidbody _rigidBody;
+        public float Position { get => transform.position.z; }
+        public float Velocity { get => Rbody.velocity.z; }
+        public Rigidbody Rbody { get => GetComponent<Rigidbody>(); }
 
-        private void Start()
-        {
-            _rigidBody = GetComponent<Rigidbody>();
-            craneSpecs.katWorldPosition = transform.position - craneSpecs.environmentWorldPosition;        
-        }
-
-        void Update()
-        {            
-            craneSpecs.katWorldPosition = transform.position - craneSpecs.environmentWorldPosition;
-
-        }
         private void FixedUpdate()
         {
             ManageKatLimit();
@@ -29,13 +20,13 @@ namespace Echo
 
         public void MoveKat(float value)
         {            
-            Utils.AccelerateRigidbody_Z_Axis(_rigidBody, value * craneSpecs.katMaxSpeed, craneSpecs.katMaxSpeed, craneSpecs.katAcceleration, Time.fixedDeltaTime+0.02f);
+            Utils.AccelerateRigidbody_Z_Axis(Rbody, value * craneSpecs.katMaxSpeed, craneSpecs.katMaxSpeed, craneSpecs.katAcceleration, Time.fixedDeltaTime+0.02f);
         }
         private void ManageKatLimit()
         {
-            if ((craneSpecs.katWorldPosition.z > 50 && _rigidBody.velocity.z > 0) || (craneSpecs.katWorldPosition.z < -25 && _rigidBody.velocity.z < 0))
+            if ((Position > 50 && Velocity > 0) || (Position < -25 && Velocity < 0))
             {
-                _rigidBody.AddForce(new Vector3(0, 0, -_rigidBody.velocity.z), ForceMode.VelocityChange);
+                Rbody.AddForce(new Vector3(0, 0, -Velocity), ForceMode.VelocityChange);
             }            
         }
     }

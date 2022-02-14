@@ -9,13 +9,13 @@ namespace Echo
         [SerializeField] public SoCraneSpecs craneSpecs;
         [SerializeField][Range(0,10)] private float _swingLimit;
         [SerializeField] [Range(0, 1)] private float _limitBounce;
-        [SerializeField] private List<Filo.Cable> cables;
-        [SerializeField] public Rigidbody spreaderBody;
-        [SerializeField] public Rigidbody katBody;
-        [SerializeField] private List<HingeJoint> winches;
-        [SerializeField] private Transform spreaderTransform;
-        [SerializeField] public Spreader spreader;
 
+        [SerializeField] private List<Filo.Cable> cables;
+        [SerializeField] private List<HingeJoint> winches;
+        
+        [SerializeField] public Spreader spreader;
+        [SerializeField] public Kat kat;
+        
         public void MoveWinch(float value)
         {
             craneSpecs.winchSpeed = value;
@@ -25,33 +25,30 @@ namespace Echo
         {
             craneSpecs.katSpeed = value;
         }
+
         private void Update()
         {
-            craneSpecs.environmentWorldPosition = transform.position;
             ManageSwingLimit();
         }
-        private void FixedUpdate()
-        {
-            
-        }
+
         private void ManageSwingLimit()
         {
-            if (spreaderBody.isKinematic || Mathf.Approximately(Time.timeScale, 0)) return;
+            if (spreader.Rbody.isKinematic || Mathf.Approximately(Time.timeScale, 0)) return;
 
-            var delta = Mathf.Abs(craneSpecs.spreaderWorldPosition.z - craneSpecs.katWorldPosition.z);
+            var delta = Mathf.Abs(spreader.transform.position.z - kat.transform.position.z);
             if (delta > _swingLimit)
             {                                
-                var spreaderVelocity = spreaderBody.velocity;
+                var spreaderVelocity = spreader.Rbody.velocity;
 
-                if (craneSpecs.spreaderWorldPosition.z > craneSpecs.katWorldPosition.z)
+                if (spreader.transform.position.z > kat.transform.position.z)
                 {
-                    spreaderVelocity.z = katBody.velocity.z < 0 ? katBody.velocity.z * 1.1f : -spreaderVelocity.z*_limitBounce;
+                    spreaderVelocity.z = kat.Rbody.velocity.z < 0 ? kat.Rbody.velocity.z * 1.1f : -spreaderVelocity.z*_limitBounce;
                 }
                 else
                 {
-                    spreaderVelocity.z = katBody.velocity.z < 0 ? -spreaderVelocity.z*_limitBounce : katBody.velocity.z * 1.1f;
+                    spreaderVelocity.z = kat.Rbody.velocity.z < 0 ? -spreaderVelocity.z*_limitBounce : kat.Rbody.velocity.z * 1.1f;
                 }
-                spreaderBody.velocity = spreaderVelocity;
+                spreader.Rbody.velocity = spreaderVelocity;
             }
         }
         public void ResetPosition(Vector3 position)
@@ -60,12 +57,12 @@ namespace Echo
             craneSpecs.katSpeed = 0;
             
             
-            spreaderBody.isKinematic = true;
-            katBody.isKinematic = true;
+            spreader.Rbody.isKinematic = true;
+            kat.Rbody.isKinematic = true;
 
-            katBody.transform.position = new Vector3(0, 32, position.z);
-            spreaderBody.transform.position = new Vector3(0, position.y, position.z);
-            spreaderBody.transform.rotation = Quaternion.Euler(Vector3.zero);
+            kat.Rbody.transform.position = new Vector3(0, 32, position.z);
+            spreader.Rbody.transform.position = new Vector3(0, position.y, position.z);
+            spreader.Rbody.transform.rotation = Quaternion.Euler(Vector3.zero);
 
             for(int i = 0; i < cables.Count; i++)
             {
@@ -90,8 +87,8 @@ namespace Echo
              
             }
 
-            spreaderBody.isKinematic = false;
-            katBody.isKinematic = false;            
+            spreader.Rbody.isKinematic = false;
+            kat.Rbody.isKinematic = false;            
         }
         
     }

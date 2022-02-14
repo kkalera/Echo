@@ -32,28 +32,7 @@ namespace Echo {
 
             // Get 2 motors (one side turns clockwise while the other side turns counter-clockwise
             JointMotor motor = joint.motor;
-            /*
-            float currentVelocity = motor.targetVelocity;
-            float acceleration = 360 * (Time.deltaTime + 0.02f) * _craneSpecs.winchAcceleration;
-
-
-            if (value != 0 && value > currentVelocity)
-            {
-                value = Mathf.Min(currentVelocity + acceleration, value);
-            }
-            else if (value != 0 && value < currentVelocity)
-            {
-                value = Mathf.Max(currentVelocity - acceleration, value);
-            }
-
-            if (Mathf.Approximately(value, 0) && currentVelocity > 0)
-            {
-                value = Mathf.Max(currentVelocity - acceleration, value);
-            }
-            else if (Mathf.Approximately(value, 0) && currentVelocity < 0)
-            {
-                value = Mathf.Min(currentVelocity + acceleration, value);
-            }*/
+            
             float timeDelta = Time.deltaTime + 0.02f;
             float accel = _craneSpecs.winchAcceleration * timeDelta * degreeToM;
             float deltaV = Mathf.Abs(value - motor.targetVelocity);
@@ -67,8 +46,9 @@ namespace Echo {
         }
         private void ManageWinchLimit()
         {
-            if((_craneSpecs.spreaderWorldPosition.y > 25 && _craneSpecs.winchSpeed > 0) ||
-                (_craneSpecs.spreaderWorldPosition.y < 0 && _craneSpecs.winchSpeed < 0) ||
+            var crane = GetComponentInParent<Crane>();
+            if((crane.spreader.Position.y > 25 && _craneSpecs.winchSpeed > 0) ||
+                (crane.spreader.Position.y < 0 && _craneSpecs.winchSpeed < 0) ||
                 _craneSpecs.winchCableAmount < 5)
             {
                 var motor = joint.motor;

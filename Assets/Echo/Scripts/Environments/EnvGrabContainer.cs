@@ -2,63 +2,79 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
 
 namespace Echo
 {
+    /// <summary>
+    /// Environment that spawns a single container, which the agent needs to grab
+    /// </summary>
     public class EnvGrabContainer : Environment
     {
-        [SerializeField] SoCollision collisionManager;
-        [SerializeField] SoCraneSpecs craneSpecs;
-        [SerializeField] GameObject containerPrefab;
+        public static int katIndex = 0;
+        public static int winchIndex = 1;
         [TagsAndLayers.TagDropdown] public string tagDead;
         [TagsAndLayers.TagDropdown] public string tagContainer;
-        [SerializeField][Range(0.01f,1)] public float accuracy = 0.2f;
-        [SerializeField] private bool useSwingReward = false;
-        private GameObject container;
+        [SerializeField] private Crane _crane;
+        [SerializeField] private GameObject containerPrefab;
+        [SerializeField] private SoCollision collisionManager;
+        private Container _container;
         
+        void Start()
+        {
+            Crane = _crane;
+        }
+
         public override void InitializeEnvironment()
         {
-            container = Instantiate(containerPrefab, Vector3.zero, Quaternion.Euler(Vector3.zero), transform);
+            // Spawn the container
+            var c = Instantiate(containerPrefab, Vector3.zero, Quaternion.Euler(Vector3.zero), transform);
+            _container = c.GetComponent<Container>();
         }
+
         public override void OnEpisodeBegin()
         {
             collisionManager.Reset();
-            container.transform.parent = transform;
-            container.transform.rotation = Quaternion.Euler(Vector3.zero);
-            container.transform.position = Vector3.zero;
-            
-        }
-        public override State Step()
-        {
-            if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagDead) ||
-                collisionManager.triggered && collisionManager.triggered_collider.CompareTag(tagDead) ||
-                (craneSpecs.spreaderRotation.x > 45 && craneSpecs.spreaderRotation.x < 315)) return new State(-1f, true);
 
-            if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagContainer))
-            {                
-                if(Mathf.Abs(craneSpecs.spreaderWorldPosition.z - TargetWorldPosition.z) <= accuracy)
-                {
-                    return new State(1f, true);
-                }
-            }
-            if (useSwingReward)
+            // Reset crane position
+            Crane.ResetPosition(new Vector3(0, 15, 25));
+
+            // Reset container position
+            _container.ResetPosition(Vector3.zero);
+
+            // Set the target as the container position
+            TargetPosition = _container.transform.position + new Vector3(0, 2.75f, 0); 
+
+        }
+
+        public override void CollectObservations(VectorSensor sensor)
+        {
+            sensor.AddObservation(Crane.spreader.Position);
+            sensor.AddObservation(Crane.spreader.Rbody.velocity);
+            sensor.AddObservation(Crane.spreader.Rotation);
+            sensor.AddObservation(Crane.kat.Position);
+            sensor.AddObservation(Crane.kat.Velocity);
+            sensor.AddObservation(TargetPosition);
+        }
+
+        public override void TakeActions(ActionBuffers actions)
+        {
+            Crane.MoveKat(actions.ContinuousActions[katIndex]);
+            Crane.MoveWinch(actions.ContinuousActions[winchIndex]);
+        }
+
+        public override State State()
+        {
+            if(collisionManager.collided && collisionManager._collision.collider.CompareTag(tagContainer)) return new State(1f, true);
+
+            if ((collisionManager.collided && collisionManager._collision.collider.CompareTag(tagDead))
+                || (collisionManager.triggered && collisionManager.triggered_collider.CompareTag(tagDead)))
             {
-                float swing = Mathf.Abs(craneSpecs.katWorldPosition.z - craneSpecs.spreaderWorldPosition.z);
-                float swingReward = (1 - (swing *2)) / MaxStep;
-                return new State(swingReward, false);
+                return new State(-1f, true);
             }
-            return new State(-1/MaxStep,false);
-        }
-        public override void UpdateTargetWorldPosition(Vector3 position)
-        {
-            base.UpdateTargetWorldPosition(position);
-        }
-        public override Vector3 CraneStartLocation()
-        {
-            Vector3 loc = Vector3.zero;
-            loc.y = Random.Range(5, 25);
-            loc.z = Random.Range(10, 25);
-            return loc;
+            
+            return new State(1f / MaxStep, false);
         }
     }
 }

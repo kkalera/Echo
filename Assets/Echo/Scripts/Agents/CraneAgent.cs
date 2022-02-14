@@ -10,7 +10,6 @@ namespace Echo
     public class CraneAgent : Agent
     {
         [SerializeField] Environment env;
-        [SerializeField] Crane crane;
         [SerializeField] private bool autoPilot;
 
         private static readonly int katIndex = 0;
@@ -24,7 +23,6 @@ namespace Echo
         public override void OnEpisodeBegin()
         {
             env.OnEpisodeBegin();
-            crane.ResetPosition(env.CraneStartLocation());
         }        
         public override void Heuristic(in ActionBuffers actionsOut)
         {            
@@ -39,11 +37,11 @@ namespace Echo
 
             if (autoPilot)
             {
-                var inputs = GetInputs(env.TargetWorldPosition + new Vector3(0,2.75f), 
-                    crane.craneSpecs.spreaderWorldPosition,
-                    new Vector3(0,crane.spreaderBody.velocity.y,crane.katBody.velocity.z),
-                    new Vector3(0, crane.craneSpecs.winchAcceleration,
-                    crane.craneSpecs.katAcceleration));
+                var inputs = GetInputs(env.TargetPosition, 
+                    env.Crane.spreader.transform.position,
+                    new Vector3(0,env.Crane.spreader.Rbody.velocity.y, env.Crane.kat.Velocity),
+                    new Vector3(0, env.Crane.craneSpecs.winchAcceleration,
+                    env.Crane.craneSpecs.katAcceleration));
                 conActions[katIndex] = inputs.z;
                 conActions[winchIndex] = inputs.y;
             }
@@ -52,22 +50,20 @@ namespace Echo
         public override void OnActionReceived(ActionBuffers actions)
         {
             float katAction = actions.ContinuousActions[katIndex];
-            crane.MoveKat(katAction);
+            env.Crane.MoveKat(katAction);
 
             float winchAction = actions.ContinuousActions[winchIndex];
-            crane.MoveWinch(winchAction);
+            env.Crane.MoveWinch(winchAction);
 
             // Get the state after interaction
-            State state = env.Step();
+            State state = env.State();
             AddReward(state.reward);
             if (state.dead) EndEpisode();
         }
 
         public override void CollectObservations(VectorSensor sensor)
         {
-            sensor.AddObservation(crane.craneSpecs.katWorldPosition);
-            sensor.AddObservation(crane.craneSpecs.spreaderWorldPosition);
-            sensor.AddObservation(env.TargetWorldPosition);            
+            env.CollectObservations(sensor);       
         }
 
         public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, Vector3 acceleration)
