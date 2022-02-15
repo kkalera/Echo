@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Echo/Scenes/Skew training.unity
     guid: 76416f5d64bec4305ab44be48281889d
   - enabled: 1
-    path: Assets/Echo/Scenes/CraneScene.unity
+    path: Assets/Echo/Scenes/CraneGrabContainer.unity
     guid: ead33c89ff9ab744a91a5a5a9c0c5581
   m_configObjects: {}

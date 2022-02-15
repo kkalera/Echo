@@ -141,8 +141,9 @@ namespace Echo
         private static Vector3 GetNextPosition(Vector3 spreaderPosition, Vector3 targetPosition)
         {
             float craneZLegs = 12;
-            bool hasToCrossLeg = spreaderPosition.z > craneZLegs && targetPosition.z < craneZLegs;
+            float legThickness = 4f;
 
+            bool hasToCrossLeg = spreaderPosition.z > craneZLegs && targetPosition.z < craneZLegs;
             if (!hasToCrossLeg) hasToCrossLeg = spreaderPosition.z > -craneZLegs && targetPosition.z < -craneZLegs;
             if (!hasToCrossLeg) hasToCrossLeg = ((spreaderPosition.z > -craneZLegs && spreaderPosition.z < craneZLegs) &&
                     (targetPosition.z > craneZLegs || targetPosition.z < -craneZLegs));
