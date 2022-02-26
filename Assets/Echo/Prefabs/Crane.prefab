@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 56256234093530210}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 2.6, y: 1.6, z: 0.55}
+  m_LocalPosition: {x: 2.6, y: 2.9, z: 0.5500002}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -138,7 +138,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 230035364232823299}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: -0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -239,7 +239,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 836196119176425403}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 23.7, z: 15}
+  m_LocalPosition: {x: 0, y: 20, z: 15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -779,13 +779,13 @@ MonoBehaviour:
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0, y: 0, z: 0}
-    outAnchor: {x: 0.9305345, y: -0.36621094, z: -0.00000011920929}
+    outAnchor: {x: 0.9406434, y: -0.33939362, z: -0.00000011920929}
   - body: {fileID: 56256234093530211}
     type: 1
     orientation: 1
     slack: 0
     hybridRolling: 0
-    storedCable: 1.413587
+    storedCable: 1.4238818
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 2.6, y: 1.5, z: 1}
@@ -798,9 +798,9 @@ MonoBehaviour:
     storedCable: 50
     spoolSeparation: 0
     cableSpawnSpeed: 0
-    inAnchor: {x: 0.97104657, y: -0.23888397, z: 0.00000011920929}
+    inAnchor: {x: 0.9694978, y: -0.24510193, z: 0.00000011920929}
     outAnchor: {x: 0, y: 0, z: 0}
-  restLength: 114.87408
+  restLength: 119.66852
 --- !u!23 &1524425164877427212
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1259,7 +1259,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1256831730737762509}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -2.6, y: 1.6, z: -0.55}
+  m_LocalPosition: {x: -2.6, y: 2.9, z: -0.5500002}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2376,13 +2376,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   craneSpecs: {fileID: 11400000, guid: 485be651551ea7f4697769337b4f4501, type: 2}
   _swingLimit: 0
+  _limitBounce: 0
   cables:
   - {fileID: 1250958244873204871}
   - {fileID: 5152683980657810906}
   - {fileID: 2067511246954712593}
   - {fileID: 2860845056471743512}
-  spreaderBody: {fileID: 1918590212833480033}
-  katBody: {fileID: 7699746005321144465}
+  winches:
+  - {fileID: 2249034895485564443}
+  - {fileID: 1575324114910570222}
+  - {fileID: 1230262440387064949}
+  - {fileID: 7640300457336701248}
+  - {fileID: 6043547839681674388}
+  - {fileID: 5848375400582275900}
+  - {fileID: 879983741951193738}
+  - {fileID: 7356280911537816567}
+  spreader: {fileID: 1407112159}
+  kat: {fileID: 7699746005321144464}
 --- !u!114 &7979483566269728109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2400,8 +2410,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   env: {fileID: 0}
-  crane: {fileID: 4639861527186858122}
-  autoPilot: 0
+  autoPilot: 1
 --- !u!114 &4639861527186858123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2415,7 +2424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 9
+    VectorObservationSize: 15
     NumStackedVectorObservations: 4
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -2459,8 +2468,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Record: 0
-  NumStepsToRecord: 5000
-  DemonstrationName: Grab
+  NumStepsToRecord: 1600
+  DemonstrationName: Grab-r
   DemonstrationDirectory: C:\Users\Kalera\Documents\GitHub\Echo-build\Demonstrations
 --- !u!1 &2386812556177103893
 GameObject:
@@ -3347,7 +3356,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4747434572351256898}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 2.6, y: 1.6, z: -0.55}
+  m_LocalPosition: {x: 2.6, y: 2.9, z: -0.5500002}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -4953,13 +4962,13 @@ MonoBehaviour:
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0, y: 0, z: 0}
-    outAnchor: {x: 0.97104657, y: -0.23888397, z: -0.00000011920929}
+    outAnchor: {x: 0.9694978, y: -0.24510193, z: -0.00000011920929}
   - body: {fileID: 1256831730737762508}
     type: 1
     orientation: 1
     slack: 0
     hybridRolling: 0
-    storedCable: 1.413587
+    storedCable: 1.4238818
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: -2.6, y: 1.5, z: -1}
@@ -4972,9 +4981,9 @@ MonoBehaviour:
     storedCable: 50
     spoolSeparation: 0
     cableSpawnSpeed: 0
-    inAnchor: {x: 0.9305345, y: -0.36621094, z: 0.00000011920929}
+    inAnchor: {x: 0.9406434, y: -0.33939362, z: 0.00000011920929}
     outAnchor: {x: 0, y: 0, z: 0}
-  restLength: 114.87408
+  restLength: 119.66852
 --- !u!23 &8949008811488052293
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5396,13 +5405,13 @@ MonoBehaviour:
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0, y: 0, z: 0}
-    outAnchor: {x: 0.97104657, y: -0.23888397, z: -0.00000011920929}
+    outAnchor: {x: 0.9694978, y: -0.24510193, z: -0.00000011920929}
   - body: {fileID: 4747434572351256899}
     type: 1
     orientation: 1
     slack: 0
     hybridRolling: 0
-    storedCable: 1.413587
+    storedCable: 1.4238818
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 2.6, y: 1.5, z: -1}
@@ -5415,9 +5424,9 @@ MonoBehaviour:
     storedCable: 50
     spoolSeparation: 0
     cableSpawnSpeed: 0
-    inAnchor: {x: 0.9305345, y: -0.36621094, z: 0.00000011920929}
+    inAnchor: {x: 0.9406434, y: -0.33939362, z: 0.00000011920929}
     outAnchor: {x: 0, y: 0, z: 0}
-  restLength: 114.87408
+  restLength: 119.66852
 --- !u!23 &3958625842287783983
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5643,13 +5652,13 @@ MonoBehaviour:
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: 0, y: 0, z: 0}
-    outAnchor: {x: 0.9305345, y: -0.36621094, z: -0.00000011920929}
+    outAnchor: {x: 0.9406434, y: -0.33939362, z: -0.00000011920929}
   - body: {fileID: 7700695764498696593}
     type: 1
     orientation: 1
     slack: 0
     hybridRolling: 0
-    storedCable: 1.413587
+    storedCable: 1.4238818
     spoolSeparation: 0
     cableSpawnSpeed: 0
     inAnchor: {x: -2.6, y: 1.5, z: 1}
@@ -5662,9 +5671,9 @@ MonoBehaviour:
     storedCable: 50
     spoolSeparation: 0
     cableSpawnSpeed: 0
-    inAnchor: {x: 0.97104657, y: -0.23888397, z: 0.00000011920929}
+    inAnchor: {x: 0.9694978, y: -0.24510193, z: 0.00000011920929}
     outAnchor: {x: 0, y: 0, z: 0}
-  restLength: 114.87408
+  restLength: 119.66852
 --- !u!23 &8450954880153794373
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6824,7 +6833,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7700695764498696592}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -2.6, y: 1.6, z: 0.55}
+  m_LocalPosition: {x: -2.6, y: 2.9, z: 0.5500002}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -7315,8 +7324,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 17.569141, y: 16.884022, z: 2}
-  m_Center: {x: -0.28457022, y: 9.767477, z: 8}
+  m_Size: {x: 17.569141, y: 14, z: 2}
+  m_Center: {x: -0.28457022, y: 7, z: 8}
 --- !u!65 &3088509497362227913
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7328,8 +7337,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 17.569141, y: 16.884022, z: 2}
-  m_Center: {x: -0.28457022, y: 9.767477, z: -8}
+  m_Size: {x: 17.569141, y: 14, z: 2}
+  m_Center: {x: -0.28457022, y: 7, z: -8}
 --- !u!1 &8832907916511049884
 GameObject:
   m_ObjectHideFlags: 0

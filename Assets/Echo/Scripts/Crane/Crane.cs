@@ -8,8 +8,6 @@ namespace Echo
     {
         [SerializeField] public SoCraneSpecs craneSpecs;
         [SerializeField][Range(0,10)] private float _swingLimit;
-        [SerializeField] [Range(0, 1)] private float _limitBounce;
-
         [SerializeField] private List<Filo.Cable> cables;
         [SerializeField] private List<HingeJoint> winches;
         
@@ -28,6 +26,10 @@ namespace Echo
 
         private void Update()
         {
+            //ManageSwingLimit();
+        }
+        private void FixedUpdate()
+        {
             ManageSwingLimit();
         }
 
@@ -37,31 +39,22 @@ namespace Echo
 
             var delta = Mathf.Abs(spreader.transform.position.z - kat.transform.position.z);
             if (delta > _swingLimit)
-            {                                
-                var spreaderVelocity = spreader.Rbody.velocity;
+            {
+                Vector3 sp = spreader.transform.position;
 
-                if (spreader.transform.position.z > kat.transform.position.z)
-                {
-                    spreaderVelocity.z = kat.Rbody.velocity.z < 0 ? kat.Rbody.velocity.z * 1.1f : -spreaderVelocity.z*_limitBounce;
-                }
-                else
-                {
-                    spreaderVelocity.z = kat.Rbody.velocity.z < 0 ? -spreaderVelocity.z*_limitBounce : kat.Rbody.velocity.z * 1.1f;
-                }
-                spreader.Rbody.velocity = spreaderVelocity;
+                spreader.transform.position = sp.z > kat.transform.position.z ? new Vector3(sp.x, sp.y, kat.transform.position.z + _swingLimit) : new Vector3(sp.x, sp.y, kat.transform.position.z - _swingLimit);    
             }
         }
         public void ResetPosition(Vector3 position)
         {
             craneSpecs.winchSpeed = 0;
-            craneSpecs.katSpeed = 0;
-            
+            craneSpecs.katSpeed = 0;            
             
             spreader.Rbody.isKinematic = true;
             kat.Rbody.isKinematic = true;
 
-            kat.Rbody.transform.position = new Vector3(0, 32, position.z);
-            spreader.Rbody.transform.position = new Vector3(0, position.y, position.z);
+            kat.Rbody.transform.position = new Vector3(position.x, 32, position.z);
+            spreader.Rbody.transform.position = new Vector3(position.x, position.y, position.z);
             spreader.Rbody.transform.rotation = Quaternion.Euler(Vector3.zero);
 
             for(int i = 0; i < cables.Count; i++)

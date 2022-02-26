@@ -90,16 +90,16 @@ namespace Echo
             vel.x += accel;
             body.velocity = vel;
         }
-        public static void AccelerateRigidbody_Y_Axis(Rigidbody body, float targetVelocity, float maxAccel, float timeDelta)
+        public static void AccelerateRigidbody_Y_Axis(Rigidbody body, float targetVelocity, float maxSpeed, float maxAccel, float timeDelta)
         {
             float accel = maxAccel * timeDelta;
-            float delta = targetVelocity - body.velocity.y;
-            if (delta < 0) accel *= -1;
-
+            float delta = Mathf.Abs(targetVelocity - body.velocity.y);
             if (accel > delta) accel = delta;
 
             Vector3 vel = body.velocity;
-            vel.y += accel;
+            if (targetVelocity < vel.y) vel.y -= accel;
+            if (targetVelocity > vel.y) vel.y += accel;
+            vel.y = Mathf.Clamp(vel.y, -maxSpeed, maxSpeed);
             body.velocity = vel;
         }
     }

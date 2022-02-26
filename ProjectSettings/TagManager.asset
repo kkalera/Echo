@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Container
   - Target
+  - Spreader
   layers:
   - Default
   - TransparentFX

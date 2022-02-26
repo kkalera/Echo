@@ -26,6 +26,7 @@ namespace Echo
         private Container _container;
         private GameObject _target;
         private bool grabbed;
+        private bool rewarded;
         
         void Start()
         {
@@ -35,9 +36,9 @@ namespace Echo
         public override void InitializeEnvironment()
         {
             // Spawn the container
-            var c = Instantiate(containerPrefab, Vector3.zero, Quaternion.Euler(Vector3.zero), transform);
+            var c = Instantiate(containerPrefab, Vector3.zero + transform.position, Quaternion.Euler(Vector3.zero), transform);
             _container = c.GetComponent<Container>();
-            _target = Instantiate(targetPrefab, new Vector3(0,0.1f,25), Quaternion.Euler(Vector3.zero), transform);
+            _target = Instantiate(targetPrefab, new Vector3(0,0.1f,-25) + transform.position, Quaternion.Euler(Vector3.zero), transform);
         }
 
         public override void OnEpisodeBegin()
@@ -45,15 +46,24 @@ namespace Echo
             collisionManager.Reset();
 
             // Reset crane position
-            Crane.ResetPosition(new Vector3(0, 15, 25));
+            Crane.ResetPosition(new Vector3(0, 15, Random.Range(-20,45)));
+            //Crane.ResetPosition(new Vector3(0, 15, 20));
 
             // Reset container position
-            _container.ResetPosition(new Vector3(0,0.1f,0));
+            _container.ResetPosition(new Vector3(0,0.1f, Random.Range(-4,4)));
+            //_container.ResetPosition(new Vector3(0, 0.1f, 0));
+
+            // Set the target position
+            _target.transform.position = new Vector3(0, 0.1f, Random.Range(15,40));
+            //_target.transform.position = new Vector3(0, 0.1f, 25);
+            
 
             // Set the target as the container position
             TargetPosition = _container.transform.position + new Vector3(0, 2.75f, 0);
 
+            _container.transform.parent = transform;
             grabbed = false;
+            rewarded = false;
 
         }
 
@@ -75,25 +85,37 @@ namespace Echo
 
         public override State State()
         {
+            //float swingDistance = Mathf.Abs(_crane.spreader.Position.z - _crane.kat.Position);
+            //float swingReward = 1f - swingDistance;
+            float speedZReward = 1 - Mathf.Min(Mathf.Abs(_crane.spreader.Rbody.velocity.z), 1);
+            float speedYReward = 1 - Mathf.Min(Mathf.Abs(_crane.spreader.Rbody.velocity.y), 1);
+            //float reward = (swingReward + speedYReward + speedZReward) / 3;
+            float reward = (speedYReward + speedZReward) / 2;
+
             // Positive reward
-            if (collisionManager.collided && collisionManager._collision.collider.CompareTag(tagContainer))
+            if (collisionManager.collided && (collisionManager._collision.collider.CompareTag(tagContainer) || collisionManager._collision.collider.CompareTag(tagTarget)))
             {
                 float distance = Mathf.Abs(_crane.spreader.Position.z - TargetPosition.z);
+                
                 if(distance < accuracy)
                 {
-                    if (grabbed)
+                    if (grabbed && !rewarded) 
                     {
-                        return new State(1f, true);
+                        rewarded = true;                        
+                        return new State(1f + reward, true);
                     }
                     else
                     {
                         _crane.spreader.GrabContainer(_container.transform);
-                        TargetPosition = _target.transform.position;
+                        TargetPosition = _target.transform.position + new Vector3(0,2.75f,0) + transform.position;
                         grabbed = true;
-                        return new State(1f, false);
+                        return new State(1f + reward, false);
                     }
                 }
-                
+                else
+                {
+                    return new State(0.1f, true);
+                }
             }
 
             // Dead
@@ -103,8 +125,8 @@ namespace Echo
             {
                 return new State(-1f, true);
             }
-            
-            return new State(1f / MaxStep, false);
+
+            return new State(-.1f / MaxStep, false);
         }
     }
 }

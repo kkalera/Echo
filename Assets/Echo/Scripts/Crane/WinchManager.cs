@@ -32,9 +32,10 @@ namespace Echo {
 
             // Get 2 motors (one side turns clockwise while the other side turns counter-clockwise
             JointMotor motor = joint.motor;
-            
-            float timeDelta = Time.deltaTime + 0.02f;
-            float accel = _craneSpecs.winchAcceleration * timeDelta * degreeToM;
+
+            float timeDelta = Time.deltaTime + 0.02f * Time.timeScale;
+            //float accel = _craneSpecs.winchAcceleration * timeDelta * degreeToM;
+            float accel = _craneSpecs.winchAcceleration * degreeToM * timeDelta;
             float deltaV = Mathf.Abs(value - motor.targetVelocity);
             if (accel > deltaV) accel = deltaV;
 
