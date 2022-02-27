@@ -13,8 +13,8 @@ namespace Echo
         [SerializeField] private bool autoPilot;        
 
         private static readonly int katIndex = 0;
-        private static readonly int winchIndex = 1;        
-
+        private static readonly int winchIndex = 1;
+        
         private void Start()
         {
             env.InitializeEnvironment();

@@ -13,7 +13,18 @@ namespace Echo
         
         [SerializeField] public Spreader spreader;
         [SerializeField] public Kat kat;
-        
+
+        void Start()
+        {
+            if(spreader == null || kat == null)
+            {
+                Debug.LogWarning("Please assign a spreader and kat component");
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#endif
+            }
+        }
+
         public void MoveWinch(float value)
         {
             craneSpecs.winchSpeed = value;
@@ -24,13 +35,9 @@ namespace Echo
             craneSpecs.katSpeed = value;
         }
 
-        private void Update()
-        {
-            //ManageSwingLimit();
-        }
         private void FixedUpdate()
         {
-            ManageSwingLimit();
+            //ManageSwingLimit();
         }
 
         private void ManageSwingLimit()
@@ -81,7 +88,7 @@ namespace Echo
             }
 
             spreader.Rbody.isKinematic = false;
-            kat.Rbody.isKinematic = false;            
+            kat.Rbody.isKinematic = false;
         }
         
     }
