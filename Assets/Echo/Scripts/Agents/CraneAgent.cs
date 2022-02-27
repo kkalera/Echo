@@ -46,6 +46,8 @@ namespace Echo
 
                 conActions[katIndex] = inputs.z;
                 conActions[winchIndex] = inputs.y;
+                Utils.ClearLogConsole();
+                Debug.Log(inputs);
             }
         }
 
