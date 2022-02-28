@@ -37,7 +37,7 @@ namespace Echo
 
         private void FixedUpdate()
         {
-            //ManageSwingLimit();
+            ManageSwingLimit();
         }
 
         private void ManageSwingLimit()

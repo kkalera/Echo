@@ -46,8 +46,6 @@ namespace Echo
 
                 conActions[katIndex] = inputs.z;
                 conActions[winchIndex] = inputs.y;
-                Utils.ClearLogConsole();
-                Debug.Log(inputs);
             }
         }
 
@@ -62,10 +60,7 @@ namespace Echo
             // Get the state after interaction
             State state = env.State();
             AddReward(state.reward);
-            //if (state.dead) Debug.Log(StepCount);
             if (state.dead) EndEpisode();
-            //Utils.ClearLogConsole();
-            //Debug.Log(GetCumulativeReward());
         }
 
         public override void CollectObservations(VectorSensor sensor)

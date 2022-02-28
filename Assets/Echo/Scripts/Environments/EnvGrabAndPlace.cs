@@ -46,8 +46,8 @@ namespace Echo
             collisionManager.Reset();
 
             // Reset crane position
-            Crane.ResetPosition(new Vector3(0, 15, Random.Range(-20,45)));
-            //Crane.ResetPosition(new Vector3(0, 15, 20));
+            //Crane.ResetPosition(new Vector3(0, 15, Random.Range(-20,45)));
+            Crane.ResetPosition(new Vector3(0, 15, 20));
 
             // Reset container position
             _container.ResetPosition(new Vector3(0,0.1f, Random.Range(-4,4)));
