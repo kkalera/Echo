@@ -14,7 +14,7 @@ namespace Filo{
 
             for (int i = 0; i < cables.Length; ++i){
                 if (cables[i] != null && cables[i].isActiveAndEnabled)
-                    cables[i].UpdateCable();
+                    cables[i].UpdateCable(Time.fixedDeltaTime);
             }
     
             for (int j = 0; j < iterations; ++j){
@@ -23,7 +23,7 @@ namespace Filo{
                         cables[i].Solve(Time.fixedDeltaTime, bias);
                 }
             }
-            
+
         }
        
 

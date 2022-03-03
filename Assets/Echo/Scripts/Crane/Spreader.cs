@@ -9,18 +9,27 @@ namespace Echo
     public class Spreader : MonoBehaviour
     {
         [SerializeField] private SoCraneSpecs craneSpecs;
+<<<<<<< Updated upstream
         [SerializeField] private SoCollision collisionManager;
+=======
+        [SerializeField] private Crane crane;
+>>>>>>> Stashed changes
 
         public Vector3 Position { get => transform.position; }
         public Quaternion Rotation { get => transform.rotation; }
         public Rigidbody Rbody { get => GetComponent<Rigidbody>(); }
+<<<<<<< Updated upstream
         
+=======
+
+>>>>>>> Stashed changes
         public void GrabContainer(Transform container)
         {
             if(container.TryGetComponent<Rigidbody>(out Rigidbody rb)){
                 rb.isKinematic = true;
             }
             container.parent = transform;
+<<<<<<< Updated upstream
             collisionManager.collided = false;
             collisionManager._collision = null;
         }
@@ -29,31 +38,11 @@ namespace Echo
             collisionManager.collided = true;
             collisionManager._collision = collision;
         }
+=======
+            container.transform.rotation = Quaternion.Euler(Vector3.zero);
+            container.transform.position = new Vector3(transform.position.x, container.transform.position.y, transform.position.z);
+>>>>>>> Stashed changes
 
-        private void OnCollisionStay(Collision collision)
-        {
-            collisionManager.collided = true;
-            collisionManager._collision = collision;
-        }
-        private void OnCollisionExit(Collision collision)
-        {
-            collisionManager.collided = false;
-            collisionManager._collision = null;
-        }
-        private void OnTriggerEnter(Collider other)
-        {          
-            collisionManager.triggered = true;
-            collisionManager.triggered_collider = other;
-        }
-        private void OnTriggerStay(Collider other)
-        {
-            collisionManager.triggered = true;
-            collisionManager.triggered_collider = other;
-        }
-        private void OnTriggerExit(Collider other)
-        {
-            collisionManager.triggered = false;
-            collisionManager.triggered_collider = null;
         }
     }
 }

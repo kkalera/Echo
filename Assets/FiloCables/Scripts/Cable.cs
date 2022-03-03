@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ namespace Filo
     {
 
         [Serializable]
-        public struct Link
+        public class Link
         {
 
             public enum LinkType
@@ -31,8 +30,9 @@ namespace Filo
             public bool hybridRolling;
             public float storedCable;
             public float spoolSeparation;
-
             public float cableSpawnSpeed;
+
+            [NonSerialized] public float cableVelocity = 0;
 
             public Vector3 inAnchor;
             public Vector3 outAnchor;
@@ -137,6 +137,9 @@ namespace Filo
         [Tooltip("Dynamically creates/removes new cable links using body colliders, allowing dynamic cable path change at runtime.")]
         public bool dynamicSplitMerge = false;
 
+        [Tooltip("Toogle hybrid link cable drawing on/off")]
+        public bool drawHybridLinks = true;
+
         [Range(0, 1)]
         [Tooltip("Percentage of loose cable visually represented. Set it to zero to deactivate cable looseness. The amount of loose cable is first clamped to maxLooseCable, then multiplied by loosenessScale.")]
         public float loosenessScale = 1;
@@ -218,11 +221,7 @@ namespace Filo
             if (links != null)
             {
                 for (int i = 0; i < links.Count; ++i)
-                {
-                    var link = links[i];
-                    link.hybridRolling = link.type == Link.LinkType.Hybrid && link.storedCable > 0;
-                    links[i] = link;
-                }
+                    links[i].hybridRolling = links[i].type == Link.LinkType.Hybrid && links[i].storedCable > 0;
             }
         }
 
@@ -251,7 +250,7 @@ namespace Filo
                         if (link2.type == Link.LinkType.Hybrid)
                             t2 -= link2.body.GetCablePlaneNormal() * link2.storedCable * link2.spoolSeparation;
 
-                        joints.Add(new CableJoint(link1.body, link2.body,
+                        joints.Add(new CableJoint(link1, link2,
                                                   link1.body.transform.InverseTransformPoint(t1),
                                                   link2.body.transform.InverseTransformPoint(t2),
                                                   (t2 - t1).magnitude + link1.slack)); 
@@ -272,7 +271,6 @@ namespace Filo
 
             for (int i = 0; i < links.Count; ++i)
             {
-
                 Link link = links[i];
 
                 if (link.body != null)
@@ -315,8 +313,6 @@ namespace Filo
                         restLength += joints[i].restLength;
                     }
                 }
-
-                links[i] = link;
             }
         }
 
@@ -326,47 +322,44 @@ namespace Filo
             Vector3? t1 = null, t2 = null;
 
             if (prevJoint != null)
-                t1 = prevJoint.body2.WorldToCable(prevJoint.WorldSpaceAttachment2);
+                t1 = prevJoint.link2.body.WorldToCable(prevJoint.WorldSpaceAttachment2);
             if (nextJoint != null)
-                t2 = nextJoint.body1.WorldToCable(nextJoint.WorldSpaceAttachment1);
+                t2 = nextJoint.link1.body.WorldToCable(nextJoint.WorldSpaceAttachment1);
 
             // Hybrid links (only at the start or the end of the cable)
             if (link.type == Link.LinkType.Hybrid)
             {
-
+                float spacing = drawHybridLinks ? 0.05f : 0;
                 if (t1.HasValue)
                 {
-                    link.body.AppendSamples(sampledCable, t1.Value, link.storedCable, link.spoolSeparation, false, link.orientation);
+                    link.body.AppendSamples(sampledCable, t1.Value, spacing, link.storedCable, link.spoolSeparation, false, link.orientation);
                 }
                 else if (t2.HasValue)
                 {
-                    link.body.AppendSamples(sampledCable, t2.Value, link.storedCable, link.spoolSeparation, true, link.orientation);
+                    link.body.AppendSamples(sampledCable, t2.Value, spacing, link.storedCable, link.spoolSeparation, true, link.orientation);
                 }
-
             }
             // Rolling links (only mid-cable)
             else if (link.type == Link.LinkType.Rolling)
             {
-
                 if (t1.HasValue && t2.HasValue)
                 {
                     float distance = link.body.SurfaceDistance(t1.Value, t2.Value, !link.orientation, false);
-                    link.body.AppendSamples(sampledCable, t1.Value, distance, 0, false, link.orientation);
+                    link.body.AppendSamples(sampledCable, t1.Value, 0.05f, distance, 0, false, link.orientation);
                 }
-
             }
             // Attachment, source and pinhole links:        
             else
             {
 
                 if (t1.HasValue)
-                    sampledCable.AppendSample(prevJoint.body2.transform.TransformPoint(link.inAnchor));
+                    sampledCable.AppendSample(prevJoint.link2.body.transform.TransformPoint(link.inAnchor));
 
                 if (t1.HasValue && t2.HasValue && t1.Value != t2.Value)
                     sampledCable.NewSegment();
 
                 if (t2.HasValue)
-                    sampledCable.AppendSample(nextJoint.body1.transform.TransformPoint(link.outAnchor));
+                    sampledCable.AppendSample(nextJoint.link1.body.transform.TransformPoint(link.outAnchor));
             }
         }
 
@@ -452,18 +445,16 @@ namespace Filo
         }
 
 
-        private void UpdatePinhole(CableJoint joint1, CableJoint joint2)
+        private void UpdatePinhole(CableJoint joint1, CableJoint joint2, float deltaTime)
         {
-
             if (joint1 != null && joint2 != null)
             {
-
-                float restLenght1 = joint1.restLength;
+                float restLength1 = joint1.restLength;
                 float restLength2 = joint2.restLength;
 
-                if (joint1.length > restLenght1)
+                if (joint1.length > restLength1)
                 {
-                    float delta = joint1.length - restLenght1;
+                    float delta = joint1.length - restLength1;
                     joint1.restLength += delta;
                     joint2.restLength -= delta;
                 }
@@ -476,19 +467,19 @@ namespace Filo
             }
         }
 
-        private void UpdatePinholes()
+        private void UpdatePinholes(float deltaTime)
         {
             for (int i = 1; i < links.Count - 1; ++i)
             {
                 if (links[i].body != null && joints[i - 1] != null && joints[i] != null)
                 {
                     if (links[i].type == Link.LinkType.Pinhole)
-                        UpdatePinhole(joints[i - 1], joints[i]);
+                        UpdatePinhole(joints[i - 1], joints[i], deltaTime);
                 }
             }
         }
 
-        private Link UpdateHybridLink(Link link, bool cableGoesIn, Vector3 attachment)
+        private void UpdateHybridLink(Link link, bool cableGoesIn, Vector3 attachment)
         {
 
             if (link.storedCable <= 0 && link.hybridRolling)
@@ -533,8 +524,6 @@ namespace Filo
                 }
 
             }
-
-            return link;
         }
 
         private void UpdateHybridLinks()
@@ -543,14 +532,14 @@ namespace Filo
             // Only first and last link can be hybrid, update them:
             if (links[0].body != null && links[0].type == Link.LinkType.Hybrid)
             {
-                links[0] = UpdateHybridLink(links[0], false, joints[0].WorldSpaceAttachment2);
+                UpdateHybridLink(links[0], false, joints[0].WorldSpaceAttachment2);
             }
 
             if (links.Count > 1)
             {
                 int lastLink = links.Count - 1;
                 if (links[lastLink].body != null && links[lastLink].type == Link.LinkType.Hybrid)
-                    links[lastLink] = UpdateHybridLink(links[lastLink], true, joints[joints.Count - 1].WorldSpaceAttachment1);
+                    UpdateHybridLink(links[lastLink], true, joints[joints.Count - 1].WorldSpaceAttachment1);
             }
         }
 
@@ -570,12 +559,12 @@ namespace Filo
                     Vector3 t1, t2;
                     FindCommonTangents(links[i], links[i + 1], out t1, out t2);
 
-                    Vector2 currentT1 = joint.body1.WorldSpaceToCablePlane(joint.WorldSpaceAttachment1);
-                    Vector2 currentT2 = joint.body2.WorldSpaceToCablePlane(joint.WorldSpaceAttachment2);
+                    Vector2 currentT1 = joint.link1.body.WorldSpaceToCablePlane(joint.WorldSpaceAttachment1);
+                    Vector2 currentT2 = joint.link2.body.WorldSpaceToCablePlane(joint.WorldSpaceAttachment2);
 
                     // Get surface distances between old and new tangents:
-                    float d1 = joint.body1.SurfaceDistance(currentT1, joint.body1.WorldSpaceToCablePlane(t1), links[i].orientation);
-                    float d2 = joint.body2.SurfaceDistance(currentT2, joint.body2.WorldSpaceToCablePlane(t2), links[i + 1].orientation);
+                    float d1 = joint.link1.body.SurfaceDistance(currentT1, joint.link1.body.WorldSpaceToCablePlane(t1), links[i].orientation);
+                    float d2 = joint.link2.body.SurfaceDistance(currentT2, joint.link2.body.WorldSpaceToCablePlane(t2), links[i + 1].orientation);
 
                     // Spawn more cable if necessary
                     if (links[i].type == Link.LinkType.Attachment)
@@ -590,6 +579,13 @@ namespace Filo
                         restLength += links[i + 1].cableSpawnSpeed;
                     }
 
+                    // Update hybrid link attachment points (displace along the plane normal based on amount of stored cable):
+                    if (links[i].type == Link.LinkType.Hybrid)
+                        t1 -= joint.link1.body.GetCablePlaneNormal() * links[i].storedCable * links[i].spoolSeparation;
+
+                    if (links[i + 1].type == Link.LinkType.Hybrid)
+                        t2 -= joint.link2.body.GetCablePlaneNormal() * links[i + 1].storedCable * links[i + 1].spoolSeparation;
+
                     // Update stored lengths:
                     link1.storedCable -= d1;
                     link2.storedCable += d2;
@@ -598,48 +594,39 @@ namespace Filo
                     joint.restLength += d1;
                     joint.restLength -= d2;
 
-                    // Update hybrid link attachment points (displace along the plane normal based on amount of stored cable):
-                    if (links[i].type == Link.LinkType.Hybrid)
-                        t1 -= joint.body1.GetCablePlaneNormal() * links[i].storedCable * links[i].spoolSeparation;
-
-                    if (links[i + 1].type == Link.LinkType.Hybrid)
-                        t2 -= joint.body2.GetCablePlaneNormal() * links[i + 1].storedCable * links[i + 1].spoolSeparation;
-
                     // Update tangent points:
-                    joint.offset1 = joint.body1.transform.InverseTransformPoint(t1);
-                    joint.offset2 = joint.body2.transform.InverseTransformPoint(t2);
-
-                    links[i] = link1;
-                    links[i + 1] = link2;
+                    joint.offset1 = joint.link1.body.transform.InverseTransformPoint(t1);
+                    joint.offset2 = joint.link2.body.transform.InverseTransformPoint(t2);
 
                 }
 
             }
         }
 
-        private void InitializeJoints()
-        {
-            for (int i = 0; i < joints.Count; ++i)
-            {
-                if (joints[i] != null)
-                    joints[i].Initialize();
-            }
-        }
-
-        public void UpdateCable()
+        public void UpdateCable(float deltaTime)
         {
 
             if (joints == null) return;
+
+            for (int i = 0; i < joints.Count; ++i)
+            {
+                if (joints[i] != null)
+                    joints[i].UpdateLength();
+            }
 
             UpdateJoints();
 
             UpdateHybridLinks();
 
-            InitializeJoints();
-
-            UpdatePinholes();
+            UpdatePinholes(deltaTime);
 
             SplitMerge();
+
+            for (int i = 0; i < joints.Count; ++i)
+            {
+                if (joints[i] != null)
+                    joints[i].UpdateMasses(); 
+            }
 
         }
 
@@ -662,14 +649,14 @@ namespace Filo
                     {
 
                         prevJoint.restLength += nextJoint.restLength;
-                        prevJoint.Body2 = nextJoint.Body2;
+                        prevJoint.Link2 = nextJoint.Link2;
 
                         // Update joint attachment points:
                         Vector3 t1, t2;
                         FindCommonTangents(links[i - 1], links[i + 1], out t1, out t2);
-                        prevJoint.offset1 = prevJoint.Body1.transform.InverseTransformPoint(t1);
-                        prevJoint.offset2 = prevJoint.Body2.transform.InverseTransformPoint(t2);
-                        prevJoint.Initialize();
+                        prevJoint.offset1 = prevJoint.Link1.body.transform.InverseTransformPoint(t1);
+                        prevJoint.offset2 = prevJoint.Link2.body.transform.InverseTransformPoint(t2);
+                        prevJoint.UpdateLength();
 
                         links.RemoveAt(i);
                         joints.RemoveAt(i);
@@ -699,13 +686,13 @@ namespace Filo
 
                             float initialRestLength = currentJoint.restLength;
 
-                            // Create new joint and link:
-                            CableJoint newJoint = new CableJoint(body, currentJoint.Body2, Vector3.zero, Vector3.zero, currentJoint.restLength);
-                            currentJoint.Body2 = body;
-
+                            // Create new link and joint:
                             Link newLink = new Link();
                             newLink.type = Link.LinkType.Rolling;
                             newLink.body = body;
+
+                            CableJoint newJoint = new CableJoint(newLink, currentJoint.Link2, Vector3.zero, Vector3.zero, currentJoint.restLength);
+                            currentJoint.Link2 = newLink;
 
                             // Calculate orientation.
                             Vector3 v = Vector3.Cross(body.GetCablePlaneNormal(),currentJoint.WorldSpaceAttachment2 - currentJoint.WorldSpaceAttachment1);
@@ -714,15 +701,15 @@ namespace Filo
                             // Update joint attachment points:
                             Vector3 t1, t2;
                             FindCommonTangents(links[i], newLink, out t1, out t2);
-                            currentJoint.offset1 = currentJoint.Body1.transform.InverseTransformPoint(t1);
-                            currentJoint.offset2 = currentJoint.Body2.transform.InverseTransformPoint(t2);
+                            currentJoint.offset1 = currentJoint.Link1.body.transform.InverseTransformPoint(t1);
+                            currentJoint.offset2 = currentJoint.Link2.body.transform.InverseTransformPoint(t2);
 
                             FindCommonTangents(newLink, links[i + 1], out t1, out t2);
-                            newJoint.offset1 = newJoint.Body1.transform.InverseTransformPoint(t1);
-                            newJoint.offset2 = newJoint.Body2.transform.InverseTransformPoint(t2);
+                            newJoint.offset1 = newJoint.Link1.body.transform.InverseTransformPoint(t1);
+                            newJoint.offset2 = newJoint.Link2.body.transform.InverseTransformPoint(t2);
 
-                            currentJoint.Initialize();
-                            newJoint.Initialize();
+                            currentJoint.UpdateLength();
+                            newJoint.UpdateLength();
 
                             // Adjust rest lengths so that tensions are equal:
                             float tension = initialRestLength / (currentJoint.length + newJoint.length);
@@ -740,14 +727,14 @@ namespace Filo
 
         public void Solve(float deltaTime, float bias)
         {
-
             if (joints == null) return;
 
             for (int i = 0; i < joints.Count; ++i)
             {
                 if (joints[i] != null)
-                    joints[i].Solve(deltaTime, bias);
+                    joints[i].SolveVelocities(deltaTime, bias);
             }
+
             for (int i = 0; i < links.Count; ++i)
             {
                 if (links[i].body != null)
@@ -758,26 +745,18 @@ namespace Filo
         private CableJoint GetPreviousJoint(int linkIndex, bool closed)
         {
             if (linkIndex > 0)
-            {
                 return joints[linkIndex - 1];
-            }
-            else if (closed && joints.Count > 0)
-            {
+            if (closed && joints.Count > 0)
                 return joints[joints.Count - 1];
-            }
             return null;
         }
 
         private CableJoint GetNextJoint(int linkIndex, bool closed)
         {
             if (linkIndex < joints.Count)
-            {
                 return joints[linkIndex];
-            }
-            else if (closed && joints.Count > 0)
-            {
+            if (closed && joints.Count > 0)
                 return joints[0];
-            }
             return null;
         }
 

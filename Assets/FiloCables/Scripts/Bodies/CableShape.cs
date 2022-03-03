@@ -169,7 +169,7 @@ namespace Filo{
             return Vector3.Lerp(nextSample,sample,(accumDistance - distance)/segmentDistance);
         }
 
-        public override void AppendSamples(Cable.SampledCable samples, Vector3 origin, float distance , float spoolSeparation,bool reverse, bool orientation){
+        public override void AppendSamples(Cable.SampledCable samples, Vector3 origin, float spacing, float distance , float spoolSeparation,bool reverse, bool orientation){
 
             if (convexHull == null || convexHull.hull.Count == 0)
                 return; 

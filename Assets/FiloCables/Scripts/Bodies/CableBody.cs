@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections.Generic;
 
 namespace Filo{
 
@@ -17,13 +15,13 @@ namespace Filo{
         public Vector3 planeNormal;
         public bool freezeRotation = true;
         private Rigidbody rbody = null;
-    
+
         private void Awake()
         {
             FindRigidbody();
         }
 
-        private void FindRigidbody(){
+        public void FindRigidbody(){
             rbody = GetComponentInParent<Rigidbody>();
             CalculateInertiaTensor();
         }
@@ -127,7 +125,6 @@ namespace Filo{
    
         }
 
-
         public virtual void CalculateInertiaTensor(){
 
             if (rbody != null){
@@ -143,7 +140,40 @@ namespace Filo{
                 }
             }
         }
-    
+
+        public float GetVelocityAtPointAlongDir(Vector3 point, Vector3 direction)
+        {
+            if (rbody != null)
+                return Vector3.Dot(rbody.GetPointVelocity(point), direction);
+            return 0;
+        }
+
+        public void GetInverseInertiaTensor(ref Matrix4x4 tensor)
+        {
+            if (rbody != null)
+            {
+                Vector3 invInertia1 = rbody.inertiaTensorRotation * new Vector3(rbody.inertiaTensor.x > 0 ? 1.0f / rbody.inertiaTensor.x : 0,
+                                                                                rbody.inertiaTensor.y > 0 ? 1.0f / rbody.inertiaTensor.y : 0,
+                                                                                rbody.inertiaTensor.z > 0 ? 1.0f / rbody.inertiaTensor.z : 0);
+
+                Matrix4x4 m = Matrix4x4.Rotate(rbody.rotation);
+                tensor[0, 0] = invInertia1.x;
+                tensor[1, 1] = invInertia1.y;
+                tensor[2, 2] = invInertia1.z;
+                tensor[3, 3] = 1;
+                tensor = m * tensor * m.transpose;
+            }
+        }
+
+        public void ApplyImpulse(Vector3 impulse, Vector3 r, float invMass, ref Matrix4x4 invInertiaTensor)
+        {
+            if (rbody != null && !rbody.isKinematic)
+            {
+                rbody.velocity += impulse * invMass;
+                rbody.angularVelocity += invInertiaTensor.MultiplyVector(Vector3.Cross(r, impulse));
+            }
+        }
+
         /**
          * Returns a worldspace point that lies in the 2D convex hull of the body. 
          */
@@ -162,7 +192,7 @@ namespace Filo{
 
         public abstract Vector3 SurfacePointAtDistance(Vector3 origin, float distance, bool orientation, out int index);
 
-        public abstract void AppendSamples(Cable.SampledCable samples, Vector3 origin, float distance , float spoolSeparation,bool reverse, bool orientation);
+        public abstract void AppendSamples(Cable.SampledCable samples, Vector3 origin, float spacing, float distance , float spoolSeparation, bool reverse, bool orientation);
     }
 }
 

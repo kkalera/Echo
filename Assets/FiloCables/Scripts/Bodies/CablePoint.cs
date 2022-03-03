@@ -31,7 +31,7 @@ namespace Filo{
             return transform.position;
         }
 
-        public override void AppendSamples(Cable.SampledCable samples, Vector3 origin, float distance ,float spoolSeparation, bool reverse, bool orientation){
+        public override void AppendSamples(Cable.SampledCable samples, Vector3 origin, float spacing, float distance, float spoolSeparation, bool reverse, bool orientation){
             return;
         }
     }

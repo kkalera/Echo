@@ -15,15 +15,33 @@ namespace Echo
         
         [SerializeField] public Spreader spreader;
         [SerializeField] public Kat kat;
+<<<<<<< Updated upstream
         
+=======
+
+        public float winchSpeed;
+        public float katSpeed;
+
+        void Start()
+        {
+            if(spreader == null || kat == null)
+            {
+                Debug.LogWarning("Please assign a spreader and kat component");
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#endif
+            }
+        }
+
+>>>>>>> Stashed changes
         public void MoveWinch(float value)
         {
-            craneSpecs.winchSpeed = value;
+            winchSpeed = value;
         }
 
         public void MoveKat(float value)
         {
-            craneSpecs.katSpeed = value;
+            katSpeed = value;
         }
 
         private void Update()
@@ -53,9 +71,14 @@ namespace Echo
         }
         public void ResetPosition(Vector3 position)
         {
+<<<<<<< Updated upstream
             craneSpecs.winchSpeed = 0;
             craneSpecs.katSpeed = 0;
             
+=======
+            winchSpeed = 0;
+            katSpeed = 0;            
+>>>>>>> Stashed changes
             
             spreader.Rbody.isKinematic = true;
             kat.Rbody.isKinematic = true;

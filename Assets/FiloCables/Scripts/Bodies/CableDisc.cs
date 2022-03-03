@@ -79,7 +79,7 @@ namespace Filo{
             return CableToWorld(origin.Rotate2D(angle));
         }
 
-        public override void AppendSamples(Cable.SampledCable samples, Vector3 origin, float distance, float spoolSeparation, bool reverse, bool orientation){
+        public override void AppendSamples(Cable.SampledCable samples, Vector3 origin, float spacing, float distance, float spoolSeparation, bool reverse, bool orientation){
 
             // If the distance or radius are roughly zero, add the first sample and bail out.
             if (ScaledRadius < 1e-4 || distance < 1e-4){
@@ -89,7 +89,7 @@ namespace Filo{
 
             // Calculate angle using arc length:
             float angle = distance / ScaledRadius;
-            int sampleCount = Mathf.CeilToInt(angle / (Mathf.PI*0.05f));
+            int sampleCount = spacing > 0.0001f ? Mathf.CeilToInt(angle / (Mathf.PI * spacing)) : 0;
 
             Vector3 axisOffset = GetCablePlaneNormal() * distance * spoolSeparation / sampleCount;
 

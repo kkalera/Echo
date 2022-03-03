@@ -7,6 +7,7 @@ namespace Echo {
     public class WinchManager : MonoBehaviour
     {
         [SerializeField] SoCraneSpecs _craneSpecs;
+        [SerializeField] Crane _crane;
         HingeJoint joint;
 
         private void Start()
@@ -16,7 +17,7 @@ namespace Echo {
 
         void Update()
         {  
-            MoveWinch(_craneSpecs.winchSpeed);
+            MoveWinch(_crane.winchSpeed);
             ManageWinchLimit();
         } 
         public void MoveWinch(float value)
@@ -47,8 +48,8 @@ namespace Echo {
         private void ManageWinchLimit()
         {
             var crane = GetComponentInParent<Crane>();
-            if((crane.spreader.Position.y > 25 && _craneSpecs.winchSpeed > 0) ||
-                (crane.spreader.Position.y < 0 && _craneSpecs.winchSpeed < 0) ||
+            if((crane.spreader.Position.y > 25 && _crane.winchSpeed > 0) ||
+                (crane.spreader.Position.y < 0 && _crane.winchSpeed < 0) ||
                 _craneSpecs.winchCableAmount < 5)
             {
                 var motor = joint.motor;

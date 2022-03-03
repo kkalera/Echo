@@ -1,22 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 namespace Filo{
 
     public class CableJoint {
     
-        public CableBody body1;
+        public Cable.Link link1;
         public Vector3 offset1;    
         
-        public CableBody body2;
+        public Cable.Link link2;
         public Vector3 offset2;
        
         [HideInInspector] public float length = 0;
         public float restLength = 1;
-    
-        private Rigidbody rb1;
-        private Rigidbody rb2;
 
         private float totalLambda = 0;
 
@@ -36,32 +32,25 @@ namespace Filo{
         private float lambda;
 
         public Vector3 WorldSpaceAttachment1{
-            get{return body1 != null ? body1.transform.TransformPoint(offset1) : Vector3.zero;}
+            get{return link1.body ? link1.body.transform.TransformPoint(offset1) : Vector3.zero;}
         }
         
         public Vector3 WorldSpaceAttachment2{
-            get{return body2 != null ? body2.transform.TransformPoint(offset2) : Vector3.zero;}
+            get{return link2.body ? link2.body.transform.TransformPoint(offset2) : Vector3.zero;}
         }
 
-        public CableBody Body1{
-            get{return body1;}
+        public Cable.Link Link1{
+            get{return link1;}
             set{
-                this.body1 = value;
-                if (body1 != null){
-                    this.rb1 = body1.GetRigidbody();
-                }else
-                    this.rb1 = null;
+                this.link1 = value;
             }
         }
 
-        public CableBody Body2{
-            get{return body2;}
+        public Cable.Link Link2
+        {
+            get{return link2;}
             set{
-                this.body2 = value;
-                if (body2 != null)
-                    this.rb2 = body2.GetRigidbody();
-                else
-                    this.rb2 = null;
+                this.link2 = value;
             }
         }
 
@@ -77,68 +66,50 @@ namespace Filo{
             get{return restLength > 0 ? length / restLength : 1;}
         }
     
-        public CableJoint(CableBody body1, CableBody body2, Vector3 offset1, Vector3 offset2, float restLength){
+        public CableJoint(Cable.Link link1, Cable.Link link2, Vector3 offset1, Vector3 offset2, float restLength){
 
-            Body1 = body1;
-            Body2 = body2;
+            Link1 = link1;
+            Link2 = link2;
             this.offset1 = offset1;
             this.offset2 = offset2;
             this.restLength = restLength;
 
-            if (body1 != null && body2 != null)
+            if (link1.body != null && link2.body != null)
                 UpdateLength();
         }
 
-        private void UpdateLength()
-        {
-            worldOffset1 = body1.transform.TransformPoint(offset1);
-            worldOffset2 = body2.transform.TransformPoint(offset2);
+        public void UpdateLength()
+        { 
+            length = 0;
+            jacobian = Vector3.zero;
+
+            if (link1.body == null || link2.body == null) return;
+
+            worldOffset1 = link1.body.transform.TransformPoint(offset1);
+            worldOffset2 = link2.body.transform.TransformPoint(offset2);
 
             Vector3 vector = worldOffset2 - worldOffset1;
             length = vector.magnitude;
             jacobian = vector / (length + 0.00001f);
         }
 
-        public void Initialize(){
+        public void UpdateMasses()
+        {
 
             totalLambda = 0;
-
-            if (body1 == null || body2 == null) return;
-
-            UpdateLength();
-
-            invInertiaTensor1 = Matrix4x4.zero;
-            invInertiaTensor2 = Matrix4x4.zero;
-
-            if (rb1 != null){
-                Vector3 invInertia1 = rb1.inertiaTensorRotation * new Vector3(rb1.inertiaTensor.x > 0?1.0f/rb1.inertiaTensor.x:0,
-                                                                              rb1.inertiaTensor.y > 0?1.0f/rb1.inertiaTensor.y:0,
-                                                                              rb1.inertiaTensor.z > 0?1.0f/rb1.inertiaTensor.z:0);
-    
-                Matrix4x4 m = Matrix4x4.Rotate(rb1.rotation);
-                invInertiaTensor1[0,0] = invInertia1.x;
-                invInertiaTensor1[1,1] = invInertia1.y;
-                invInertiaTensor1[2,2] = invInertia1.z;
-                invInertiaTensor1[3,3] = 1;
-                invInertiaTensor1 = m * invInertiaTensor1 * m.transpose;
-            }
-    
-            if (rb2 != null){
-                Vector3 invInertia2 = rb2.inertiaTensorRotation * new Vector3(rb2.inertiaTensor.x > 0?1.0f/rb2.inertiaTensor.x:0,
-                                                                              rb2.inertiaTensor.y > 0?1.0f/rb2.inertiaTensor.y:0,
-                                                                              rb2.inertiaTensor.z > 0?1.0f/rb2.inertiaTensor.z:0);
-        
-                Matrix4x4 m2 = Matrix4x4.Rotate(rb2.rotation);
-                invInertiaTensor2[0,0] = invInertia2.x;
-                invInertiaTensor2[1,1] = invInertia2.y;
-                invInertiaTensor2[2,2] = invInertia2.z;
-                invInertiaTensor2[3,3] = 1;
-                invInertiaTensor2 = m2 * invInertiaTensor2 * m2.transpose;
-            }
-
             invMass1 = 0;
             invMass2 = 0;
-            float w1 = 0,w2 = 0;
+            invInertiaTensor1 = Matrix4x4.zero;
+            invInertiaTensor2 = Matrix4x4.zero;
+            float w1 = 0, w2 = 0;
+
+            if (link1 == null || link2 == null) return;
+
+            link1.body.GetInverseInertiaTensor(ref invInertiaTensor1);
+            link2.body.GetInverseInertiaTensor(ref invInertiaTensor2);
+
+            var rb1 = link1.body.GetRigidbody();
+            var rb2 = link2.body.GetRigidbody();
 
             if (rb1 != null && !rb1.isKinematic)
             {
@@ -153,49 +124,59 @@ namespace Filo{
                 r2 = worldOffset2 - rb2.worldCenterOfMass;
                 w2 = Vector3.Dot(Vector3.Cross(invInertiaTensor2.MultiplyVector(Vector3.Cross(r2,jacobian)),r2),jacobian);
             }
-           
+
+            if (link1.type == Cable.Link.LinkType.Pinhole)
+            {
+                invMass1 = 1;
+                w1 = 1;
+            }
+            if (link2.type == Cable.Link.LinkType.Pinhole)
+            {
+                invMass2 = 1;
+                w2 = 1;
+            }
+
             k = invMass1 + invMass2 + w1 + w2;
         }
-        
-        public void Solve (float deltaTime, float bias) { 
-    
-            // position constraint: distance between attachment points minus rest distance must be zero.   
+
+        // multiple cables can be attached to a body, so cable speed must be stored in the link.
+        public void SolveVelocities(float deltaTime, float bias)
+        {
+            UpdateLength();
+
+            // position constraint: distance between attachment points minus rest distance must be zero.
             float c = length - restLength;
+
             impulse = Vector3.zero;
             lambda = 0;
 
-            if (body1 != null && body2 != null && c > 0 && k > 0)
+            if (link1 != null && link2 != null && c > 0 && k > 0)
             {
-                // calculate the relative velocity of both attachment points:
-                Vector3 relVel = (rb2 != null ? rb2.GetPointVelocity(worldOffset2):Vector3.zero) - 
-                                 (rb1 != null ? rb1.GetPointVelocity(worldOffset1):Vector3.zero);
-    
-                // velocity constraint: velocity along jacobian must be zero.
-                float cDot = Vector3.Dot(relVel,jacobian);  
-    
+                // calculate the relative velocity of both attachment points along jacobian:
+                float cDot = (link2.body.GetVelocityAtPointAlongDir(worldOffset2, jacobian) + link2.cableVelocity) -
+                             (link1.body.GetVelocityAtPointAlongDir(worldOffset1, jacobian) + link1.cableVelocity);
+
                 // calculate constraint force intensity:  
-                lambda = (- cDot - c * bias/deltaTime) / k;
+                lambda = (-cDot - c * bias / deltaTime) / k;
 
                 // accumulate and clamp impulse:
                 float tempLambda = totalLambda;
-                totalLambda = Mathf.Min(0,totalLambda + lambda);
+                totalLambda = Mathf.Min(0, totalLambda + lambda);
                 lambda = totalLambda - tempLambda;
-        
+
                 // apply impulse to both rigidbodies:
                 impulse = jacobian * lambda;
 
-                if (rb1 != null && !rb1.isKinematic){
-                    rb1.velocity -= impulse * invMass1;
-                    rb1.angularVelocity -= invInertiaTensor1.MultiplyVector(Vector3.Cross(r1,impulse));   
-                } 
-        
-                if (rb2 != null && !rb2.isKinematic){
-                    rb2.velocity += impulse * invMass2;
-                    rb2.angularVelocity += invInertiaTensor2.MultiplyVector(Vector3.Cross(r2,impulse)); 
-                } 
+                link1.body.ApplyImpulse(-impulse, r1, invMass1, ref invInertiaTensor1);
+                link2.body.ApplyImpulse( impulse, r2, invMass2, ref invInertiaTensor2);
+
+                if (link1.type == Cable.Link.LinkType.Pinhole)
+                    link1.cableVelocity -= lambda * invMass1;
+
+                if (link2.type == Cable.Link.LinkType.Pinhole)
+                    link2.cableVelocity += lambda * invMass2;
             }
-    
-    	}
+        }
 
     }
 }

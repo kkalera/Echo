@@ -8,6 +8,9 @@ namespace Echo
     public class Kat : MonoBehaviour
     {
         [SerializeField] private SoCraneSpecs craneSpecs;
+        [SerializeField] private Crane _crane;
+        [SerializeField] private Transform envPosition;
+
         public float Position { get => transform.position.z; }
         public float Velocity { get => Rbody.velocity.z; }
         public Rigidbody Rbody { get => GetComponent<Rigidbody>(); }
@@ -15,7 +18,7 @@ namespace Echo
         private void FixedUpdate()
         {
             ManageKatLimit();
-            MoveKat(craneSpecs.katSpeed);
+            MoveKat(_crane.katSpeed);
         }
 
         public void MoveKat(float value)
@@ -24,7 +27,7 @@ namespace Echo
         }
         private void ManageKatLimit()
         {
-            if ((Position > 50 && Velocity > 0) || (Position < -25 && Velocity < 0))
+            if ((Position > 50 + envPosition.position.z && Velocity > 0) || (Position < -25 + envPosition.position.z && Velocity < 0))
             {
                 Rbody.AddForce(new Vector3(0, 0, -Velocity), ForceMode.VelocityChange);
             }            
