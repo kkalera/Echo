@@ -73,8 +73,8 @@ namespace Echo
             spreader.Rbody.isKinematic = true;
             kat.Rbody.isKinematic = true;
 
-            kat.Rbody.transform.position = new Vector3(0, 32, position.z);
-            spreader.Rbody.transform.position = new Vector3(0, position.y, position.z);
+            kat.Rbody.transform.position = new Vector3(position.x, 32, position.z);
+            spreader.Rbody.transform.position = new Vector3(position.x, position.y, position.z);
             spreader.Rbody.transform.rotation = Quaternion.Euler(Vector3.zero);
 
             for(int i = 0; i < cables.Count; i++)

@@ -358,7 +358,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 653
+  m_VersionIndex: 632
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -721,6 +721,10 @@ PrefabInstance:
       value: 114.87408
       objectReference: {fileID: 0}
     - target: {fileID: 1250958244873204871, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: drawHybridLinks
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1250958244873204871, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].body
       value: 
       objectReference: {fileID: 1640601676}
@@ -730,11 +734,11 @@ PrefabInstance:
       objectReference: {fileID: 766190578}
     - target: {fileID: 1250958244873204871, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[2].inAnchor.x
-      value: 0.97106946
+      value: 0.97104657
       objectReference: {fileID: 0}
     - target: {fileID: 1250958244873204871, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[2].inAnchor.y
-      value: -0.23889923
+      value: -0.23888397
       objectReference: {fileID: 0}
     - target: {fileID: 1250958244873204871, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[2].inAnchor.z
@@ -742,7 +746,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1250958244873204871, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].outAnchor.x
-      value: 0.9305421
+      value: 0.9305345
       objectReference: {fileID: 0}
     - target: {fileID: 1250958244873204871, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].outAnchor.y
@@ -754,7 +758,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1250958244873204871, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[1].storedCable
-      value: 1.4135875
+      value: 1.413587
       objectReference: {fileID: 0}
     - target: {fileID: 1918590212422367114, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: _crane
@@ -793,6 +797,10 @@ PrefabInstance:
       value: 114.87408
       objectReference: {fileID: 0}
     - target: {fileID: 2067511246954712593, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: drawHybridLinks
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2067511246954712593, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].body
       value: 
       objectReference: {fileID: 1899698751}
@@ -802,7 +810,7 @@ PrefabInstance:
       objectReference: {fileID: 1214431444}
     - target: {fileID: 2067511246954712593, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[2].inAnchor.x
-      value: 0.9305421
+      value: 0.9305345
       objectReference: {fileID: 0}
     - target: {fileID: 2067511246954712593, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[2].inAnchor.y
@@ -814,11 +822,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2067511246954712593, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].outAnchor.x
-      value: 0.97106946
+      value: 0.97104657
       objectReference: {fileID: 0}
     - target: {fileID: 2067511246954712593, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].outAnchor.y
-      value: -0.23889923
+      value: -0.23888397
       objectReference: {fileID: 0}
     - target: {fileID: 2067511246954712593, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].outAnchor.z
@@ -826,7 +834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2067511246954712593, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[1].storedCable
-      value: 1.4135875
+      value: 1.413587
       objectReference: {fileID: 0}
     - target: {fileID: 2325188989495878058, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: m_Name
@@ -881,6 +889,10 @@ PrefabInstance:
       value: 114.87408
       objectReference: {fileID: 0}
     - target: {fileID: 2860845056471743512, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: drawHybridLinks
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2860845056471743512, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].body
       value: 
       objectReference: {fileID: 1734744274}
@@ -890,7 +902,7 @@ PrefabInstance:
       objectReference: {fileID: 1495780726}
     - target: {fileID: 2860845056471743512, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[2].inAnchor.x
-      value: 0.9305421
+      value: 0.9305345
       objectReference: {fileID: 0}
     - target: {fileID: 2860845056471743512, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[2].inAnchor.y
@@ -902,11 +914,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2860845056471743512, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].outAnchor.x
-      value: 0.97106946
+      value: 0.97104657
       objectReference: {fileID: 0}
     - target: {fileID: 2860845056471743512, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].outAnchor.y
-      value: -0.23889923
+      value: -0.23888397
       objectReference: {fileID: 0}
     - target: {fileID: 2860845056471743512, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].outAnchor.z
@@ -914,7 +926,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2860845056471743512, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[1].storedCable
-      value: 1.4135875
+      value: 1.413587
+      objectReference: {fileID: 0}
+    - target: {fileID: 3088509497362227913, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4639861527186858122, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: kat
@@ -924,6 +940,10 @@ PrefabInstance:
       propertyPath: spreader
       value: 
       objectReference: {fileID: 5357674428147323213}
+    - target: {fileID: 4639861527186858122, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: winches.Array.size
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 4639861527186858122, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: winches.Array.data[0]
       value: 
@@ -961,6 +981,10 @@ PrefabInstance:
       value: 114.87408
       objectReference: {fileID: 0}
     - target: {fileID: 5152683980657810906, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: drawHybridLinks
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152683980657810906, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].body
       value: 
       objectReference: {fileID: 1352246698}
@@ -970,11 +994,11 @@ PrefabInstance:
       objectReference: {fileID: 602087342}
     - target: {fileID: 5152683980657810906, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[2].inAnchor.x
-      value: 0.97106946
+      value: 0.97104657
       objectReference: {fileID: 0}
     - target: {fileID: 5152683980657810906, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[2].inAnchor.y
-      value: -0.23889923
+      value: -0.23888397
       objectReference: {fileID: 0}
     - target: {fileID: 5152683980657810906, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[2].inAnchor.z
@@ -982,7 +1006,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5152683980657810906, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].outAnchor.x
-      value: 0.9305421
+      value: 0.9305345
       objectReference: {fileID: 0}
     - target: {fileID: 5152683980657810906, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[0].outAnchor.y
@@ -994,11 +1018,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5152683980657810906, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: links.Array.data[1].storedCable
-      value: 1.4135875
+      value: 1.413587
       objectReference: {fileID: 0}
     - target: {fileID: 6370365952164822156, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6828101334783566317, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7699746005321144464, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: _crane

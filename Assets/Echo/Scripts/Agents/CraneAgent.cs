@@ -141,6 +141,7 @@ namespace Echo
         }
         private static Vector3 GetNextPosition(Vector3 spreaderPosition, Vector3 targetPosition)
         {
+            
             float craneZLegs = 12;
             bool hasToCrossLeg = spreaderPosition.z > craneZLegs && targetPosition.z < craneZLegs;
 
@@ -150,14 +151,10 @@ namespace Echo
             
             // Check if we're to far from the target to lower the spreader        
             float r = (spreaderPosition.y * 0.2f) + 1;
-
-            if (spreaderPosition.y < 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg && spreaderPosition.z > craneZLegs)
-            {
-                targetPosition = new Vector3(0, 25f, 12);
-            }
-            else if (spreaderPosition.y < 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && hasToCrossLeg && spreaderPosition.z < -craneZLegs)
-            {
-                targetPosition = new Vector3(0, 25f, -12);
+            
+            if (spreaderPosition.y < 17 && hasToCrossLeg)
+            {                
+                targetPosition = new Vector3(0, 25f, spreaderPosition.z);
             }
             else if (spreaderPosition.y >= 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
             {
@@ -166,9 +163,7 @@ namespace Echo
 
 
             if (Mathf.Abs(spreaderPosition.y - targetPosition.y) > 1 && spreaderPosition.z > 4 && Mathf.Abs(spreaderPosition.z - targetPosition.z) < r) targetPosition.z -= 0.75f;
-            if (Mathf.Abs(spreaderPosition.z - targetPosition.z) > r &&
-                Mathf.Abs(spreaderPosition.y - targetPosition.y) < 2 &&
-                spreaderPosition.y < 19) targetPosition.y += 0.5f;
+            if (Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && Mathf.Abs(spreaderPosition.y - targetPosition.y) < 2 && spreaderPosition.y < 19) targetPosition.y += 0.5f;
 
             return targetPosition;
         }
