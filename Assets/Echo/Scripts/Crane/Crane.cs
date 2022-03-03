@@ -15,9 +15,6 @@ namespace Echo
         
         [SerializeField] public Spreader spreader;
         [SerializeField] public Kat kat;
-<<<<<<< Updated upstream
-        
-=======
 
         public float winchSpeed;
         public float katSpeed;
@@ -33,7 +30,6 @@ namespace Echo
             }
         }
 
->>>>>>> Stashed changes
         public void MoveWinch(float value)
         {
             winchSpeed = value;
@@ -71,14 +67,8 @@ namespace Echo
         }
         public void ResetPosition(Vector3 position)
         {
-<<<<<<< Updated upstream
-            craneSpecs.winchSpeed = 0;
-            craneSpecs.katSpeed = 0;
-            
-=======
             winchSpeed = 0;
             katSpeed = 0;            
->>>>>>> Stashed changes
             
             spreader.Rbody.isKinematic = true;
             kat.Rbody.isKinematic = true;

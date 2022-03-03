@@ -47,10 +47,8 @@ namespace Echo {
         }
         private void ManageWinchLimit()
         {
-            var crane = GetComponentInParent<Crane>();
-            if((crane.spreader.Position.y > 25 && _crane.winchSpeed > 0) ||
-                (crane.spreader.Position.y < 0 && _crane.winchSpeed < 0) ||
-                _craneSpecs.winchCableAmount < 5)
+            if((_crane.spreader.Position.y > 25 && _crane.winchSpeed > 0) ||
+                (_crane.spreader.Position.y < 0 && _crane.winchSpeed < 0))
             {
                 var motor = joint.motor;
                 motor.targetVelocity = 0;

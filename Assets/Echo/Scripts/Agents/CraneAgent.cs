@@ -37,23 +37,12 @@ namespace Echo
 
             if (autoPilot)
             {
-<<<<<<< Updated upstream
-                var inputs = GetInputs(env.TargetPosition, 
-                    env.Crane.spreader.transform.position,
-                    new Vector3(0,env.Crane.spreader.Rbody.velocity.y, env.Crane.kat.Velocity),
-                    new Vector3(0, env.Crane.craneSpecs.winchAcceleration,
-                    env.Crane.craneSpecs.katAcceleration));
-=======
                 var inputs = GetInputs(env.TargetPosition - env.transform.position,
                     env.Crane.spreader.Position - env.transform.position,
                     new Vector3(0,env.Crane.spreader.Rbody.velocity.y, env.Crane.kat.Velocity),
                     new Vector3(0, env.Crane.craneSpecs.winchAcceleration,
                     env.Crane.craneSpecs.katAcceleration));
 
-                Utils.ClearLogConsole();
-                Debug.Log(env.TargetPosition - env.transform.position);
-                Debug.Log(env.Crane.spreader.Position - env.transform.position);
->>>>>>> Stashed changes
                 conActions[katIndex] = inputs.z;
                 conActions[winchIndex] = inputs.y;
             }
