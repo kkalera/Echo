@@ -23,7 +23,7 @@ namespace Echo
         public override void OnEpisodeBegin()
         {
             env.OnEpisodeBegin();
-        }        
+        }
         public override void Heuristic(in ActionBuffers actionsOut)
         {            
             var conActions = actionsOut.ContinuousActions;
@@ -75,6 +75,8 @@ namespace Echo
 
             ///// Z movement
             float distanceZ = Mathf.Abs(spreaderPosition.z - targetPosition.z);
+            Utils.ClearLogConsole();
+            Debug.Log(distanceZ);
             if (!Mathf.Approximately(distanceZ, 0))
             {
                 float vel = Mathf.Abs(currentSpeed.z);
@@ -162,7 +164,7 @@ namespace Echo
             }
 
 
-            if (Mathf.Abs(spreaderPosition.y - targetPosition.y) > 1 && spreaderPosition.z > 4 && Mathf.Abs(spreaderPosition.z - targetPosition.z) < r) targetPosition.z -= 0.75f;
+            //if (Mathf.Abs(spreaderPosition.y - targetPosition.y) > 1 && spreaderPosition.z > 4 && Mathf.Abs(spreaderPosition.z - targetPosition.z) < r) targetPosition.z -= 0.75f;
             if (Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && Mathf.Abs(spreaderPosition.y - targetPosition.y) < 2 && spreaderPosition.y < 19) targetPosition.y += 0.5f;
 
             return targetPosition;
