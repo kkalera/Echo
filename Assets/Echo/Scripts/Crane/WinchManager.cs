@@ -15,8 +15,13 @@ namespace Echo {
             joint = GetComponent<HingeJoint>();
         }
 
+        private void FixedUpdate()
+        {
+
+            
+        }
         void Update()
-        {  
+        {
             MoveWinch(_crane.winchSpeed);
             ManageWinchLimit();
         } 
@@ -26,15 +31,14 @@ namespace Echo {
             // The motor target velocity is in degree/s
             // Every pulley has a diameter of 1 meter.
             // This means that for every rotation, 3.14m of cable is added
-            // So 1 degree = 0.00872m of cable released of 1m/s of cable = 114.68 degree/s
+            // So 1 degree = 0.00872m of cable released of 1m/s of cable = +-114.6 degree/s
             float diameter = 1;
             float degreeToM = 360 / (Mathf.PI * diameter);
             value *= degreeToM * _craneSpecs.winchMaxSpeed;
-
-            // Get 2 motors (one side turns clockwise while the other side turns counter-clockwise
+            
             JointMotor motor = joint.motor;
             
-            float timeDelta = Time.deltaTime + 0.02f;
+            float timeDelta = Time.deltaTime;
             float accel = _craneSpecs.winchAcceleration * timeDelta * degreeToM;
             float deltaV = Mathf.Abs(value - motor.targetVelocity);
             if (accel > deltaV) accel = deltaV;

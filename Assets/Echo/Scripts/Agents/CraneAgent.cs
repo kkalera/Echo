@@ -37,7 +37,7 @@ namespace Echo
 
             if (autoPilot)
             {
-                var inputs = GetInputs(env.TargetPosition - env.transform.position,
+                var inputs = GetInputs(env.TargetPosition - env.transform.position + new Vector3(0,2.85f,0),
                     env.Crane.spreader.Position - env.transform.position,
                     new Vector3(0,env.Crane.spreader.Rbody.velocity.y, env.Crane.kat.Velocity),
                     new Vector3(0, env.Crane.craneSpecs.winchAcceleration,
@@ -69,14 +69,11 @@ namespace Echo
 
         public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, Vector3 acceleration)
         {
-
             Vector3 inputs = new Vector3(0, 0, 0);
             targetPosition = GetNextPosition(spreaderPosition, targetPosition);
 
             ///// Z movement
             float distanceZ = Mathf.Abs(spreaderPosition.z - targetPosition.z);
-            Utils.ClearLogConsole();
-            Debug.Log(distanceZ);
             if (!Mathf.Approximately(distanceZ, 0))
             {
                 float vel = Mathf.Abs(currentSpeed.z);

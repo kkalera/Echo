@@ -12,13 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb5ece9fe38073b4f91ad527495ce07f, type: 3}
   m_Name: CraneSpecs
   m_EditorClassIdentifier: Assembly-CSharp:Echo:SoWinchSpeed
-  winchSpeed: 0
-  winchMaxSpeed: 5
+  winchMaxSpeed: 4
   winchAcceleration: 1
-  katSpeed: 0
+  winchCableAmount: 41.8097
   katMaxSpeed: 4
   katAcceleration: 1
-  skewSpeed: 0
-  skewMaxSpeed: 1
-  spreaderWorldPosition: {x: -0.000017050423, y: 19.974003, z: 4.787147}
-  katWorldPosition: {x: 0, y: 32, z: 4.787201}

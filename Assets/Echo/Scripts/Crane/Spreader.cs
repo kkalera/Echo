@@ -8,9 +8,6 @@ namespace Echo
     [RequireComponent(typeof(Rigidbody))]
     public class Spreader : MonoBehaviour
     {
-        [SerializeField] private SoCraneSpecs craneSpecs;
-        [SerializeField] private Crane crane;
-
         public Vector3 Position { get => transform.position; }
         public Quaternion Rotation { get => transform.rotation; }
         public Rigidbody Rbody { get => GetComponent<Rigidbody>(); }

@@ -64,7 +64,7 @@ namespace Echo
             
 
             // Set the target as the container position
-            TargetPosition = _container.transform.position + new Vector3(0, 2.75f, 0);
+            TargetPosition = _container.transform.position;
 
             _container.transform.parent = transform;
             grabbed = false;
@@ -113,7 +113,7 @@ namespace Echo
                     {
                         OnCollisionExit(null);
                         _crane.spreader.GrabContainer(_container.transform);
-                        TargetPosition = _target.transform.position + new Vector3(0,2.75f,0);
+                        TargetPosition = _target.transform.position;
                         grabbed = true;
                         return new State(1f, false);
                     }
