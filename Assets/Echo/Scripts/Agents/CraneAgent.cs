@@ -37,7 +37,7 @@ namespace Echo
 
             if (autoPilot)
             {
-                var inputs = GetInputs(env.TargetPosition - env.transform.position + new Vector3(0,2.85f,0),
+                var inputs = GetInputs(env.TargetPosition - env.transform.position + new Vector3(0,2.75f,0),
                     env.Crane.spreader.Position - env.transform.position,
                     new Vector3(0,env.Crane.spreader.Rbody.velocity.y, env.Crane.kat.Velocity),
                     new Vector3(0, env.Crane.craneSpecs.winchAcceleration,
@@ -92,12 +92,10 @@ namespace Echo
                 float vel = Mathf.Abs(currentSpeed.y);
                 float d = Mathf.Pow(vel, 2) / (2 * acceleration.y);
                 inputs.y = distanceY - d;
-                
                 if (targetPosition.y < spreaderPosition.y) inputs.y = -inputs.y;
                 inputs.y = Mathf.Clamp(inputs.y, -1, 1);
             }
             /////
-
             return inputs;
 
         }
@@ -162,7 +160,7 @@ namespace Echo
 
 
             //if (Mathf.Abs(spreaderPosition.y - targetPosition.y) > 1 && spreaderPosition.z > 4 && Mathf.Abs(spreaderPosition.z - targetPosition.z) < r) targetPosition.z -= 0.75f;
-            if (Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && Mathf.Abs(spreaderPosition.y - targetPosition.y) < 2 && spreaderPosition.y < 19) targetPosition.y += 0.5f;
+            //if (Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && Mathf.Abs(spreaderPosition.y - targetPosition.y) < 2 && spreaderPosition.y < 19) targetPosition.y += 0.5f;
 
             return targetPosition;
         }

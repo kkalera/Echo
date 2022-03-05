@@ -13,5 +13,8 @@ namespace Echo
 
         public float katMaxSpeed = 1;
         public float katAcceleration = 1;
+
+        public float maxSpreaderHeight = 25;
+        public float minSpreaderHeight = 0;
     }
 }

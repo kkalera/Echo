@@ -18,7 +18,6 @@ namespace Echo
                 rb.isKinematic = true;
             }
             container.parent = transform;
-;
         }
     }
 }
