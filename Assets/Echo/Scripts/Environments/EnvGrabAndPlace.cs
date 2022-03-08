@@ -90,12 +90,11 @@ namespace Echo
 
         public override State State()
         {
-            //float swingDistance = Mathf.Abs(_crane.spreader.Position.z - _crane.kat.Position);
-            //float swingReward = 1f - swingDistance;
-            //float speedZReward = 1 - Mathf.Min(Mathf.Abs(_crane.spreader.Rbody.velocity.z), 1);
-            //float speedYReward = 1 - Mathf.Min(Mathf.Abs(_crane.spreader.Rbody.velocity.y), 1);
-            //float reward = (swingReward + speedYReward + speedZReward) / 3;
-            //float reward = (speedYReward + speedZReward) / 2;
+            float swingDistance = Mathf.Abs(_crane.spreader.Position.z - _crane.kat.Position);
+            float swingReward = 1f - swingDistance;
+            float speedZReward = 1 - Mathf.Min(Mathf.Abs(_crane.spreader.Rbody.velocity.z), 1);
+            float speedYReward = 1 - Mathf.Min(Mathf.Abs(_crane.spreader.Rbody.velocity.y), 1);
+            float reward = (swingReward + speedYReward + speedZReward) / 3;            
 
             // Positive reward
             if (collided && (collision_collider.CompareTag(tagContainer) || collision_collider.CompareTag(tagTarget)))
@@ -107,7 +106,7 @@ namespace Echo
                     if (grabbed && !rewarded) 
                     {
                         rewarded = true;                        
-                        return new State(1f, true);
+                        return new State(1f + reward, true);
                     }
                     else
                     {
@@ -115,7 +114,7 @@ namespace Echo
                         _crane.spreader.GrabContainer(_container.transform);
                         TargetPosition = _target.transform.position;
                         grabbed = true;
-                        return new State(1f, false);
+                        return new State(1f + reward, false);
                     }
                 }
                 else
@@ -132,7 +131,7 @@ namespace Echo
                 return new State(-1f, true);
             }
 
-            return new State(-.1f / MaxStep, false);
+            return new State((-1f + swingReward) / MaxStep, false);
         }
 
         public void OnCollisionEnter(Collision collision)

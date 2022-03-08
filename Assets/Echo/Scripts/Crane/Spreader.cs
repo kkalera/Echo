@@ -17,6 +17,8 @@ namespace Echo
             if(container.TryGetComponent<Rigidbody>(out Rigidbody rb)){
                 rb.isKinematic = true;
             }
+            container.rotation = transform.rotation;
+            container.position = transform.position - new Vector3(0,2.85f,0);
             container.parent = transform;
         }
     }

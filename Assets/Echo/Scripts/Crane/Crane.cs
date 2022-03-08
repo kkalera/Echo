@@ -11,7 +11,7 @@ namespace Echo
         [SerializeField] [Range(0, 1)] private float _limitBounce;
 
         [SerializeField] private List<Filo.Cable> cables;
-        [SerializeField] private List<HingeJoint> winches;
+        [SerializeField] public List<HingeJoint> winches;
         
         [SerializeField] public Spreader spreader;
         [SerializeField] public Kat kat;
@@ -64,6 +64,7 @@ namespace Echo
                 }
                 spreader.Rbody.velocity = spreaderVelocity;
             }
+            
         }
         public void ResetPosition(Vector3 position)
         {

@@ -27,10 +27,14 @@ namespace Echo
         }
         private void ManageKatLimit()
         {
-            if ((Position > 50 + envPosition.position.z && Velocity > 0) || (Position < -25 + envPosition.position.z && Velocity < 0))
+            if (Position > 50 + envPosition.position.z && Velocity > 0)
             {
-                Rbody.AddForce(new Vector3(0, 0, -Velocity), ForceMode.VelocityChange);
-            }            
+                Rbody.AddForce(new Vector3(0, 0, -Velocity - 0.1f), ForceMode.VelocityChange);
+            }else if(Position < -25 + envPosition.position.z && Velocity < 0)
+            {
+                Rbody.AddForce(new Vector3(0, 0, -Velocity + 0.1f), ForceMode.VelocityChange);
+            }
+
         }
     }
 }
