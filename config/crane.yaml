@@ -1,0 +1,73 @@
+default_settings: null
+behaviors:
+  Crane:
+    trainer_type: ppo
+    time_horizon: 128
+    max_steps: 1e8
+    summary_freq: 50000
+
+    hyperparameters:
+      batch_size: 512
+      buffer_size: 5120
+      beta: 0.003     
+      epsilon: 0.2
+      lambd: 0.95
+      num_epoch: 3
+      learning_rate: 0.00002
+      learning_rate_schedule: linear      
+
+    network_settings:
+      normalize: false
+      hidden_units: 256
+      num_layers: 2
+      vis_encode_type: simple
+      memory: null
+      goal_conditioning_type: hyper
+
+    reward_signals:
+      extrinsic:
+        strength: 1.0
+        gamma: 0.99
+
+      curiosity:
+        strength: 0.02
+        gamma: 0.99        
+
+      gail:
+        strength: 0.5
+        gamma: 0.99
+        demo_path: Demonstrations/GP-S0-A03.demo
+
+    behavioral_cloning:
+      demo_path: Demonstrations/GP-S0-A03.demo
+      strength: 0.5
+      steps: 500000
+
+env_settings:
+  env_path: build/Echo
+  env_args: null
+  base_port: 5005
+  num_envs: 10
+  seed: -1
+engine_settings:
+  width: 512
+  height: 512
+  quality_level: 5
+  time_scale: 20
+  target_frame_rate: -1
+  capture_frame_rate: 60
+  no_graphics: true
+
+environment_parameters: null
+checkpoint_settings:
+  run_id: GP-S0-A03-1
+  initialize_from: null
+  load_model: false
+  resume: false
+  force: true
+  train_model: false
+  inference: false
+  results_dir: results
+torch_settings:
+  device: null
+debug: false
