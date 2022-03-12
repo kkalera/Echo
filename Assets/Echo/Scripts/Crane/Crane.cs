@@ -7,7 +7,8 @@ namespace Echo
     public class Crane : MonoBehaviour
     {
         [SerializeField] public SoCraneSpecs craneSpecs;
-        [SerializeField][Range(0,10)] private float _swingLimit;
+        [SerializeField] private bool UseSwingLimit;
+        [SerializeField][Range(0,10)] public float _swingLimit;
         [SerializeField] [Range(0, 1)] private float _limitBounce;
 
         [SerializeField] private List<Filo.Cable> cables;
@@ -42,7 +43,11 @@ namespace Echo
 
         private void Update()
         {
-            ManageSwingLimit();
+            
+        }
+        private void FixedUpdate()
+        {
+            if (UseSwingLimit) ManageSwingLimit();
         }
 
         private void ManageSwingLimit()
@@ -56,11 +61,13 @@ namespace Echo
 
                 if (spreader.transform.position.z > kat.transform.position.z)
                 {
-                    spreaderVelocity.z = kat.Rbody.velocity.z < 0 ? kat.Rbody.velocity.z * 1.1f : -spreaderVelocity.z*_limitBounce;
+                    //spreaderVelocity.z = kat.Rbody.velocity.z < 0 ? kat.Rbody.velocity.z * 1.1f : -spreaderVelocity.z*_limitBounce;
+                    spreaderVelocity.z = kat.Rbody.velocity.z < 0 ? kat.Rbody.velocity.z * 1.1f : 0;
                 }
                 else
                 {
-                    spreaderVelocity.z = kat.Rbody.velocity.z < 0 ? -spreaderVelocity.z*_limitBounce : kat.Rbody.velocity.z * 1.1f;
+                    //spreaderVelocity.z = kat.Rbody.velocity.z < 0 ? -spreaderVelocity.z*_limitBounce : kat.Rbody.velocity.z * 1.1f;
+                    spreaderVelocity.z = kat.Rbody.velocity.z < 0 ? 0 : kat.Rbody.velocity.z * 1.1f;
                 }
                 spreader.Rbody.velocity = spreaderVelocity;
             }

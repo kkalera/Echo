@@ -20,7 +20,7 @@ namespace Echo
         [SerializeField] private Crane _crane;        
         [SerializeField] private GameObject containerPrefab;
         [SerializeField] private GameObject targetPrefab;
-        [SerializeField][Range(0.05f,1)] private float accuracy;
+        [SerializeField][Range(0.05f,1)] private float accuracy;        
 
         private Container _container;
         private GameObject _target;
@@ -69,6 +69,11 @@ namespace Echo
             _container.transform.parent = transform;
             grabbed = false;
             rewarded = false;
+            _crane._swingLimit = Academy.Instance.EnvironmentParameters.GetWithDefault("swing", 0);
+        }
+
+        private void Update()
+        {
 
         }
 
@@ -90,11 +95,14 @@ namespace Echo
 
         public override State State()
         {
+            if (!GetComponent<BoxCollider>().bounds.Contains(_crane.spreader.Position)) return new State(0, true);
+
             float swingDistance = Mathf.Abs(_crane.spreader.Position.z - _crane.kat.Position);
             float swingReward = 1f - swingDistance;
             float speedZReward = 1 - Mathf.Min(Mathf.Abs(_crane.spreader.Rbody.velocity.z), 1);
             float speedYReward = 1 - Mathf.Min(Mathf.Abs(_crane.spreader.Rbody.velocity.y), 1);
-            float reward = (swingReward + speedYReward + speedZReward) / 3;            
+            float reward = (swingReward + speedYReward + speedZReward) / 3;
+            
 
             // Positive reward
             if (collided && (collision_collider.CompareTag(tagContainer) || collision_collider.CompareTag(tagTarget)))

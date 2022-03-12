@@ -24,7 +24,7 @@ namespace Echo {
                 // This means that for every rotation, 3.14m of cable is added
                 // So 1 degree = 0.00872m of cable released of 1m/s of cable = +-114.6 degree/s
                 // Spools have a radius of 2 in the disc settings, this seems to be a bug in Filo cables
-                float diameter = 1;
+                float diameter = 0.5f;
                 float degreeToM = 360 / (Mathf.PI * diameter);
                 value *= degreeToM * _craneSpecs.winchMaxSpeed;
 
