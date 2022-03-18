@@ -20,7 +20,8 @@ namespace Echo
         [SerializeField] private Crane _crane;        
         [SerializeField] private GameObject containerPrefab;
         [SerializeField] private GameObject targetPrefab;
-        [SerializeField][Range(0.05f,1)] private float accuracy;        
+        [SerializeField][Range(0.05f,1)] private float accuracy;
+        [SerializeField] private bool normalisation;
 
         private Container _container;
         private GameObject _target;
@@ -55,12 +56,12 @@ namespace Echo
             Crane.ResetPosition(new Vector3(0, 15, 20) + transform.position);
 
             // Reset container position
-            _container.ResetPosition(new Vector3(0,0.1f, Random.Range(-4,4)) + transform.position);
-            //_container.ResetPosition(new Vector3(0, 0.1f, 0));
+            //_container.ResetPosition(new Vector3(0,0.1f, Random.Range(-4,4)) + transform.position);
+            _container.ResetPosition(new Vector3(0, 0.1f, 0) + transform.position);
 
             // Set the target position
-            _target.transform.position = new Vector3(0, 0.1f, Random.Range(15,40)) + transform.position;
-            //_target.transform.position = new Vector3(0, 0.1f, 25);
+            //_target.transform.position = new Vector3(0, 0.1f, Random.Range(15,40)) + transform.position;
+            _target.transform.position = new Vector3(0, 0.1f, 25) + transform.position;
             
 
             // Set the target as the container position
@@ -69,7 +70,12 @@ namespace Echo
             _container.transform.parent = transform;
             grabbed = false;
             rewarded = false;
-            _crane._swingLimit = Academy.Instance.EnvironmentParameters.GetWithDefault("swing", 0);
+            
+            float swing = Academy.Instance.EnvironmentParameters.GetWithDefault("swing", _crane._swingLimit);
+            if (Mathf.Approximately(swing, -1)) Application.Quit();
+            
+            _crane._swingLimit = swing;
+            Academy.Instance.StatsRecorder.Add("Swing", swing);
         }
 
         private void Update()
@@ -79,12 +85,77 @@ namespace Echo
 
         public override void CollectObservations(VectorSensor sensor)
         {
-            sensor.AddObservation(Crane.spreader.Position - transform.position);
-            sensor.AddObservation(Crane.spreader.Rbody.velocity);
-            sensor.AddObservation(Crane.spreader.Rotation);
-            sensor.AddObservation(Crane.kat.Position - transform.position.z);            
-            sensor.AddObservation(Crane.kat.Velocity);
-            sensor.AddObservation(TargetPosition - transform.position);
+            // Use normalisation
+            if (normalisation)
+            {
+                Bounds bounds = GetComponent<BoxCollider>().bounds;
+                float xmin = bounds.center.x - bounds.extents.x;
+                float xmax = bounds.center.x + bounds.extents.x;
+                float ymin = bounds.center.y - bounds.extents.y;
+                float ymax = bounds.center.y + bounds.extents.y;
+                float zmin = bounds.center.z - bounds.extents.z;
+                float zmax = bounds.center.z + bounds.extents.z;
+
+                //Vector3 spreaderPos = Crane.spreader.Position - transform.position;
+                Vector3 spreaderPos = Crane.spreader.Position;
+                spreaderPos.x = Utils.Normalize(spreaderPos.x, xmin, xmax);
+                spreaderPos.y = Utils.Normalize(spreaderPos.y, ymin, ymax);
+                spreaderPos.z = Utils.Normalize(spreaderPos.z, zmin, zmax);
+                sensor.AddObservation(spreaderPos);
+
+                Vector3 spreaderVel = Crane.spreader.Rbody.velocity;
+                spreaderVel.x = Utils.Normalize(spreaderVel.x, _crane.craneSpecs.katMaxSpeed * 3, -(_crane.craneSpecs.katMaxSpeed * 3));
+                spreaderVel.y = Utils.Normalize(spreaderVel.y, _crane.craneSpecs.winchMaxSpeed * 3, -(_crane.craneSpecs.winchMaxSpeed * 3));
+                spreaderVel.z = Utils.Normalize(spreaderVel.z, _crane.craneSpecs.katMaxSpeed * 3, -(_crane.craneSpecs.katMaxSpeed * 3));
+                sensor.AddObservation(spreaderVel);
+
+                Vector3 spreaderRotation = Crane.spreader.Rotation.eulerAngles;
+                spreaderRotation.x = Utils.Normalize(spreaderRotation.x, 0, 360);
+                spreaderRotation.y = Utils.Normalize(spreaderRotation.y, 0, 360);
+                spreaderRotation.z = Utils.Normalize(spreaderRotation.z, 0, 360);
+                sensor.AddObservation(spreaderRotation);
+
+                float katPosition = Crane.kat.Position;
+                katPosition = Utils.Normalize(katPosition, zmin, zmax);
+                sensor.AddObservation(katPosition);
+
+                float katVelocity = Crane.kat.Velocity;
+                katVelocity = Utils.Normalize(katVelocity, -_crane.craneSpecs.katMaxSpeed, _crane.craneSpecs.katMaxSpeed);
+                sensor.AddObservation(katVelocity);
+
+                Vector3 targetPos = TargetPosition;
+                targetPos.x = Utils.Normalize(targetPos.x, xmin, xmax);
+                targetPos.y = Utils.Normalize(targetPos.y, ymin, ymax);
+                targetPos.z = Utils.Normalize(targetPos.z, zmin, zmax);
+                sensor.AddObservation(targetPos);
+
+                /*
+                Utils.ClearLogConsole();
+                Debug.Log("SpreaderPosision:  " + spreaderPos);
+                Debug.Log("SpreaderVelocity:  " + spreaderVel);
+                Debug.Log("SpreaderRotation:  " + spreaderRotation);
+                Debug.Log("KatPosition:  " + katPosition);
+                Debug.Log("KatVelocity:  " + katVelocity);
+                Debug.Log("TargetPosition:  " + targetPos);*/
+            }
+            else
+            {
+                sensor.AddObservation(Crane.spreader.Position - transform.position);
+                sensor.AddObservation(Crane.spreader.Rbody.velocity);
+                sensor.AddObservation(Crane.spreader.Rotation.eulerAngles);
+                sensor.AddObservation(Crane.kat.Position - transform.position.z);
+                sensor.AddObservation(Crane.kat.Velocity);
+                sensor.AddObservation(TargetPosition - transform.position);
+
+                /*Utils.ClearLogConsole();
+                Debug.Log(Crane.spreader.Position - transform.position);
+                Debug.Log(Crane.spreader.Rbody.velocity);
+                Debug.Log(Crane.spreader.Rotation.eulerAngles);
+                Debug.Log(Crane.kat.Position - transform.position.z);
+                Debug.Log(Crane.kat.Velocity);
+                Debug.Log(TargetPosition - transform.position);*/
+            }
+            
         }
 
         public override void TakeActions(ActionBuffers actions)
@@ -96,13 +167,7 @@ namespace Echo
         public override State State()
         {
             if (!GetComponent<BoxCollider>().bounds.Contains(_crane.spreader.Position)) return new State(0, true);
-
-            float swingDistance = Mathf.Abs(_crane.spreader.Position.z - _crane.kat.Position);
-            float swingReward = 1f - swingDistance;
-            float speedZReward = 1 - Mathf.Min(Mathf.Abs(_crane.spreader.Rbody.velocity.z), 1);
-            float speedYReward = 1 - Mathf.Min(Mathf.Abs(_crane.spreader.Rbody.velocity.y), 1);
-            float reward = (swingReward + speedYReward + speedZReward) / 3;
-            
+            float swingAmount = Mathf.Abs(_crane.spreader.Position.z - _crane.kat.Position);            
 
             // Positive reward
             if (collided && (collision_collider.CompareTag(tagContainer) || collision_collider.CompareTag(tagTarget)))
@@ -114,7 +179,7 @@ namespace Echo
                     if (grabbed && !rewarded) 
                     {
                         rewarded = true;                        
-                        return new State(1f + reward, true);
+                        return new State(2f, true);
                     }
                     else
                     {
@@ -122,7 +187,7 @@ namespace Echo
                         _crane.spreader.GrabContainer(_container.transform);
                         TargetPosition = _target.transform.position;
                         grabbed = true;
-                        return new State(1f + reward, false);
+                        return new State(2f, false);
                     }
                 }
                 else
@@ -138,8 +203,8 @@ namespace Echo
             {
                 return new State(-1f, true);
             }
-
-            return new State((-1f + swingReward) / MaxStep, false);
+            
+            return new State((1f - Mathf.Pow(swingAmount,4)) / MaxStep, false);
         }
 
         public void OnCollisionEnter(Collision collision)

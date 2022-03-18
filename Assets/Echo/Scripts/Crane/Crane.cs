@@ -20,17 +20,6 @@ namespace Echo
         public float winchSpeed;
         public float katSpeed;
 
-        void Start()
-        {
-            if(spreader == null || kat == null)
-            {
-                Debug.LogWarning("Please assign a spreader and kat component");
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-#endif
-            }
-        }
-
         public void MoveWinch(float value)
         {
             winchSpeed = value;
@@ -41,10 +30,6 @@ namespace Echo
             katSpeed = value;
         }
 
-        private void Update()
-        {
-            
-        }
         private void FixedUpdate()
         {
             if (UseSwingLimit) ManageSwingLimit();

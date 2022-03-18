@@ -102,5 +102,10 @@ namespace Echo
             vel.y += accel;
             body.velocity = vel;
         }
+
+        public static float Normalize(float val, float min, float max)
+        {
+            return ((val - min) / (max - min));
+        }
     }
 }

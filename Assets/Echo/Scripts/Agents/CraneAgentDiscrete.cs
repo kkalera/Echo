@@ -7,7 +7,7 @@ using Unity.MLAgents.Sensors;
 
 namespace Echo
 {
-    public class CraneAgent : Agent
+    public class CraneAgentDiscrete : Agent
     {
         [SerializeField] Environment env;
         [SerializeField] private bool autoPilot;        
@@ -27,17 +27,17 @@ namespace Echo
         }
         public override void Heuristic(in ActionBuffers actionsOut)
         {            
-            var Actions = actionsOut.DiscreteActions;
+            var conActions = actionsOut.DiscreteActions;
 
             if (!heuristicController)
             {
-                if (Input.GetKey(KeyCode.Z)) Actions[katIndex] = 1;
-                if (Input.GetKey(KeyCode.S)) Actions[katIndex] = -1;
-                if (!Input.GetKey(KeyCode.Z) && !Input.GetKey(KeyCode.S)) Actions[katIndex] = 0;
+                if (Input.GetKey(KeyCode.Z)) conActions[katIndex] = 1;
+                if (Input.GetKey(KeyCode.S)) conActions[katIndex] = -1;
+                if (!Input.GetKey(KeyCode.Z) && !Input.GetKey(KeyCode.S)) conActions[katIndex] = 0;
 
-                if (Input.GetKey(KeyCode.UpArrow)) Actions[winchIndex] = 1;
-                if (Input.GetKey(KeyCode.DownArrow)) Actions[winchIndex] = -1;
-                if (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow)) Actions[winchIndex] = 0;
+                if (Input.GetKey(KeyCode.UpArrow)) conActions[winchIndex] = 1;
+                if (Input.GetKey(KeyCode.DownArrow)) conActions[winchIndex] = -1;
+                if (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow)) conActions[winchIndex] = 0;
             }            
 
             if (autoPilot)
@@ -48,19 +48,44 @@ namespace Echo
                     new Vector3(0, env.Crane.craneSpecs.winchAcceleration,
                     env.Crane.craneSpecs.katAcceleration));
 
-                Actions[katIndex] = (int)inputs.z;
-                Actions[winchIndex] = (int)inputs.y;
+                conActions[katIndex] = inputs.z switch
+                {
+                    1 => 1,
+                    -1 => 2,
+                    _ => 0,
+                };
+
+                conActions[winchIndex] = inputs.y switch
+                {
+                    1 => 1,
+                    -1 => 2,
+                    _ => 0,
+                };
+
+                //conActions[katIndex] = (int)inputs.z;
+                //conActions[winchIndex] = (int)inputs.y;
             }
 
         }
 
         public override void OnActionReceived(ActionBuffers actions)
         {
-            float katAction = actions.ContinuousActions[katIndex];
-            env.Crane.MoveKat(katAction);
+            float katAction = actions.DiscreteActions[katIndex];
+            switch (katAction)
+            {
+                case 1: env.Crane.MoveKat(1);break;
+                case 2: env.Crane.MoveKat(-1);break;
+                default: env.Crane.MoveKat(0);break;
+            }
+            
 
-            float winchAction = actions.ContinuousActions[winchIndex];
-            env.Crane.MoveWinch(winchAction);
+            float winchAction = actions.DiscreteActions[winchIndex];
+            switch (winchAction)
+            {
+                case 1: env.Crane.MoveWinch(1); break;
+                case 2: env.Crane.MoveWinch(-1); break;
+                default: env.Crane.MoveWinch(0); break;
+            }
 
             // Get the state after interaction
             State state = env.State();
@@ -69,8 +94,10 @@ namespace Echo
         }
 
         public override void CollectObservations(VectorSensor sensor)
-        {
-            env.CollectObservations(sensor);       
+        {            
+            env.CollectObservations(sensor);
+            //State state = env.State();
+            //AddReward(state.reward);
         }
 
         public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, Vector3 acceleration)
@@ -84,7 +111,7 @@ namespace Echo
             {
                 float vel = Mathf.Abs(currentSpeed.z);
                 float d = Mathf.Pow(vel, 2) / (2 * acceleration.z);
-                inputs.z = distanceZ - d;
+                inputs.z = d < distanceZ ? 1 : 0;
 
                 if (targetPosition.z < spreaderPosition.z) inputs.z = -inputs.z;
                 inputs.z = Mathf.Clamp(inputs.z, -1, 1);
@@ -97,7 +124,7 @@ namespace Echo
             {
                 float vel = Mathf.Abs(currentSpeed.y);
                 float d = Mathf.Pow(vel, 2) / (2 * acceleration.y);
-                inputs.y = distanceY - d;
+                inputs.y = d < distanceY ? 1 : 0;
                 if (targetPosition.y < spreaderPosition.y) inputs.y = -inputs.y;
                 inputs.y = Mathf.Clamp(inputs.y, -1, 1);
             }
