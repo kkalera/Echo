@@ -12,9 +12,13 @@ namespace Echo
         [SerializeField] Environment env;
         [SerializeField] private bool autoPilot;        
         [SerializeField] private bool heuristicController;
+        [SerializeField] private bool useAutopilotRewards;
 
         private static readonly int katIndex = 0;
-        private static readonly int winchIndex = 1;        
+        private static readonly int winchIndex = 1;
+
+        private float autoPilotKat = 0;
+        private float autoPilotWinch = 0;
 
         private void Start()
         {
@@ -26,8 +30,8 @@ namespace Echo
             env.OnEpisodeBegin();
         }
         public override void Heuristic(in ActionBuffers actionsOut)
-        {            
-            var Actions = actionsOut.DiscreteActions;
+        {
+            var Actions = actionsOut.ContinuousActions;
 
             if (!heuristicController)
             {
@@ -38,18 +42,58 @@ namespace Echo
                 if (Input.GetKey(KeyCode.UpArrow)) Actions[winchIndex] = 1;
                 if (Input.GetKey(KeyCode.DownArrow)) Actions[winchIndex] = -1;
                 if (!Input.GetKey(KeyCode.UpArrow) && !Input.GetKey(KeyCode.DownArrow)) Actions[winchIndex] = 0;
-            }            
+            }
+
+
+            Dictionary<string, float> obs = env.CollectObservations();
+
+            Vector3 inputs = Vector3.zero;
+            if (!env.NormalisedObservations)
+            {
+                inputs = GetInputs
+                (
+                new Vector3(obs["targetX"], obs["targetY"], obs["targetZ"]),
+                new Vector3(obs["spreaderX"], obs["spreaderY"], obs["spreaderZ"]),
+                new Vector3(obs["spreaderVelX"], obs["spreaderVelY"], obs["katVel"]),
+                new Vector3(0, env.Crane.craneSpecs.winchAcceleration, env.Crane.craneSpecs.katAcceleration)
+                );
+            }
+            else
+            {
+                Bounds bounds = env.transform.GetComponent<BoxCollider>().bounds;
+                float xmin = bounds.center.x - bounds.extents.x;
+                float xmax = bounds.center.x + bounds.extents.x;
+                float ymin = bounds.center.y - bounds.extents.y;
+                float ymax = bounds.center.y + bounds.extents.y;
+                float zmin = bounds.center.z - bounds.extents.z;
+                float zmax = bounds.center.z + bounds.extents.z;
+
+                inputs = GetInputs
+                (
+                new Vector3(Utils.DeNormalize(obs["targetX"], xmin, xmax) - transform.parent.position.x, 
+                            Utils.DeNormalize(obs["targetY"], ymin, ymax) - transform.parent.position.y, 
+                            Utils.DeNormalize(obs["targetZ"], zmin, zmax) - transform.parent.position.z),
+
+                new Vector3(Utils.DeNormalize(obs["spreaderX"], xmin, xmax) - transform.parent.position.x,
+                            Utils.DeNormalize(obs["spreaderY"], ymin, ymax) - transform.parent.position.y, 
+                            Utils.DeNormalize(obs["spreaderZ"], zmin, zmax) - transform.parent.position.z),
+
+                new Vector3(0, env.Crane.spreader.Rbody.velocity.y, env.Crane.kat.Velocity),
+                new Vector3(0, env.Crane.craneSpecs.winchAcceleration, env.Crane.craneSpecs.katAcceleration)
+                );
+            }
 
             if (autoPilot)
             {
-                var inputs = GetInputs(env.TargetPosition - env.transform.position + new Vector3(0,2.75f,0),
-                    env.Crane.spreader.Position - env.transform.position,
-                    new Vector3(0,env.Crane.spreader.Rbody.velocity.y, env.Crane.kat.Velocity),
-                    new Vector3(0, env.Crane.craneSpecs.winchAcceleration,
-                    env.Crane.craneSpecs.katAcceleration));
-
-                Actions[katIndex] = (int)inputs.z;
-                Actions[winchIndex] = (int)inputs.y;
+                Actions[katIndex] = inputs.z;
+                Actions[winchIndex] = inputs.y;
+                autoPilotKat = inputs.z;
+                autoPilotWinch = inputs.y;
+            }
+            else
+            {
+                autoPilotKat = inputs.z;
+                autoPilotWinch = inputs.y;
             }
 
         }
@@ -65,12 +109,38 @@ namespace Echo
             // Get the state after interaction
             State state = env.State();
             AddReward(state.reward);
+            if (useAutopilotRewards) AddReward((1-Mathf.Abs(actions.ContinuousActions[katIndex] - autoPilotKat)) / MaxStep);
+            if (useAutopilotRewards) AddReward((1-Mathf.Abs(actions.ContinuousActions[winchIndex] - autoPilotWinch)) / MaxStep);
             if (state.dead) EndEpisode();
+
+            /*Utils.ClearLogConsole();
+            Debug.Log((2 - Mathf.Abs(actions.ContinuousActions[katIndex] - autoPilotKat) / 2));
+            Debug.Log((2 - Mathf.Abs(actions.ContinuousActions[winchIndex] - autoPilotWinch) / 2));*/
+
         }
 
         public override void CollectObservations(VectorSensor sensor)
         {
-            env.CollectObservations(sensor);       
+            var obs = env.CollectObservations();
+            sensor.AddObservation(obs["spreaderX"]);
+            sensor.AddObservation(obs["spreaderY"]);
+            sensor.AddObservation(obs["spreaderZ"]);
+            sensor.AddObservation(obs["spreaderVelX"]);
+            sensor.AddObservation(obs["spreaderVelY"]);
+            sensor.AddObservation(obs["spreaderVelZ"]);
+            sensor.AddObservation(obs["spreaderRotaX"]);
+            sensor.AddObservation(obs["spreaderRotaY"]);
+            sensor.AddObservation(obs["spreaderRotaZ"]);
+            sensor.AddObservation(obs["kat"]);
+            sensor.AddObservation(obs["katVel"]);
+            sensor.AddObservation(obs["targetX"]);
+            sensor.AddObservation(obs["targetY"]);
+            sensor.AddObservation(obs["targetZ"]);
+
+            Utils.ClearLogConsole();
+            Debug.Log(obs["spreaderZ"]);
+            Debug.Log(obs["kat"]);
+            Debug.Log(obs["targetZ"]);
         }
 
         public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, Vector3 acceleration)
@@ -105,46 +175,9 @@ namespace Echo
             return inputs;
 
         }
-        public static Vector3 GetInputsSwing(Vector3 targetPosition,Vector3 spreaderVelocity,
-            Vector3 spreaderPosition, Vector3 katVelocity, Vector3 katPosition, Vector3 acceleration)
-        {
 
-            Vector3 inputs = new Vector3(0, 0, 0);
-            targetPosition = GetNextPosition(spreaderPosition, targetPosition);
-
-            ///// Z movement
-            float distanceZ = Mathf.Abs(spreaderPosition.z - targetPosition.z);
-            if (!Mathf.Approximately(distanceZ, 0))
-            {
-                // Swing management
-                // Acceleration: limit the acceleration so that the swing created does not exceed the
-                // distance the kat can travel in the same time
-
-                // Calculate the distance that the pendulum (spreader) will swing based on current speed and position
-                // Formula for the height a pendulum will reach: h = L - L * cos(a)
-                // h: height
-                // L: length of the pendulum
-                // a: angle from vertical
-                float sa = Mathf.Abs(spreaderPosition.y - katPosition.y);
-                float sb = Mathf.Abs(spreaderPosition.z - katPosition.z);
-                float a = Mathf.Atan(sb / sa) * Mathf.Rad2Deg;
-                float l = Vector3.Distance(katPosition, spreaderPosition);
-                float h = l - l * Mathf.Cos(a);
-                
-                
-            }
-            /////
-
-            ///// Y movement
-            
-            /////
-
-            return inputs;
-
-        }
         private static Vector3 GetNextPosition(Vector3 spreaderPosition, Vector3 targetPosition)
         {
-            
             float craneZLegs = 12;
             bool hasToCrossLeg = spreaderPosition.z > craneZLegs && targetPosition.z < craneZLegs;
 
@@ -157,7 +190,7 @@ namespace Echo
             
             if (spreaderPosition.y < 17 && hasToCrossLeg)
             {                
-                targetPosition = new Vector3(0, 25f, spreaderPosition.z);
+                targetPosition = new Vector3(targetPosition.x, 25f, spreaderPosition.z);
             }
             else if (spreaderPosition.y >= 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
             {

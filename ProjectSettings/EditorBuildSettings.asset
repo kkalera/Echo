@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Echo/Scenes/CraneGrabAndPlace.unity
     guid: 3f58fb60d8989604c811f82cbfce4b9c
+  - enabled: 0
+    path: Assets/Echo/Scenes/Testing.unity
+    guid: 2552ba71a069065449693e51f139bb12
   m_configObjects: {}

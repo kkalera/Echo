@@ -7,11 +7,11 @@ namespace Echo {
     {
         [SerializeField] SoCraneSpecs _craneSpecs;
         [SerializeField] Crane _crane;
-
-
+        
         private void FixedUpdate()
         {
             MoveWinch(_crane.winchSpeed);
+            EnforceLimits();
         }
         public void MoveWinch(float value)
         {
@@ -47,7 +47,7 @@ namespace Echo {
         {
             if(value > 0)
             {
-                float distanceY = Mathf.Abs(_crane.spreader.Position.y - _craneSpecs.maxSpreaderHeight);
+                float distanceY = _craneSpecs.maxSpreaderHeight - _crane.spreader.Position.y;
                 if (!Mathf.Approximately(distanceY, 0))
                 {
                     float vel = Mathf.Abs(_crane.spreader.Rbody.velocity.y);
@@ -71,6 +71,26 @@ namespace Echo {
             }
 
             return value;
+        }
+        private void EnforceLimits()
+        {
+            
+            bool stopWinches;
+
+            stopWinches = _crane.winchSpeed > 0 && _crane.spreader.Position.y > _craneSpecs.maxSpreaderHeight;
+            if(!stopWinches)stopWinches = _crane.winchSpeed < 0 && _crane.spreader.Position.y < _craneSpecs.minSpreaderHeight;
+            if(!stopWinches)stopWinches = _crane.cables[0].links[0].storedCable <= 1 && _crane.winchSpeed < 0;            
+
+            if (stopWinches)
+            {
+                for (int i = 0; i < _crane.winches.Count; i++)
+                {
+                    JointMotor motor = _crane.winches[i].motor;
+                    motor.targetVelocity = 0;
+                    _crane.winches[i].motor = motor;
+                }
+            }
+
         }
     }
 }

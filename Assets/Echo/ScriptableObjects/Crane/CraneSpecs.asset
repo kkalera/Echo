@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:Echo:SoWinchSpeed
   winchMaxSpeed: 4
   winchAcceleration: 1
-  winchCableAmount: 52.77252
+  winchCableAmount: 31.947117
   katMaxSpeed: 4
   katAcceleration: 1
   maxSpreaderHeight: 24

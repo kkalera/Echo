@@ -48,14 +48,16 @@ namespace Echo
 
         }
 
-        public override void CollectObservations(VectorSensor sensor)
+        public override Dictionary<string, float> CollectObservations()
         {
+            return new Dictionary<string, float>();
+            /*
             sensor.AddObservation(Crane.spreader.Position);
             sensor.AddObservation(Crane.spreader.Rbody.velocity);
             sensor.AddObservation(Crane.spreader.Rotation);
             sensor.AddObservation(Crane.kat.Position);
             sensor.AddObservation(Crane.kat.Velocity);
-            sensor.AddObservation(TargetPosition);
+            sensor.AddObservation(TargetPosition);*/
         }
 
         public override void TakeActions(ActionBuffers actions)

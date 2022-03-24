@@ -11,7 +11,7 @@ namespace Echo
         [SerializeField][Range(0,10)] public float _swingLimit;
         [SerializeField] [Range(0, 1)] private float _limitBounce;
 
-        [SerializeField] private List<Filo.Cable> cables;
+        [SerializeField] public List<Filo.Cable> cables;
         [SerializeField] public List<HingeJoint> winches;
         
         [SerializeField] public Spreader spreader;
@@ -73,15 +73,17 @@ namespace Echo
             for(int i = 0; i < cables.Count; i++)
             {
                 cables[i].Setup();
+                cables[i].links[0].orientation = false;
+                cables[i].links[2].orientation = true;
 
-                for(int ii = 0; ii < cables[i].links.Count; ii++)
+                for (int ii = 0; ii < cables[i].links.Count; ii++)
                 {
                     var link = cables[i].links[ii];
                     if (link.hybridRolling)
                     {
                         link.storedCable = 50;
                     }
-                    cables[i].links[ii] = link;
+                    cables[i].links[ii] = link;                    
                 }
 
             }
@@ -90,7 +92,6 @@ namespace Echo
                 var m = winches[w].motor;
                 m.targetVelocity = 0;
                 winches[w].motor = m;
-             
             }
 
             spreader.Rbody.isKinematic = false;

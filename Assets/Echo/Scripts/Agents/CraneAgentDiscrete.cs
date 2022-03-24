@@ -95,7 +95,7 @@ namespace Echo
 
         public override void CollectObservations(VectorSensor sensor)
         {            
-            env.CollectObservations(sensor);
+            //env.CollectObservations(sensor);
             //State state = env.State();
             //AddReward(state.reward);
         }

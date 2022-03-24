@@ -22,6 +22,8 @@ namespace Echo
         [SerializeField] private GameObject targetPrefab;
         [SerializeField][Range(0.05f,1)] private float accuracy;
         [SerializeField] private bool normalisation;
+        [SerializeField] private bool randomPosition;
+        [SerializeField] private bool denseRewards;
 
         private Container _container;
         private GameObject _target;
@@ -33,6 +35,8 @@ namespace Echo
         private bool triggered;
         private Collider trigger_collider;
         
+        private float startDistance;
+        public override bool NormalisedObservations { get => normalisation; set =>normalisation = value; }
         void Start()
         {
             Crane = _crane;
@@ -52,24 +56,27 @@ namespace Echo
             OnTriggerExit(null);
 
             // Reset crane position
-            //Crane.ResetPosition(new Vector3(0, 15, Random.Range(-20,45)));
-            Crane.ResetPosition(new Vector3(0, 15, 20) + transform.position);
-
-            // Reset container position
-            //_container.ResetPosition(new Vector3(0,0.1f, Random.Range(-4,4)) + transform.position);
-            _container.ResetPosition(new Vector3(0, 0.1f, 0) + transform.position);
-
-            // Set the target position
-            //_target.transform.position = new Vector3(0, 0.1f, Random.Range(15,40)) + transform.position;
-            _target.transform.position = new Vector3(0, 0.1f, 25) + transform.position;
-            
+            if (randomPosition)
+            {
+                Crane.ResetPosition(new Vector3(0, Random.Range(15, 20), Random.Range(-20, 45)) + transform.position);
+                _container.ResetPosition(new Vector3(0, 0.1f, Random.Range(-4, 4)) + transform.position);
+                _target.transform.position = new Vector3(0, 0.01f, Random.Range(15, 40)) + transform.position;
+            }
+            else
+            {
+                Crane.ResetPosition(new Vector3(0, 15, 20) + transform.position);
+                _container.ResetPosition(new Vector3(0, 0.1f, 0) + transform.position);
+                _target.transform.position = new Vector3(0, 0.01f, 25) + transform.position;
+            }
 
             // Set the target as the container position
-            TargetPosition = _container.transform.position;
+            TargetPosition = _container.transform.position + new Vector3(0,2.75f,0);
 
             _container.transform.parent = transform;
             grabbed = false;
             rewarded = false;
+
+            startDistance = Vector3.Distance(_crane.spreader.Position, TargetPosition);
             
             float swing = Academy.Instance.EnvironmentParameters.GetWithDefault("swing", _crane._swingLimit);
             if (Mathf.Approximately(swing, -1)) Application.Quit();
@@ -78,11 +85,7 @@ namespace Echo
             Academy.Instance.StatsRecorder.Add("Swing", swing);
         }
 
-        private void Update()
-        {
-
-        }
-
+        /*
         public override void CollectObservations(VectorSensor sensor)
         {
             // Use normalisation
@@ -129,14 +132,7 @@ namespace Echo
                 targetPos.z = Utils.Normalize(targetPos.z, zmin, zmax);
                 sensor.AddObservation(targetPos);
 
-                /*
-                Utils.ClearLogConsole();
-                Debug.Log("SpreaderPosision:  " + spreaderPos);
-                Debug.Log("SpreaderVelocity:  " + spreaderVel);
-                Debug.Log("SpreaderRotation:  " + spreaderRotation);
-                Debug.Log("KatPosition:  " + katPosition);
-                Debug.Log("KatVelocity:  " + katVelocity);
-                Debug.Log("TargetPosition:  " + targetPos);*/
+
             }
             else
             {
@@ -146,16 +142,83 @@ namespace Echo
                 sensor.AddObservation(Crane.kat.Position - transform.position.z);
                 sensor.AddObservation(Crane.kat.Velocity);
                 sensor.AddObservation(TargetPosition - transform.position);
+                
+            } 
+        }*/
+        
+        public override Dictionary<string, float> CollectObservations()
+        {
+            Dictionary<string, float> dict = new();
+            if (normalisation)
+            {
+                Bounds bounds = GetComponent<BoxCollider>().bounds;
+                float xmin = bounds.center.x - bounds.extents.x;
+                float xmax = bounds.center.x + bounds.extents.x;
+                float ymin = bounds.center.y - bounds.extents.y;
+                float ymax = bounds.center.y + bounds.extents.y;
+                float zmin = bounds.center.z - bounds.extents.z;
+                float zmax = bounds.center.z + bounds.extents.z;
 
-                /*Utils.ClearLogConsole();
-                Debug.Log(Crane.spreader.Position - transform.position);
-                Debug.Log(Crane.spreader.Rbody.velocity);
-                Debug.Log(Crane.spreader.Rotation.eulerAngles);
-                Debug.Log(Crane.kat.Position - transform.position.z);
-                Debug.Log(Crane.kat.Velocity);
-                Debug.Log(TargetPosition - transform.position);*/
+                //Vector3 spreaderPos = Crane.spreader.Position - transform.position;
+                Vector3 spreaderPos = Crane.spreader.Position;
+                spreaderPos.x = Utils.Normalize(spreaderPos.x, xmin, xmax);
+                spreaderPos.y = Utils.Normalize(spreaderPos.y, ymin, ymax);
+                spreaderPos.z = Utils.Normalize(spreaderPos.z, zmin, zmax);
+                dict.Add("spreaderX", spreaderPos.x);
+                dict.Add("spreaderY", spreaderPos.y);
+                dict.Add("spreaderZ", spreaderPos.z);
+
+
+                Vector3 spreaderVel = Crane.spreader.Rbody.velocity;
+                spreaderVel.x = Utils.Normalize(spreaderVel.x, _crane.craneSpecs.katMaxSpeed * 3, -(_crane.craneSpecs.katMaxSpeed * 3));
+                spreaderVel.y = Utils.Normalize(spreaderVel.y, _crane.craneSpecs.winchMaxSpeed * 3, -(_crane.craneSpecs.winchMaxSpeed * 3));
+                spreaderVel.z = Utils.Normalize(spreaderVel.z, _crane.craneSpecs.katMaxSpeed * 3, -(_crane.craneSpecs.katMaxSpeed * 3));
+                dict.Add("spreaderVelX", spreaderVel.x);
+                dict.Add("spreaderVelY", spreaderVel.y);
+                dict.Add("spreaderVelZ", spreaderVel.z);
+
+                Vector3 spreaderRotation = Crane.spreader.Rotation.eulerAngles;
+                spreaderRotation.x = Utils.Normalize(spreaderRotation.x, 0, 360);
+                spreaderRotation.y = Utils.Normalize(spreaderRotation.y, 0, 360);
+                spreaderRotation.z = Utils.Normalize(spreaderRotation.z, 0, 360);
+                dict.Add("spreaderRotaX", spreaderRotation.x);
+                dict.Add("spreaderRotaY", spreaderRotation.y);
+                dict.Add("spreaderRotaZ", spreaderRotation.z);
+
+                float katPosition = Crane.kat.Position;
+                katPosition = Utils.Normalize(katPosition, zmin, zmax);
+                dict.Add("kat", katPosition);
+
+                float katVelocity = Crane.kat.Velocity;
+                katVelocity = Utils.Normalize(katVelocity, -_crane.craneSpecs.katMaxSpeed, _crane.craneSpecs.katMaxSpeed);
+                dict.Add("katVel", katVelocity);
+
+                Vector3 targetPos = TargetPosition;
+                targetPos.x = Utils.Normalize(targetPos.x, xmin, xmax);
+                targetPos.y = Utils.Normalize(targetPos.y, ymin, ymax);
+                targetPos.z = Utils.Normalize(targetPos.z, zmin, zmax);
+                dict.Add("targetX", targetPos.x);
+                dict.Add("targetY", targetPos.y);
+                dict.Add("targetZ", targetPos.z);
             }
-            
+            else
+            {
+                dict.Add("spreaderX", (Crane.spreader.Position - transform.position).x);
+                dict.Add("spreaderY", (Crane.spreader.Position - transform.position).y);
+                dict.Add("spreaderZ", (Crane.spreader.Position - transform.position).z);
+                dict.Add("spreaderVelX", Crane.spreader.Rbody.velocity.x);
+                dict.Add("spreaderVelY", Crane.spreader.Rbody.velocity.y);
+                dict.Add("spreaderVelZ", Crane.spreader.Rbody.velocity.z);
+                dict.Add("spreaderRotaX", Crane.spreader.Rotation.eulerAngles.x);
+                dict.Add("spreaderRotaY", Crane.spreader.Rotation.eulerAngles.y);
+                dict.Add("spreaderRotaZ", Crane.spreader.Rotation.eulerAngles.z);
+                dict.Add("kat", Crane.kat.Position - transform.position.z);
+                dict.Add("katVel", Crane.kat.Velocity);
+                dict.Add("targetX", (TargetPosition - transform.position).x);
+                dict.Add("targetY", (TargetPosition - transform.position).y);
+                dict.Add("targetZ", (TargetPosition - transform.position).z);
+            }
+            return dict;
         }
 
         public override void TakeActions(ActionBuffers actions)
@@ -170,7 +233,8 @@ namespace Echo
             float swingAmount = Mathf.Abs(_crane.spreader.Position.z - _crane.kat.Position);            
 
             // Positive reward
-            if (collided && (collision_collider.CompareTag(tagContainer) || collision_collider.CompareTag(tagTarget)))
+            if ((collided && (collision_collider.CompareTag(tagContainer) || collision_collider.CompareTag(tagTarget)))
+                || triggered && (trigger_collider.CompareTag(tagContainer) || trigger_collider.CompareTag(tagTarget)))
             {
                 float distance = Mathf.Abs(_crane.spreader.Position.z - TargetPosition.z);
                 
@@ -185,7 +249,8 @@ namespace Echo
                     {
                         OnCollisionExit(null);
                         _crane.spreader.GrabContainer(_container.transform);
-                        TargetPosition = _target.transform.position;
+                        TargetPosition = _target.transform.position + new Vector3(0,2.75f,0);
+                        startDistance = Vector3.Distance(TargetPosition, _crane.spreader.Position);
                         grabbed = true;
                         return new State(2f, false);
                     }
@@ -203,8 +268,15 @@ namespace Echo
             {
                 return new State(-1f, true);
             }
-            
-            return new State((1f - Mathf.Pow(swingAmount,4)) / MaxStep, false);
+
+            // Swing reward
+            /*
+            float swingMultiplier = Academy.Instance.EnvironmentParameters.GetWithDefault("swingMultiplier", 0);
+            float swingLimit = Academy.Instance.EnvironmentParameters.GetWithDefault("swing", _crane._swingLimit);
+            Academy.Instance.StatsRecorder.Add("SwingAmount", swingAmount);
+            float swingReward = swingMultiplier * Mathf.Pow(swingAmount, 2) * Mathf.Min(swingLimit, 1);*/            
+
+            return new State(-1f / MaxStep, false);
         }
 
         public void OnCollisionEnter(Collision collision)

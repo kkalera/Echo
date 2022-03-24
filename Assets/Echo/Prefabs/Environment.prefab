@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 156183370}
   - component: {fileID: 156183372}
-  - component: {fileID: 156183371}
-  - component: {fileID: 795023661}
-  - component: {fileID: 730047087}
+  - component: {fileID: 2433001184166069814}
+  - component: {fileID: 7728366710330643741}
+  - component: {fileID: 3514835129846083765}
   m_Layer: 0
   m_Name: Agent
   m_TagString: Untagged
@@ -51,13 +51,13 @@ MonoBehaviour:
     VectorObservationSize: 14
     NumStackedVectorObservations: 4
     m_ActionSpec:
-      m_NumContinuousActions: 0
-      BranchSizes: 0300000003000000
-    VectorActionSize: 0300000003000000
+      m_NumContinuousActions: 2
+      BranchSizes: 
+    VectorActionSize: 02000000
     VectorActionDescriptions: []
-    VectorActionSpaceType: 0
+    VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 185f1fa98f0c01a47bce016c6fa77c4e, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: Crane
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
---- !u!114 &156183371
+--- !u!114 &2433001184166069814
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -74,12 +74,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 156183369}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c8d85f592bae4defaff0dd6268d769c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DecisionPeriod: 5
-  TakeActionsBetweenDecisions: 1
---- !u!114 &795023661
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 3500
+  env: {fileID: 738117515383580444}
+  autoPilot: 1
+  heuristicController: 0
+  useAutopilotRewards: 1
+--- !u!114 &7728366710330643741
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,9 +99,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Record: 0
   NumStepsToRecord: 10000
-  DemonstrationName: GP-S0-A03-DIS
+  DemonstrationName: GP-APR
   DemonstrationDirectory: C:\Users\kenne\Documents\GitHub\Echo-build\Demos
---- !u!114 &730047087
+--- !u!114 &3514835129846083765
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,16 +110,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 156183369}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a7f3fa578e61df46a5478ad0c18edc4, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 3500
-  env: {fileID: 738117515383580444}
-  autoPilot: 1
-  heuristicController: 0
+  DecisionPeriod: 5
+  TakeActionsBetweenDecisions: 1
 --- !u!1 &738117515383580441
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,7 +170,9 @@ MonoBehaviour:
   containerPrefab: {fileID: 7646367646814213189, guid: f9ccedd88a64046f58c91f4b904cc12c, type: 3}
   targetPrefab: {fileID: 4462264063161659833, guid: 806c33f8ecebb734785462521a71eb37, type: 3}
   accuracy: 0.3
-  normalisation: 0
+  normalisation: 1
+  randomPosition: 0
+  denseRewards: 1
 --- !u!65 &1573194662
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -374,7 +377,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 863
+  m_VersionIndex: 926
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -749,8 +752,12 @@ PrefabInstance:
       value: 112.19935
       objectReference: {fileID: 0}
     - target: {fileID: 1250958244873204871, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
-      propertyPath: loosenessScale
+      propertyPath: maxLooseCable
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1250958244873204871, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: loosenessScale
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1250958244873204871, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: drawHybridLinks
@@ -861,8 +868,12 @@ PrefabInstance:
       value: 112.19935
       objectReference: {fileID: 0}
     - target: {fileID: 2067511246954712593, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
-      propertyPath: loosenessScale
+      propertyPath: maxLooseCable
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2067511246954712593, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: loosenessScale
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2067511246954712593, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: drawHybridLinks
@@ -969,8 +980,12 @@ PrefabInstance:
       value: 112.19935
       objectReference: {fileID: 0}
     - target: {fileID: 2860845056471743512, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
-      propertyPath: loosenessScale
+      propertyPath: maxLooseCable
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2860845056471743512, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: loosenessScale
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2860845056471743512, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: drawHybridLinks
@@ -1025,8 +1040,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3088509497362227913, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: m_Size.y
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 3088509497362227913, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3088509497362227913, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: m_Center.y
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3151875600416989237, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: m_Enabled
@@ -1046,7 +1069,7 @@ PrefabInstance:
       objectReference: {fileID: 5357674428147323213}
     - target: {fileID: 4639861527186858122, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: _swingLimit
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4639861527186858122, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: UseSwingLimit
@@ -1101,8 +1124,12 @@ PrefabInstance:
       value: 112.19935
       objectReference: {fileID: 0}
     - target: {fileID: 5152683980657810906, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
-      propertyPath: loosenessScale
+      propertyPath: maxLooseCable
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152683980657810906, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: loosenessScale
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5152683980657810906, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: drawHybridLinks
@@ -1165,8 +1192,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6828101334783566317, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: m_Size.y
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 6828101334783566317, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6828101334783566317, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
+      propertyPath: m_Center.y
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7699746005321144464, guid: 5177ed83b0d97bc40864a9fac38fcfee, type: 3}
       propertyPath: _crane

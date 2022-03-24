@@ -30,42 +30,7 @@ namespace Echo
         {
             clearConsoleMethod.Invoke(new object(), null);
         }
-        /// <summary>
-        /// DEPRECATED
-        /// </summary>
-        /// <param name="body"></param>
-        /// <param name="targetVelocity"></param>
-        /// <param name="maxAccel"></param>
-        /// <param name="forceMode"></param>
-        private static void AccelerateRigidbody(Rigidbody body, Vector3 targetVelocity, float maxAccel, ForceMode forceMode = ForceMode.Acceleration)
-        {
-            Vector3 deltaV = targetVelocity - body.velocity;
-            Vector3 accel = deltaV / Time.deltaTime;
-            
-            if (accel.sqrMagnitude > maxAccel * maxAccel)
-                accel = accel.normalized * maxAccel;
-
-            body.AddForce(accel, forceMode);
-        }
-        /// <summary>
-        /// DEPRECATED
-        /// </summary>
-        /// <param name="body"></param>
-        /// <param name="targetVelocity"></param>
-        /// <param name="maxAccel"></param>
-        /// <param name="timeDelta"></param>
-        private static void AccelerateRigidbodyT(Rigidbody body, Vector3 targetVelocity, Vector3 maxAccel, float timeDelta)
-        {            
-            Vector3 accel = maxAccel * timeDelta;
-            Vector3 delta = targetVelocity - body.velocity;
-            if (delta.z < 0) accel *= -1;
-            
-            if (accel.sqrMagnitude > delta.sqrMagnitude) accel = delta;
-
-            Vector3 vel = body.velocity;
-            vel += accel;
-            body.velocity = vel;
-        }
+ 
         public static void AccelerateRigidbody_Z_Axis(Rigidbody body, float targetVelocity, float maxSpeed, float maxAccel, float timeDelta)
         {            
             float accel = maxAccel * timeDelta;
@@ -78,34 +43,38 @@ namespace Echo
             vel.z = Mathf.Clamp(vel.z, -maxSpeed, maxSpeed);
             body.velocity = vel;
         }
-        public static void AccelerateRigidbody_X_Axis(Rigidbody body, float targetVelocity, float maxAccel, float timeDelta)
+        public static void AccelerateRigidbody_X_Axis(Rigidbody body, float targetVelocity, float maxSpeed ,float maxAccel, float timeDelta)
         {
             float accel = maxAccel * timeDelta;
-            float delta = targetVelocity - body.velocity.x;
-            if (delta < 0) accel *= -1;
-
+            float delta = Mathf.Abs(targetVelocity - body.velocity.x);
             if (accel > delta) accel = delta;
 
             Vector3 vel = body.velocity;
-            vel.x += accel;
+            if (targetVelocity < vel.x) vel.x -= accel;
+            if (targetVelocity > vel.x) vel.x += accel;
+            vel.x = Mathf.Clamp(vel.x, -maxSpeed, maxSpeed);
             body.velocity = vel;
         }
-        public static void AccelerateRigidbody_Y_Axis(Rigidbody body, float targetVelocity, float maxAccel, float timeDelta)
+        public static void AccelerateRigidbody_Y_Axis(Rigidbody body, float targetVelocity, float maxSpeed, float maxAccel, float timeDelta)
         {
             float accel = maxAccel * timeDelta;
-            float delta = targetVelocity - body.velocity.y;
-            if (delta < 0) accel *= -1;
-
+            float delta = Mathf.Abs(targetVelocity - body.velocity.y);
             if (accel > delta) accel = delta;
 
             Vector3 vel = body.velocity;
-            vel.y += accel;
+            if (targetVelocity < vel.y) vel.y -= accel;
+            if (targetVelocity > vel.y) vel.y += accel;
+            vel.z = Mathf.Clamp(vel.y, -maxSpeed, maxSpeed);
             body.velocity = vel;
         }
 
         public static float Normalize(float val, float min, float max)
         {
             return ((val - min) / (max - min));
+        }
+        public static float DeNormalize(float val, float min, float max)
+        {
+            return (val *(max-min)) + min;
         }
     }
 }
