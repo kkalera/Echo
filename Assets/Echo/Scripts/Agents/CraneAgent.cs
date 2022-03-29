@@ -28,6 +28,7 @@ namespace Echo
         public override void OnEpisodeBegin()
         {
             env.OnEpisodeBegin();
+            useAutopilotRewards = Academy.Instance.EnvironmentParameters.GetWithDefault("useAutopilotRewards", -1) > 0;
         }
         public override void Heuristic(in ActionBuffers actionsOut)
         {
@@ -83,19 +84,14 @@ namespace Echo
                 );
             }
 
+            autoPilotKat = inputs.z;
+            autoPilotWinch = inputs.y;
+
             if (autoPilot)
             {
                 Actions[katIndex] = inputs.z;
-                Actions[winchIndex] = inputs.y;
-                autoPilotKat = inputs.z;
-                autoPilotWinch = inputs.y;
+                Actions[winchIndex] = inputs.y;                
             }
-            else
-            {
-                autoPilotKat = inputs.z;
-                autoPilotWinch = inputs.y;
-            }
-
         }
 
         public override void OnActionReceived(ActionBuffers actions)
@@ -112,10 +108,6 @@ namespace Echo
             if (useAutopilotRewards) AddReward((1-Mathf.Abs(actions.ContinuousActions[katIndex] - autoPilotKat)) / MaxStep);
             if (useAutopilotRewards) AddReward((1-Mathf.Abs(actions.ContinuousActions[winchIndex] - autoPilotWinch)) / MaxStep);
             if (state.dead) EndEpisode();
-
-            /*Utils.ClearLogConsole();
-            Debug.Log((2 - Mathf.Abs(actions.ContinuousActions[katIndex] - autoPilotKat) / 2));
-            Debug.Log((2 - Mathf.Abs(actions.ContinuousActions[winchIndex] - autoPilotWinch) / 2));*/
 
         }
 
@@ -137,10 +129,10 @@ namespace Echo
             sensor.AddObservation(obs["targetY"]);
             sensor.AddObservation(obs["targetZ"]);
 
-            Utils.ClearLogConsole();
-            Debug.Log(obs["spreaderZ"]);
-            Debug.Log(obs["kat"]);
-            Debug.Log(obs["targetZ"]);
+            //Utils.ClearLogConsole();
+            //Debug.Log(obs["spreaderZ"]);
+            //Debug.Log(obs["kat"]);
+            //Debug.Log(obs["targetZ"]);
         }
 
         public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, Vector3 acceleration)

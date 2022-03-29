@@ -80,11 +80,11 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 3500
+  MaxStep: 5000
   env: {fileID: 738117515383580444}
-  autoPilot: 1
+  autoPilot: 0
   heuristicController: 0
-  useAutopilotRewards: 1
+  useAutopilotRewards: 0
 --- !u!114 &7728366710330643741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Record: 0
   NumStepsToRecord: 10000
-  DemonstrationName: GP-APR
+  DemonstrationName: GP-RP
   DemonstrationDirectory: C:\Users\kenne\Documents\GitHub\Echo-build\Demos
 --- !u!114 &3514835129846083765
 MonoBehaviour:
@@ -170,9 +170,8 @@ MonoBehaviour:
   containerPrefab: {fileID: 7646367646814213189, guid: f9ccedd88a64046f58c91f4b904cc12c, type: 3}
   targetPrefab: {fileID: 4462264063161659833, guid: 806c33f8ecebb734785462521a71eb37, type: 3}
   accuracy: 0.3
-  normalisation: 1
+  normalisation: 0
   randomPosition: 0
-  denseRewards: 1
 --- !u!65 &1573194662
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -377,7 +376,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 926
+  m_VersionIndex: 953
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

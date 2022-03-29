@@ -23,7 +23,6 @@ namespace Echo
         [SerializeField][Range(0.05f,1)] private float accuracy;
         [SerializeField] private bool normalisation;
         [SerializeField] private bool randomPosition;
-        [SerializeField] private bool denseRewards;
 
         private Container _container;
         private GameObject _target;
@@ -35,7 +34,6 @@ namespace Echo
         private bool triggered;
         private Collider trigger_collider;
         
-        private float startDistance;
         public override bool NormalisedObservations { get => normalisation; set =>normalisation = value; }
         void Start()
         {
@@ -52,6 +50,12 @@ namespace Echo
 
         public override void OnEpisodeBegin()
         {
+            float n = normalisation ? 1 : -1;
+            float rp = randomPosition ? 1 : -1;
+            normalisation = Academy.Instance.EnvironmentParameters.GetWithDefault("normalisation", n) > 0;
+            randomPosition = Academy.Instance.EnvironmentParameters.GetWithDefault("randomPosition", rp) > 0;
+            _crane._swingLimit = Academy.Instance.EnvironmentParameters.GetWithDefault("swing", _crane._swingLimit);
+
             OnCollisionExit(null);
             OnTriggerExit(null);
 
@@ -75,14 +79,6 @@ namespace Echo
             _container.transform.parent = transform;
             grabbed = false;
             rewarded = false;
-
-            startDistance = Vector3.Distance(_crane.spreader.Position, TargetPosition);
-            
-            float swing = Academy.Instance.EnvironmentParameters.GetWithDefault("swing", _crane._swingLimit);
-            if (Mathf.Approximately(swing, -1)) Application.Quit();
-            
-            _crane._swingLimit = swing;
-            Academy.Instance.StatsRecorder.Add("Swing", swing);
         }
 
         /*
@@ -230,8 +226,7 @@ namespace Echo
         public override State State()
         {
             if (!GetComponent<BoxCollider>().bounds.Contains(_crane.spreader.Position)) return new State(0, true);
-            float swingAmount = Mathf.Abs(_crane.spreader.Position.z - _crane.kat.Position);            
-
+                        
             // Positive reward
             if ((collided && (collision_collider.CompareTag(tagContainer) || collision_collider.CompareTag(tagTarget)))
                 || triggered && (trigger_collider.CompareTag(tagContainer) || trigger_collider.CompareTag(tagTarget)))
@@ -250,7 +245,6 @@ namespace Echo
                         OnCollisionExit(null);
                         _crane.spreader.GrabContainer(_container.transform);
                         TargetPosition = _target.transform.position + new Vector3(0,2.75f,0);
-                        startDistance = Vector3.Distance(TargetPosition, _crane.spreader.Position);
                         grabbed = true;
                         return new State(2f, false);
                     }
@@ -270,13 +264,13 @@ namespace Echo
             }
 
             // Swing reward
-            /*
+            float swingAmount = Mathf.Abs(_crane.spreader.Position.z - _crane.kat.Position);
             float swingMultiplier = Academy.Instance.EnvironmentParameters.GetWithDefault("swingMultiplier", 0);
             float swingLimit = Academy.Instance.EnvironmentParameters.GetWithDefault("swing", _crane._swingLimit);
             Academy.Instance.StatsRecorder.Add("SwingAmount", swingAmount);
-            float swingReward = swingMultiplier * Mathf.Pow(swingAmount, 2) * Mathf.Min(swingLimit, 1);*/            
+            float swingReward = swingLimit > 0 ? .5f - (swingMultiplier * Mathf.Pow(swingAmount, 2)) : 0;
 
-            return new State(-1f / MaxStep, false);
+            return new State((-1f + swingReward) / MaxStep, false);
         }
 
         public void OnCollisionEnter(Collision collision)
