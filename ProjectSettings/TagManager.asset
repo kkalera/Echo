@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Container
   - Target
+  - Schacht
   layers:
   - Default
   - TransparentFX

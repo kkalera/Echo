@@ -26,15 +26,15 @@ namespace Echo
             env.MaxStep = Mathf.Max(1,MaxStep);
         }
         public override void OnEpisodeBegin()
-        {
+        {            
             env.OnEpisodeBegin();
             useAutopilotRewards = Academy.Instance.EnvironmentParameters.GetWithDefault("useAutopilotRewards", -1) > 0;
         }
         public override void Heuristic(in ActionBuffers actionsOut)
-        {
+        {            
             var Actions = actionsOut.ContinuousActions;
 
-            if (!heuristicController)
+            if (!autoPilot)
             {
                 if (Input.GetKey(KeyCode.Z)) Actions[katIndex] = 1;
                 if (Input.GetKey(KeyCode.S)) Actions[katIndex] = -1;
@@ -57,7 +57,7 @@ namespace Echo
                 new Vector3(obs["spreaderX"], obs["spreaderY"], obs["spreaderZ"]),
                 new Vector3(obs["spreaderVelX"], obs["spreaderVelY"], obs["katVel"]),
                 new Vector3(0, env.Crane.craneSpecs.winchAcceleration, env.Crane.craneSpecs.katAcceleration)
-                );
+                );                
             }
             else
             {
@@ -84,6 +84,7 @@ namespace Echo
                 );
             }
 
+            // Used for autopilot reward system
             autoPilotKat = inputs.z;
             autoPilotWinch = inputs.y;
 
@@ -91,7 +92,7 @@ namespace Echo
             {
                 Actions[katIndex] = inputs.z;
                 Actions[winchIndex] = inputs.y;                
-            }
+            }            
         }
 
         public override void OnActionReceived(ActionBuffers actions)
@@ -128,17 +129,14 @@ namespace Echo
             sensor.AddObservation(obs["targetX"]);
             sensor.AddObservation(obs["targetY"]);
             sensor.AddObservation(obs["targetZ"]);
-
-            //Utils.ClearLogConsole();
-            //Debug.Log(obs["spreaderZ"]);
-            //Debug.Log(obs["kat"]);
-            //Debug.Log(obs["targetZ"]);
         }
 
-        public static Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, Vector3 acceleration)
+        private Vector3 GetInputs(Vector3 targetPosition, Vector3 spreaderPosition, Vector3 currentSpeed, Vector3 acceleration)
         {
-            Vector3 inputs = new Vector3(0, 0, 0);
-            targetPosition = GetNextPosition(spreaderPosition, targetPosition);
+            
+            Vector3 inputs = Vector3.zero;
+            
+            targetPosition = env.GetNextPosition(spreaderPosition, targetPosition);
 
             ///// Z movement
             float distanceZ = Mathf.Abs(spreaderPosition.z - targetPosition.z);
@@ -159,41 +157,12 @@ namespace Echo
             {
                 float vel = Mathf.Abs(currentSpeed.y);
                 float d = Mathf.Pow(vel, 2) / (2 * acceleration.y);
-                inputs.y = distanceY - d;
+                inputs.y = distanceY - d;                
                 if (targetPosition.y < spreaderPosition.y) inputs.y = -inputs.y;
                 inputs.y = Mathf.Clamp(inputs.y, -1, 1);
             }
-            /////
+            /////            
             return inputs;
-
-        }
-
-        private static Vector3 GetNextPosition(Vector3 spreaderPosition, Vector3 targetPosition)
-        {
-            float craneZLegs = 12;
-            bool hasToCrossLeg = spreaderPosition.z > craneZLegs && targetPosition.z < craneZLegs;
-
-            if (!hasToCrossLeg) hasToCrossLeg = spreaderPosition.z > -craneZLegs && targetPosition.z < -craneZLegs;
-            if (!hasToCrossLeg) hasToCrossLeg = ((spreaderPosition.z > -craneZLegs && spreaderPosition.z < craneZLegs) &&
-                    (targetPosition.z > craneZLegs || targetPosition.z < -craneZLegs));
-            
-            // Check if we're to far from the target to lower the spreader        
-            float r = (spreaderPosition.y * 0.2f) + 1;
-            
-            if (spreaderPosition.y < 17 && hasToCrossLeg)
-            {                
-                targetPosition = new Vector3(targetPosition.x, 25f, spreaderPosition.z);
-            }
-            else if (spreaderPosition.y >= 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
-            {
-                targetPosition = new Vector3(0, spreaderPosition.y, targetPosition.z);
-            }
-
-
-            //if (Mathf.Abs(spreaderPosition.y - targetPosition.y) > 1 && spreaderPosition.z > 4 && Mathf.Abs(spreaderPosition.z - targetPosition.z) < r) targetPosition.z -= 0.75f;
-            //if (Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && Mathf.Abs(spreaderPosition.y - targetPosition.y) < 2 && spreaderPosition.y < 19) targetPosition.y += 0.5f;
-
-            return targetPosition;
         }
     }
 }

@@ -18,5 +18,6 @@ namespace Echo
         public virtual int MaxStep { get; set; }
         public virtual Vector3 TargetPosition { get; set; }
         public virtual bool NormalisedObservations { get; set; }
+        public virtual Vector3 GetNextPosition(Vector3 spreaderPosition, Vector3 targetPosition) { return targetPosition; }
     }
 }

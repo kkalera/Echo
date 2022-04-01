@@ -10,7 +10,7 @@ namespace Echo
     /// <summary>
     /// Environment that spawns a single container, which the agent needs to grab
     /// </summary>
-    public class EnvGrabAndPlace : Environment, CollisionReceiver
+    public class EnvSchacht : Environment, CollisionReceiver
     {
         public static int katIndex = 0;
         public static int winchIndex = 1;
@@ -68,7 +68,7 @@ namespace Echo
             }
             else
             {
-                Crane.ResetPosition(new Vector3(0, 15, 45) + transform.position);
+                Crane.ResetPosition(new Vector3(0, 15, -20) + transform.position);
                 _container.ResetPosition(new Vector3(0, 0.1f, 0) + transform.position);
                 _target.transform.position = new Vector3(0, 0.01f, 25) + transform.position;
             }
@@ -80,67 +80,6 @@ namespace Echo
             grabbed = false;
             rewarded = false;
         }
-
-        /*
-        public override void CollectObservations(VectorSensor sensor)
-        {
-            // Use normalisation
-            if (normalisation)
-            {
-                Bounds bounds = GetComponent<BoxCollider>().bounds;
-                float xmin = bounds.center.x - bounds.extents.x;
-                float xmax = bounds.center.x + bounds.extents.x;
-                float ymin = bounds.center.y - bounds.extents.y;
-                float ymax = bounds.center.y + bounds.extents.y;
-                float zmin = bounds.center.z - bounds.extents.z;
-                float zmax = bounds.center.z + bounds.extents.z;
-
-                //Vector3 spreaderPos = Crane.spreader.Position - transform.position;
-                Vector3 spreaderPos = Crane.spreader.Position;
-                spreaderPos.x = Utils.Normalize(spreaderPos.x, xmin, xmax);
-                spreaderPos.y = Utils.Normalize(spreaderPos.y, ymin, ymax);
-                spreaderPos.z = Utils.Normalize(spreaderPos.z, zmin, zmax);
-                sensor.AddObservation(spreaderPos);
-
-                Vector3 spreaderVel = Crane.spreader.Rbody.velocity;
-                spreaderVel.x = Utils.Normalize(spreaderVel.x, _crane.craneSpecs.katMaxSpeed * 3, -(_crane.craneSpecs.katMaxSpeed * 3));
-                spreaderVel.y = Utils.Normalize(spreaderVel.y, _crane.craneSpecs.winchMaxSpeed * 3, -(_crane.craneSpecs.winchMaxSpeed * 3));
-                spreaderVel.z = Utils.Normalize(spreaderVel.z, _crane.craneSpecs.katMaxSpeed * 3, -(_crane.craneSpecs.katMaxSpeed * 3));
-                sensor.AddObservation(spreaderVel);
-
-                Vector3 spreaderRotation = Crane.spreader.Rotation.eulerAngles;
-                spreaderRotation.x = Utils.Normalize(spreaderRotation.x, 0, 360);
-                spreaderRotation.y = Utils.Normalize(spreaderRotation.y, 0, 360);
-                spreaderRotation.z = Utils.Normalize(spreaderRotation.z, 0, 360);
-                sensor.AddObservation(spreaderRotation);
-
-                float katPosition = Crane.kat.Position;
-                katPosition = Utils.Normalize(katPosition, zmin, zmax);
-                sensor.AddObservation(katPosition);
-
-                float katVelocity = Crane.kat.Velocity;
-                katVelocity = Utils.Normalize(katVelocity, -_crane.craneSpecs.katMaxSpeed, _crane.craneSpecs.katMaxSpeed);
-                sensor.AddObservation(katVelocity);
-
-                Vector3 targetPos = TargetPosition;
-                targetPos.x = Utils.Normalize(targetPos.x, xmin, xmax);
-                targetPos.y = Utils.Normalize(targetPos.y, ymin, ymax);
-                targetPos.z = Utils.Normalize(targetPos.z, zmin, zmax);
-                sensor.AddObservation(targetPos);
-
-
-            }
-            else
-            {
-                sensor.AddObservation(Crane.spreader.Position - transform.position);
-                sensor.AddObservation(Crane.spreader.Rbody.velocity);
-                sensor.AddObservation(Crane.spreader.Rotation.eulerAngles);
-                sensor.AddObservation(Crane.kat.Position - transform.position.z);
-                sensor.AddObservation(Crane.kat.Velocity);
-                sensor.AddObservation(TargetPosition - transform.position);
-                
-            } 
-        }*/
         
         public override Dictionary<string, float> CollectObservations()
         {
@@ -269,25 +208,24 @@ namespace Echo
             float swingLimit = Academy.Instance.EnvironmentParameters.GetWithDefault("swing", _crane._swingLimit);
             Academy.Instance.StatsRecorder.Add("SwingAmount", swingAmount);
             float swingReward = swingLimit > 0 ? .5f - (swingMultiplier * Mathf.Pow(swingAmount * Utils.Normalize(_crane.spreader.Position.y, -25, 15), 2)) : 0;
-
             return new State((-1f + swingReward) / MaxStep, false);
         }
 
         public override Vector3 GetNextPosition(Vector3 spreaderPosition, Vector3 targetPosition)
         {
-            float craneZLegs = 12;
+            float craneZLegs = 6;
             bool hasToCrossLeg = spreaderPosition.z > craneZLegs && targetPosition.z < craneZLegs;
-
-            if (!hasToCrossLeg) hasToCrossLeg = spreaderPosition.z > -craneZLegs && targetPosition.z < -craneZLegs;
-            if (!hasToCrossLeg) hasToCrossLeg = ((spreaderPosition.z > -craneZLegs && spreaderPosition.z < craneZLegs) &&
+            if (!hasToCrossLeg) hasToCrossLeg = spreaderPosition.z < -craneZLegs && targetPosition.z > -craneZLegs;
+            if (!hasToCrossLeg) hasToCrossLeg = (
+                    (spreaderPosition.z < craneZLegs && spreaderPosition.z > -craneZLegs) &&
                     (targetPosition.z > craneZLegs || targetPosition.z < -craneZLegs));
+            
 
             // Check if we're to far from the target to lower the spreader        
             float r = (spreaderPosition.y * 0.2f) + 1;
-
             if (spreaderPosition.y < 17 && hasToCrossLeg)
             {
-                targetPosition = new Vector3(targetPosition.x, 25f, spreaderPosition.z);
+                targetPosition = new Vector3(targetPosition.x, 18f, spreaderPosition.z);
             }
             else if (spreaderPosition.y >= 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
             {
