@@ -74,7 +74,9 @@ namespace Echo
             {
                 cables[i].Setup();
                 cables[i].links[0].orientation = false;
+                //cables[i].links[0].storedCable = 50;
                 cables[i].links[2].orientation = true;
+                //cables[i].links[2].storedCable = 50;
 
                 for (int ii = 0; ii < cables[i].links.Count; ii++)
                 {
@@ -83,7 +85,7 @@ namespace Echo
                     {
                         link.storedCable = 50;
                     }
-                    cables[i].links[ii] = link;                    
+                    cables[i].links[ii] = link;
                 }
 
             }

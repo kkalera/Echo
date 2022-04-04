@@ -68,7 +68,7 @@ namespace Echo
             }
             else
             {
-                Crane.ResetPosition(new Vector3(0, 15, -20) + transform.position);
+                Crane.ResetPosition(new Vector3(0, 15, 25) + transform.position);
                 _container.ResetPosition(new Vector3(0, 0.1f, 0) + transform.position);
                 _target.transform.position = new Vector3(0, 0.01f, 25) + transform.position;
             }
@@ -208,7 +208,7 @@ namespace Echo
             float swingLimit = Academy.Instance.EnvironmentParameters.GetWithDefault("swing", _crane._swingLimit);
             Academy.Instance.StatsRecorder.Add("SwingAmount", swingAmount);
             float swingReward = swingLimit > 0 ? .5f - (swingMultiplier * Mathf.Pow(swingAmount * Utils.Normalize(_crane.spreader.Position.y, -25, 15), 2)) : 0;
-            return new State((-1f + swingReward) / MaxStep, false);
+            return new State((swingReward) / MaxStep, false);
         }
 
         public override Vector3 GetNextPosition(Vector3 spreaderPosition, Vector3 targetPosition)
@@ -219,22 +219,41 @@ namespace Echo
             if (!hasToCrossLeg) hasToCrossLeg = (
                     (spreaderPosition.z < craneZLegs && spreaderPosition.z > -craneZLegs) &&
                     (targetPosition.z > craneZLegs || targetPosition.z < -craneZLegs));
-            
 
-            // Check if we're to far from the target to lower the spreader        
+            bool targetContainer = targetPosition.z < craneZLegs;
             float r = (spreaderPosition.y * 0.2f) + 1;
-            if (spreaderPosition.y < 17 && hasToCrossLeg)
-            {
-                targetPosition = new Vector3(targetPosition.x, 18f, spreaderPosition.z);
-            }
-            else if (spreaderPosition.y >= 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
-            {
-                targetPosition = new Vector3(0, spreaderPosition.y, targetPosition.z);
-            }
 
-
-            //if (Mathf.Abs(spreaderPosition.y - targetPosition.y) > 1 && spreaderPosition.z > 4 && Mathf.Abs(spreaderPosition.z - targetPosition.z) < r) targetPosition.z -= 0.75f;
-            //if (Mathf.Abs(spreaderPosition.z - targetPosition.z) > r && Mathf.Abs(spreaderPosition.y - targetPosition.y) < 2 && spreaderPosition.y < 19) targetPosition.y += 0.5f;
+            if (targetContainer)
+            {                
+                if (spreaderPosition.y < 17 && hasToCrossLeg)
+                {
+                    targetPosition = new Vector3(targetPosition.x, 18f, spreaderPosition.z);
+                }
+                else if (spreaderPosition.y >= 17 && Mathf.Abs(spreaderPosition.z - targetPosition.z) > r)
+                {
+                    targetPosition = new Vector3(0, spreaderPosition.y, targetPosition.z);
+                }
+            }
+            else
+            {
+                if (spreaderPosition.y < 17 && hasToCrossLeg)
+                {                    
+                    targetPosition = new Vector3(targetPosition.x, 18f, spreaderPosition.z);
+                    
+                }
+                else if (Mathf.Abs(spreaderPosition.z - targetPosition.z - 0.5f) > r && spreaderPosition.y > 7.6f) 
+                {
+                    targetPosition = new Vector3(0, spreaderPosition.y, targetPosition.z - 0.5f);                    
+                }
+                else if(Mathf.Abs(spreaderPosition.z - targetPosition.z - 0.5f) < r && spreaderPosition.y > 7.6f)
+                {
+                    targetPosition = new Vector3(0, 7.5f, targetPosition.z - 0.5f);                    
+                }
+                else if(Mathf.Abs(targetPosition.z - spreaderPosition.z) > 0.05)
+                {
+                    targetPosition = new Vector3(0, 7.5f, targetPosition.z);
+                }
+            }                      
 
             return targetPosition;
         }

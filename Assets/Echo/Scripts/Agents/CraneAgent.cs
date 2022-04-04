@@ -29,6 +29,7 @@ namespace Echo
         {            
             env.OnEpisodeBegin();
             useAutopilotRewards = Academy.Instance.EnvironmentParameters.GetWithDefault("useAutopilotRewards", -1) > 0;
+
         }
         public override void Heuristic(in ActionBuffers actionsOut)
         {            
@@ -146,8 +147,16 @@ namespace Echo
                 float d = Mathf.Pow(vel, 2) / (2 * acceleration.z);
                 inputs.z = distanceZ - d;
 
-                if (targetPosition.z < spreaderPosition.z) inputs.z = -inputs.z;
-                inputs.z = Mathf.Clamp(inputs.z, -1, 1);
+                if (targetPosition.z < spreaderPosition.z)
+                {
+                    inputs.z = Mathf.Clamp(-inputs.z,-1,0);
+                }
+                else
+                {
+                    inputs.z = Mathf.Clamp(inputs.z, 0, 1);
+                }
+                
+                //inputs.z = Mathf.Clamp(inputs.z, -1, 1);
             }
             /////
 
@@ -158,8 +167,15 @@ namespace Echo
                 float vel = Mathf.Abs(currentSpeed.y);
                 float d = Mathf.Pow(vel, 2) / (2 * acceleration.y);
                 inputs.y = distanceY - d;                
-                if (targetPosition.y < spreaderPosition.y) inputs.y = -inputs.y;
-                inputs.y = Mathf.Clamp(inputs.y, -1, 1);
+                if (targetPosition.y < spreaderPosition.y)
+                {
+                    inputs.y = Mathf.Clamp(-inputs.y, -1, 0);
+                }
+                else
+                {
+                    inputs.y = Mathf.Clamp(inputs.y, 0, 1);
+                }
+                
             }
             /////            
             return inputs;
