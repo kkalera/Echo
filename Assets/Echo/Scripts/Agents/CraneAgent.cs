@@ -98,10 +98,10 @@ namespace Echo
 
         public override void OnActionReceived(ActionBuffers actions)
         {
-            float katAction = actions.ContinuousActions[katIndex];
+            float katAction = Mathf.Clamp(actions.ContinuousActions[katIndex], -1, 1);
             env.Crane.MoveKat(katAction);
 
-            float winchAction = actions.ContinuousActions[winchIndex];
+            float winchAction = Mathf.Clamp(actions.ContinuousActions[winchIndex], -1, 1);
             env.Crane.MoveWinch(winchAction);
 
             // Get the state after interaction

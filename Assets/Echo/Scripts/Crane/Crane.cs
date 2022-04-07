@@ -24,17 +24,14 @@ namespace Echo
         {
             winchSpeed = value;
         }
-
         public void MoveKat(float value)
         {
             katSpeed = value;
         }
-
         private void FixedUpdate()
         {
             if (UseSwingLimit) ManageSwingLimit();
         }
-
         private void ManageSwingLimit()
         {
             if (spreader.Rbody.isKinematic || Mathf.Approximately(Time.timeScale, 0)) return;
@@ -68,14 +65,14 @@ namespace Echo
 
             kat.Rbody.transform.position = new Vector3(position.x, 32, position.z);
             spreader.Rbody.transform.position = new Vector3(position.x, position.y, position.z);
-            spreader.Rbody.transform.rotation = Quaternion.Euler(Vector3.zero);
+            spreader.Rbody.transform.rotation = Quaternion.Euler(Vector3.zero);            
 
             for(int i = 0; i < cables.Count; i++)
             {
                 cables[i].Setup();
-                cables[i].links[0].orientation = false;
+                //cables[i].links[0].orientation = false;
                 //cables[i].links[0].storedCable = 50;
-                cables[i].links[2].orientation = true;
+                //cables[i].links[2].orientation = true;
                 //cables[i].links[2].storedCable = 50;
 
                 for (int ii = 0; ii < cables[i].links.Count; ii++)
@@ -94,6 +91,11 @@ namespace Echo
                 var m = winches[w].motor;
                 m.targetVelocity = 0;
                 winches[w].motor = m;
+
+                Transform t = winches[w].transform;
+                Vector3 rotation = t.rotation.eulerAngles;
+                rotation.z = 0;
+                t.rotation = Quaternion.Euler(rotation);
             }
 
             spreader.Rbody.isKinematic = false;

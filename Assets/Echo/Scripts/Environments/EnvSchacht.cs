@@ -17,6 +17,7 @@ namespace Echo
         [TagsAndLayers.TagDropdown] public string tagDead;
         [TagsAndLayers.TagDropdown] public string tagContainer;
         [TagsAndLayers.TagDropdown] public string tagTarget;
+        [TagsAndLayers.TagDropdown] public string tagShaft;
         [SerializeField] private Crane _crane;        
         [SerializeField] private GameObject containerPrefab;
         [SerializeField] private GameObject targetPrefab;
@@ -31,6 +32,7 @@ namespace Echo
 
         private bool collided;
         private Collider collision_collider;
+        private Collision collision;
         private bool triggered;
         private Collider trigger_collider;
         
@@ -202,12 +204,20 @@ namespace Echo
                 return new State(-1f, true);
             }
 
+            // If collision with shaft is too hard
+            if(collided && collision_collider.CompareTag(tagShaft) && collision != null){
+                if(collision.relativeVelocity.y > 1f)
+                {
+                    return new State(-1f, true);
+                }
+            }
+
             // Swing reward
             float swingAmount = Mathf.Abs(_crane.spreader.Position.z - _crane.kat.Position);
             float swingMultiplier = Academy.Instance.EnvironmentParameters.GetWithDefault("swingMultiplier", 0);
             float swingLimit = Academy.Instance.EnvironmentParameters.GetWithDefault("swing", _crane._swingLimit);
             Academy.Instance.StatsRecorder.Add("SwingAmount", swingAmount);
-            float swingReward = swingLimit > 0 ? .5f - (swingMultiplier * Mathf.Pow(swingAmount * Utils.Normalize(_crane.spreader.Position.y, -25, 15), 2)) : 0;
+            float swingReward = swingLimit > 0.1f ? .5f - (swingMultiplier * Mathf.Pow(swingAmount * Utils.Normalize(_crane.spreader.Position.y, -25, 15), 2)) : 0;
             return new State((swingReward) / MaxStep, false);
         }
 
@@ -262,6 +272,7 @@ namespace Echo
         {
             collided = true;
             collision_collider = collision.collider;
+            this.collision = collision;
         }
 
         public void OnCollisionStay(Collision collision)
@@ -274,6 +285,7 @@ namespace Echo
         {
             collided = false;
             collision_collider = null;
+            this.collision = null;
         }
 
         public void OnTriggerEnter(Collider other)
