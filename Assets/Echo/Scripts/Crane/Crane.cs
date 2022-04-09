@@ -84,6 +84,7 @@ namespace Echo
                     }
                     cables[i].links[ii] = link;
                 }
+
                 cables[i].Setup();
 
             }
