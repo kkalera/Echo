@@ -69,7 +69,7 @@ namespace Echo
 
             for(int i = 0; i < cables.Count; i++)
             {
-                cables[i].Setup();
+                
                 //cables[i].links[0].orientation = false;
                 //cables[i].links[0].storedCable = 50;
                 //cables[i].links[2].orientation = true;
@@ -84,6 +84,7 @@ namespace Echo
                     }
                     cables[i].links[ii] = link;
                 }
+                cables[i].Setup();
 
             }
             for (int w = 0; w < winches.Count; w++)
