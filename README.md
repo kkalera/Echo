@@ -1,4 +1,4 @@
-# This project is still in development, bugs, missing features and unfinished code is to be expected
+# This project is still in development and shown as a portfolio project. Do not expect this to work out of the box.
 
 ## Project Echo
 
